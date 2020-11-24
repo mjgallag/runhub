@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+deploy:
+  helm:
+    releases:
+      - name: runhub-crds
+        chartPath: charts/runhub-crds
+        createNamespace: true
+      - name: runhub
+        chartPath: charts/runhub
+    flags:
+      install:
+        - --atomic
+      upgrade:
+        - --atomic
