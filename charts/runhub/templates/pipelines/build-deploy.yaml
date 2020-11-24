@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-deploy
+spec:
+  workspaces:
+    - name: src
+  tasks:
+    - name: get-runhub-src
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: https://github.com/mjgallag/runhub.git
+        - name: subdirectory
+          value: runhub
+      workspaces:
+        - name: output
+          workspace: src
