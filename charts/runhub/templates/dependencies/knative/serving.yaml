@@ -1246,6 +1246,7 @@ data:
     # 3. Redirected: The Knative ingress will send a 302 redirect for all
     # http connections, asking the clients to use HTTPS.
     httpProtocol: "Enabled"
+  ingress.class: "kourier.ingress.networking.knative.dev"
 
 ---
 # Copyright 2018 The Knative Authors
