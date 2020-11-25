@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build
+spec:
+  params:
+    - name: dockerfile-path
+      type: string
+    - name: context-path
+      type: string
+  workspaces:
+    - name: src
+  steps:
+    - name: build
+      image: moby/buildkit:v0.7.2@sha256:c5dbe36aa78f10ec70978ecea8c731f5b8ba2dfaf8de43c17263fba1b212f433
+      securityContext:
+        privileged: true
+      script: |
+        buildctl-daemonless.sh \
+          build \
+            --frontend dockerfile.v0 \
+            --local dockerfile=$(workspaces.src.path)/$(params.dockerfile-path) \
+            --local context=$(workspaces.src.path)/$(params.context-path)

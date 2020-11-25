@@ -31,3 +31,17 @@ spec:
       workspaces:
         - name: output
           workspace: src
+    - name: build-frontend
+      runAfter:
+        - get-runhub-src
+        - get-app-src
+      taskRef:
+        name: build
+      params:
+        - name: dockerfile-path
+          value: runhub/dockerfiles/node
+        - name: context-path
+          value: app/frontend
+      workspaces:
+        - name: src
+          workspace: src
