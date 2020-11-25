@@ -8,6 +8,8 @@ deploy:
         createNamespace: true
       - name: runhub
         chartPath: charts/runhub
+        valuesFiles:
+          - values.yaml
     flags:
       install:
         - --atomic
