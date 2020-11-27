@@ -2,6 +2,17 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
+    "app": {
+      "type": "object",
+      "properties": {
+        "imagePrefix": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "imagePrefix"
+      ]
+    },
     "credentials": {
       "type": "object",
       "properties": {
@@ -19,11 +30,34 @@
             "username",
             "password"
           ]
+        },
+        "containerRegistry": {
+          "type": "object",
+          "properties": {
+            "hostname": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "hostname",
+            "username",
+            "password"
+          ]
         }
-      }
+      },
+      "required": [
+        "containerRegistry"
+      ]
     }
   },
   "required": [
+    "app",
     "credentials"
   ]
 }

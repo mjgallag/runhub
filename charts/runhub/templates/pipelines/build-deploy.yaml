@@ -42,6 +42,8 @@ spec:
           value: runhub/dockerfiles/node
         - name: context-path
           value: app/frontend
+        - name: image
+          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
       workspaces:
         - name: src
           workspace: src

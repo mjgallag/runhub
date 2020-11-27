@@ -6,3 +6,4 @@ secrets:
 {{- if .Values.credentials.git }}
   - name: git-basic-auth
 {{- end }}
+  - name: container-registry-dockerconfigjson

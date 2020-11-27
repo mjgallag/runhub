@@ -8,6 +8,8 @@ spec:
       type: string
     - name: context-path
       type: string
+    - name: image
+      type: string
   workspaces:
     - name: src
   steps:
@@ -20,4 +22,5 @@ spec:
           build \
             --frontend dockerfile.v0 \
             --local dockerfile=$(workspaces.src.path)/$(params.dockerfile-path) \
-            --local context=$(workspaces.src.path)/$(params.context-path)
+            --local context=$(workspaces.src.path)/$(params.context-path) \
+            --output type=image,name=$(params.image),push=true
