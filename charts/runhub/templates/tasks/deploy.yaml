@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec:
+  params:
+    - name: service
+      type: string
+    - name: image
+      type: string
+  steps:
+    - name: deploy
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.19.1@sha256:d49c937341792a6144e61d251dc174688665c39c433dc0fcf468027ea4309ec6
+      script: |
+        kn service apply $(params.service) \
+          --image $(params.image) \
+          --pull-secret container-registry-dockerconfigjson

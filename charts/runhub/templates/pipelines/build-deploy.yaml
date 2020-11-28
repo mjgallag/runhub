@@ -47,3 +47,13 @@ spec:
       workspaces:
         - name: src
           workspace: src
+    - name: deploy-frontend
+      runAfter:
+        - build-frontend
+      taskRef:
+        name: deploy
+      params:
+        - name: service
+          value: app
+        - name: image
+          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
