@@ -23,4 +23,6 @@ spec:
             --frontend dockerfile.v0 \
             --local dockerfile=$(workspaces.src.path)/$(params.dockerfile-path) \
             --local context=$(workspaces.src.path)/$(params.context-path) \
-            --output type=image,name=$(params.image),push=true
+            --output type=image,name=$(params.image),push=true \
+            --export-cache type=inline \
+            --import-cache type=registry,ref=$(params.image)
