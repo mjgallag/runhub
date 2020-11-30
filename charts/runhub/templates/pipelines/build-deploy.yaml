@@ -8,6 +8,8 @@ spec:
       type: string
     - name: app-git-revision
       type: string
+    - name: app-image-tag
+      type: string
   workspaces:
     - name: src
   tasks:
@@ -47,7 +49,7 @@ spec:
         - name: context-path
           value: app/frontend
         - name: image
-          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
+          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend:$(params.app-image-tag)
       workspaces:
         - name: src
           workspace: src
@@ -60,4 +62,4 @@ spec:
         - name: service
           value: app
         - name: image
-          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
+          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend:$(params.app-image-tag)
