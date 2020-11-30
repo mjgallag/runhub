@@ -6,6 +6,8 @@ spec:
   params:
     - name: app-git-url
       type: string
+    - name: app-git-revision
+      type: string
   workspaces:
     - name: src
   tasks:
@@ -26,6 +28,8 @@ spec:
       params:
         - name: url
           value: $(params.app-git-url)
+        - name: revision
+          value: $(params.app-git-revision)
         - name: subdirectory
           value: app
       workspaces:
