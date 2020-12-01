@@ -1,13 +1,16 @@
-FROM node:14.15.1-alpine3.12@sha256:5f5c0679611843292161d2374c967f1e04196bc3f5281125c408de65db8284fe
-
+FROM node:14.15.1-alpine3.12@sha256:5f5c0679611843292161d2374c967f1e04196bc3f5281125c408de65db8284fe AS base
 WORKDIR /app
-
 COPY package.json package-lock.json ./
-RUN npm ci && npm cache clean --force
 
+FROM base AS build
+RUN npm ci && npm cache clean --force
 COPY . .
 RUN npm run build
+RUN rm -R node_modules
 
+FROM base AS serve
 ENV NODE_ENV=production
+RUN npm ci && npm cache clean --force
+COPY --from=build /app .
 ENTRYPOINT ["npm", "run", "serve"]
 EXPOSE 8080
