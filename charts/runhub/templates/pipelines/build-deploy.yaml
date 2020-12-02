@@ -49,7 +49,9 @@ spec:
         - name: context-path
           value: app/frontend
         - name: image
-          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend:$(params.app-image-tag)
+          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
+        - name: image-tag
+          value: $(params.app-image-tag)
       workspaces:
         - name: src
           workspace: src
