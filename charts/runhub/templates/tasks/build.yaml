@@ -25,8 +25,8 @@ spec:
         buildctl-daemonless.sh \
           build \
             --frontend dockerfile.v0 \
-            --local dockerfile=$(workspaces.src.path)/$(params.dockerfile-path) \
-            --local context=$(workspaces.src.path)/$(params.context-path) \
-            --output type=image,name=$(params.image):$(params.image-tag),push=true \
-            --export-cache type=registry,mode=max,ref=$(params.image):cache-$(params.image-tag) \
+            --local 'dockerfile=$(workspaces.src.path)/$(params.dockerfile-path)' \
+            --local 'context=$(workspaces.src.path)/$(params.context-path)' \
+            --output 'type=image,name=$(params.image):$(params.image-tag),push=true' \
+            --export-cache 'type=registry,mode=max,ref=$(params.image):cache-$(params.image-tag)' \
             --import-cache 'type=registry,"ref=$(params.image):cache-$(params.image-tag),$(params.image):cache-$(params.cache-from-image-tag)"'
