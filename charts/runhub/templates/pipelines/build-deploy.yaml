@@ -10,6 +10,8 @@ spec:
       type: string
     - name: app-image-tag
       type: string
+    - name: cache-from-app-image-tag
+      type: string
   workspaces:
     - name: src
   tasks:
@@ -52,6 +54,8 @@ spec:
           value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
         - name: image-tag
           value: $(params.app-image-tag)
+        - name: cache-from-image-tag
+          value: $(params.cache-from-app-image-tag)
       workspaces:
         - name: src
           workspace: src

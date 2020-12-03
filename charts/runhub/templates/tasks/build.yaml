@@ -12,6 +12,8 @@ spec:
       type: string
     - name: image-tag
       type: string
+    - name: cache-from-image-tag
+      type: string
   workspaces:
     - name: src
   steps:
@@ -27,4 +29,4 @@ spec:
             --local context=$(workspaces.src.path)/$(params.context-path) \
             --output type=image,name=$(params.image):$(params.image-tag),push=true \
             --export-cache type=registry,mode=max,ref=$(params.image):cache-$(params.image-tag) \
-            --import-cache type=registry,ref=$(params.image):cache-$(params.image-tag)
+            --import-cache 'type=registry,"ref=$(params.image):cache-$(params.image-tag),$(params.image):cache-$(params.cache-from-image-tag)"'
