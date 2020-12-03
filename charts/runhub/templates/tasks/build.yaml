@@ -18,7 +18,7 @@ spec:
     - name: src
   steps:
     - name: build
-      image: moby/buildkit:v0.7.2@sha256:c5dbe36aa78f10ec70978ecea8c731f5b8ba2dfaf8de43c17263fba1b212f433
+      image: moby/buildkit:v0.8.0@sha256:7fd25ca755852c8c982072eb602b2b16b843e4ed4205f8c9ed4b3c53db5ae16e
       securityContext:
         privileged: true
       script: |
