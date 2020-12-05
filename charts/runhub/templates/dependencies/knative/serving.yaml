@@ -757,7 +757,7 @@ data:
     svc.cluster.local: |
       selector:
         app: secret
-  {{ .Values.app.domain }}: |
+  {{ .Values.domain }}: |
 
 ---
 # Copyright 2020 The Knative Authors

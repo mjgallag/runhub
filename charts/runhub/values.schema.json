@@ -2,20 +2,11 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "app": {
-      "type": "object",
-      "properties": {
-        "domain": {
-          "type": "string"
-        },
-        "imagePrefix": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "domain",
-        "imagePrefix"
-      ]
+    "domain": {
+      "type": "string"
+    },
+    "imagePrefix": {
+      "type": "string"
     },
     "credentials": {
       "type": "object",
@@ -61,7 +52,8 @@
     }
   },
   "required": [
-    "app",
+    "domain",
+    "imagePrefix",
     "credentials"
   ]
 }

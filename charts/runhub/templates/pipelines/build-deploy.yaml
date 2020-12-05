@@ -4,13 +4,13 @@ metadata:
   name: build-deploy
 spec:
   params:
-    - name: app-git-url
+    - name: git-url
       type: string
-    - name: app-git-revision
+    - name: git-revision
       type: string
-    - name: app-image-tag
+    - name: image-tag
       type: string
-    - name: cache-from-app-image-tag
+    - name: cache-from-image-tag
       type: string
   workspaces:
     - name: src
@@ -26,14 +26,14 @@ spec:
       workspaces:
         - name: output
           workspace: src
-    - name: get-app-src
+    - name: get-src
       taskRef:
         name: git-clone
       params:
         - name: url
-          value: $(params.app-git-url)
+          value: $(params.git-url)
         - name: revision
-          value: $(params.app-git-revision)
+          value: $(params.git-revision)
         - name: subdirectory
           value: app
       workspaces:
@@ -42,7 +42,7 @@ spec:
     - name: build-frontend
       runAfter:
         - get-runhub-src
-        - get-app-src
+        - get-src
       taskRef:
         name: build
       params:
@@ -51,11 +51,11 @@ spec:
         - name: context-path
           value: app/frontend
         - name: image
-          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend
+          value: {{ template "runhub.imagePrefixWithHostname" . }}/frontend
         - name: image-tag
-          value: $(params.app-image-tag)
+          value: $(params.image-tag)
         - name: cache-from-image-tag
-          value: $(params.cache-from-app-image-tag)
+          value: $(params.cache-from-image-tag)
       workspaces:
         - name: src
           workspace: src
@@ -68,4 +68,4 @@ spec:
         - name: service
           value: app
         - name: image
-          value: {{ template "runhub.appImagePrefixWithHostname" . }}/frontend:$(params.app-image-tag)
+          value: {{ template "runhub.imagePrefixWithHostname" . }}/frontend:$(params.image-tag)
