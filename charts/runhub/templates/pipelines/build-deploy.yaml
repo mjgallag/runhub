@@ -8,9 +8,15 @@ spec:
       type: string
     - name: git-revision
       type: string
+    - name: route-tag
+      type: string
     - name: image-tag
       type: string
     - name: cache-from-image-tag
+      type: string
+    - name: main-route-tag
+      type: string
+    - name: main-route-image-tag
       type: string
   workspaces:
     - name: src
@@ -67,5 +73,13 @@ spec:
       params:
         - name: service
           value: app
+        - name: route-tag
+          value: $(params.route-tag)
         - name: image
-          value: {{ template "runhub.imagePrefixWithHostname" . }}/frontend:$(params.image-tag)
+          value: {{ template "runhub.imagePrefixWithHostname" . }}/frontend
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: main-route-tag
+          value: $(params.main-route-tag)
+        - name: main-route-image-tag
+          value: $(params.main-route-image-tag)

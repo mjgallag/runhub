@@ -6,12 +6,27 @@ spec:
   params:
     - name: service
       type: string
+    - name: route-tag
+      type: string
     - name: image
+      type: string
+    - name: image-tag
+      type: string
+    - name: main-route-tag
+      type: string
+    - name: main-route-image-tag
       type: string
   steps:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.19.1@sha256:d49c937341792a6144e61d251dc174688665c39c433dc0fcf468027ea4309ec6
       script: |
-        kn service apply '$(params.service)' \
-          --image '$(params.image)' \
-          --pull-secret container-registry-dockerconfigjson
+        kn service describe '$(params.service)' || \
+          kn service create '$(params.service)' \
+            --image '$(params.image):$(params.main-route-image-tag)' \
+            --pull-secret container-registry-dockerconfigjson
+        kn service update '$(params.service)' --untag '$(params.route-tag)' || true
+        kn service update '$(params.service)' \
+          --traffic '$(params.main-route-image-tag)=100' \
+          --image '$(params.image):$(params.image-tag)' \
+          --revision-name '$(params.service)-$(context.taskRun.uid)' \
+          --tag '$(params.service)-$(context.taskRun.uid)=$(params.route-tag)'
