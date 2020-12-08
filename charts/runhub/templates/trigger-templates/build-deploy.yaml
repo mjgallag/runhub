@@ -15,7 +15,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: build-deploy-
+        generateName: build-deploy-$(tt.params.route-tag)-
       spec:
         serviceAccountName: build-deploy
         pipelineRef:
