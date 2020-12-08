@@ -11,6 +11,7 @@ spec:
         eventTypes:
           - ping
   bindings:
+    - ref: git-build-deploy
     - ref: git-ping-build-deploy
   template:
     ref: build-deploy

@@ -5,6 +5,7 @@ metadata:
 spec:
   triggers:
     - triggerRef: git-ping-build-deploy
+    - triggerRef: git-push-branch-build-deploy
   resources:
     kubernetesResource:
       serviceType: LoadBalancer
