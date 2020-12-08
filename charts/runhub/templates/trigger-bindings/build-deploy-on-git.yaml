@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: git-build-deploy
+  name: build-deploy-on-git
 spec:
   params:
     - name: git-url

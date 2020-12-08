@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: Trigger
 metadata:
-  name: git-push-branch-build-deploy
+  name: build-deploy-on-git-push-branch
 spec:
   interceptors:
     - github:
@@ -21,7 +21,7 @@ spec:
                 ? body.base_ref.split('/')[2]
                 : body.repository.default_branch
   bindings:
-    - ref: git-build-deploy
-    - ref: git-push-branch-build-deploy
+    - ref: build-deploy-on-git
+    - ref: build-deploy-on-git-push-branch
   template:
     ref: build-deploy

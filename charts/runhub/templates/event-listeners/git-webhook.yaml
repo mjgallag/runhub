@@ -4,8 +4,8 @@ metadata:
   name: git-webhook
 spec:
   triggers:
-    - triggerRef: git-ping-build-deploy
-    - triggerRef: git-push-branch-build-deploy
+    - triggerRef: build-deploy-on-git-ping
+    - triggerRef: build-deploy-on-git-push-branch
   resources:
     kubernetesResource:
       serviceType: LoadBalancer

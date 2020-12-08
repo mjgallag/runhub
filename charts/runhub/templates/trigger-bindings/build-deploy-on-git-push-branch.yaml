@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: git-push-branch-build-deploy
+  name: build-deploy-on-git-push-branch
 spec:
   params:
     - name: git-revision
