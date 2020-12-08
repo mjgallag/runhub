@@ -1,0 +1,21 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: undeploy-on-git-push-delete-branch
+spec:
+  interceptors:
+    - github:
+        secretRef:
+          secretName: git-webhook-opaque
+          secretKey: secret
+        eventTypes:
+          - push
+    - cel:
+        filter: "body.ref.split('/')[1] == 'heads' && body.deleted"
+        overlays:
+          - key: branch
+            expression: "body.ref.split('/')[2]"
+  bindings:
+    - ref: undeploy-on-git-push-delete-branch
+  template:
+    ref: undeploy
