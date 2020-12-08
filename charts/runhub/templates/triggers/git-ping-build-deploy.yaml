@@ -1,0 +1,16 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: git-ping-build-deploy
+spec:
+  interceptors:
+    - github:
+        secretRef:
+          secretName: git-webhook-opaque
+          secretKey: secret
+        eventTypes:
+          - ping
+  bindings:
+    - ref: git-ping-build-deploy
+  template:
+    ref: build-deploy
