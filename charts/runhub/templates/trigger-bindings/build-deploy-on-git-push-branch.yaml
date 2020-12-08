@@ -5,10 +5,10 @@ metadata:
 spec:
   params:
     - name: git-revision
-      value: $(extensions.branch)
+      value: $(body.ref)
     - name: route-tag
-      value: $(extensions.branch)
+      value: $(extensions.branch)-branch
     - name: image-tag
-      value: $(extensions.branch)
+      value: $(extensions.branch)-branch
     - name: cache-from-image-tag
-      value: $(extensions.cache-from-image-tag)
+      value: $(extensions.cache-from-branch)-branch

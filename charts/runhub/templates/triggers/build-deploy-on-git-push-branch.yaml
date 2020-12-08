@@ -15,7 +15,7 @@ spec:
         overlays:
           - key: branch
             expression: "body.ref.split('/')[2]"
-          - key: cache-from-image-tag
+          - key: cache-from-branch
             expression: |
               body.created && body.base_ref.split('/')[1] == 'heads'
                 ? body.base_ref.split('/')[2]
