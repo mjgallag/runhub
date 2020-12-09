@@ -479,6 +479,8 @@ data:
     # (including a maxScale of "0" = unlimited) is disallowed.
     # A value of zero (the default) allows any limit, including unlimited.
     max-scale-limit: "0"
+  initial-scale: "0"
+  allow-zero-initial-scale: "true"
 
 ---
 # Copyright 2019 The Knative Authors
