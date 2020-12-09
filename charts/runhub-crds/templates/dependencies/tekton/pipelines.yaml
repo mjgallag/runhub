@@ -19,8 +19,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -85,8 +85,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   versions:
@@ -138,8 +138,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -204,8 +204,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -286,8 +286,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   versions:
@@ -339,8 +339,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -406,8 +406,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
@@ -472,8 +472,8 @@ metadata:
   labels:
     app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
-    pipeline.tekton.dev/release: "v0.18.1"
-    version: "v0.18.1"
+    pipeline.tekton.dev/release: "v0.19.0"
+    version: "v0.19.0"
 spec:
   group: tekton.dev
   preserveUnknownFields: false
