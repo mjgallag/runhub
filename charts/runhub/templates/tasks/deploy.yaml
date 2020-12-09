@@ -28,5 +28,5 @@ spec:
         kn service update '$(params.service)' \
           --traffic '$(params.main-route-image-tag)=100' \
           --image '$(params.image):$(params.image-tag)' \
-          --revision-name '$(params.service)-$(context.taskRun.uid)' \
-          --tag '$(params.service)-$(context.taskRun.uid)=$(params.route-tag)'
+          --revision-name '$(params.service)-$(params.route-tag)-$(context.taskRun.uid)' \
+          --tag '$(params.service)-$(params.route-tag)-$(context.taskRun.uid)=$(params.route-tag)'
