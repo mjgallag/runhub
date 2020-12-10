@@ -36,6 +36,9 @@ spec:
           - name: main-route-image-tag
             value: $(tt.params.main-route-image-tag)
         workspaces:
+          - name: dockerfile
+            configMap:
+              name: dockerfile
           - name: src
             volumeClaimTemplate:
               spec:

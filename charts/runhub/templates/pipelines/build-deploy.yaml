@@ -19,19 +19,9 @@ spec:
     - name: main-route-image-tag
       type: string
   workspaces:
+    - name: dockerfile
     - name: src
   tasks:
-    - name: get-runhub-src
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: https://github.com/mjgallag/runhub.git
-        - name: subdirectory
-          value: runhub
-      workspaces:
-        - name: output
-          workspace: src
     - name: get-src
       taskRef:
         name: git-clone
@@ -47,13 +37,10 @@ spec:
           workspace: src
     - name: build-frontend
       runAfter:
-        - get-runhub-src
         - get-src
       taskRef:
         name: build
       params:
-        - name: dockerfile-path
-          value: runhub/dockerfiles/node
         - name: context-path
           value: app/frontend
         - name: image
@@ -63,6 +50,8 @@ spec:
         - name: cache-from-image-tag
           value: $(params.cache-from-image-tag)
       workspaces:
+        - name: dockerfile
+          workspace: dockerfile
         - name: src
           workspace: src
     - name: deploy-frontend
