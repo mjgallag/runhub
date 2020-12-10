@@ -11,10 +11,10 @@ spec:
         eventTypes:
           - push
     - cel:
-        filter: "body.ref.split('/')[1] == 'heads' && !body.deleted"
+        filter: body.ref.split('/')[1] == 'heads' && !body.deleted
         overlays:
           - key: branch
-            expression: "body.ref.split('/')[2]"
+            expression: body.ref.split('/')[2]
           - key: cache-from-branch
             expression: |
               body.created && body.base_ref.split('/')[1] == 'heads'
