@@ -72,3 +72,40 @@ spec:
           value: $(params.main-route-tag)
         - name: main-route-image-tag
           value: $(params.main-route-image-tag)
+    - name: build-backend
+      runAfter:
+        - get-src
+      taskRef:
+        name: build
+      params:
+        - name: context-path
+          value: app/backend
+        - name: image
+          value: {{ template "runhub.imagePrefixWithHostname" . }}/backend
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: cache-from-image-tag
+          value: $(params.cache-from-image-tag)
+      workspaces:
+        - name: dockerfile
+          workspace: dockerfile
+        - name: src
+          workspace: src
+    - name: deploy-backend
+      runAfter:
+        - build-backend
+      taskRef:
+        name: deploy
+      params:
+        - name: service
+          value: backend
+        - name: route-tag
+          value: $(params.route-tag)
+        - name: image
+          value: {{ template "runhub.imagePrefixWithHostname" . }}/backend
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: main-route-tag
+          value: $(params.main-route-tag)
+        - name: main-route-image-tag
+          value: $(params.main-route-image-tag)

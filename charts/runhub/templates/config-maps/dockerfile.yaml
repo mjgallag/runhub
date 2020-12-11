@@ -11,7 +11,7 @@ data:
     FROM base AS build
     RUN npm ci && npm cache clean --force
     COPY . .
-    RUN npm run build
+    RUN npm run --if-present build
     RUN rm -R node_modules
 
     FROM base AS serve
