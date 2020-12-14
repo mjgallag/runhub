@@ -44,7 +44,7 @@ spec:
         - name: context-path
           value: app/frontend
         - name: image
-          value: {{ template "runhub.imagePrefixWithHostname" . }}/frontend
+          value: {{ template "runhub.imagePathWithHostname" . }}/frontend
         - name: image-tag
           value: $(params.image-tag)
         - name: cache-from-image-tag
@@ -65,7 +65,7 @@ spec:
         - name: route-tag
           value: $(params.route-tag)
         - name: image
-          value: {{ template "runhub.imagePrefixWithHostname" . }}/frontend
+          value: {{ template "runhub.imagePathWithHostname" . }}/frontend
         - name: image-tag
           value: $(params.image-tag)
         - name: main-route-tag
@@ -81,7 +81,7 @@ spec:
         - name: context-path
           value: app/backend
         - name: image
-          value: {{ template "runhub.imagePrefixWithHostname" . }}/backend
+          value: {{ template "runhub.imagePathWithHostname" . }}/backend
         - name: image-tag
           value: $(params.image-tag)
         - name: cache-from-image-tag
@@ -102,7 +102,7 @@ spec:
         - name: route-tag
           value: $(params.route-tag)
         - name: image
-          value: {{ template "runhub.imagePrefixWithHostname" . }}/backend
+          value: {{ template "runhub.imagePathWithHostname" . }}/backend
         - name: image-tag
           value: $(params.image-tag)
         - name: main-route-tag
