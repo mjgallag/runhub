@@ -2,6 +2,6 @@
   {{ .Values.credentials.containerRegistry.hostname }}/{{ .Values.imagePath }}
 {{- end }}
 
-{{ define "runhub.urlSuffix" -}}
+{{ define "runhub.domainWithNamespace" -}}
   {{ .Release.Namespace }}.{{ .Values.domain }}
 {{- end }}
