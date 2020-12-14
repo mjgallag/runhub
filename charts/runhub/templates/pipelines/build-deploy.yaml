@@ -41,8 +41,10 @@ spec:
       params:
         - name: context-path
           value: frontend
-        - name: image
-          value: {{ template "runhub.imagePathWithHostname" . }}/frontend
+        - name: image-path-with-hostname
+          value: {{ template "runhub.imagePathWithHostname" . }}
+        - name: image-name
+          value: frontend
         - name: image-tag
           value: $(params.image-tag)
         - name: cache-from-image-tag
@@ -78,8 +80,10 @@ spec:
       params:
         - name: context-path
           value: backend
-        - name: image
-          value: {{ template "runhub.imagePathWithHostname" . }}/backend
+        - name: image-path-with-hostname
+          value: {{ template "runhub.imagePathWithHostname" . }}
+        - name: image-name
+          value: backend
         - name: image-tag
           value: $(params.image-tag)
         - name: cache-from-image-tag
