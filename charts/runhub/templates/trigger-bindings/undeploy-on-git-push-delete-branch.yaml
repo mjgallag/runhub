@@ -5,4 +5,4 @@ metadata:
 spec:
   params:
     - name: route-tag
-      value: $(extensions.branch)-branch
+      value: $(extensions.branch)-{{ template "runhub.labelBranch" . }}

@@ -7,8 +7,8 @@ spec:
     - name: git-revision
       value: refs/heads/$(body.repository.default_branch)
     - name: route-tag
-      value: $(body.repository.default_branch)-branch
+      value: $(body.repository.default_branch)-{{ template "runhub.labelBranch" . }}
     - name: image-tag
-      value: $(body.repository.default_branch)-branch
+      value: $(body.repository.default_branch)-{{ template "runhub.labelBranch" . }}
     - name: cache-from-image-tag
-      value: $(body.repository.default_branch)-branch
+      value: $(body.repository.default_branch)-{{ template "runhub.labelBranch" . }}
