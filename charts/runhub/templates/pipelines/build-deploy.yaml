@@ -30,8 +30,6 @@ spec:
           value: $(params.git-url)
         - name: revision
           value: $(params.git-revision)
-        - name: subdirectory
-          value: app
       workspaces:
         - name: output
           workspace: src
@@ -42,7 +40,7 @@ spec:
         name: build
       params:
         - name: context-path
-          value: app/frontend
+          value: frontend
         - name: image
           value: {{ template "runhub.imagePathWithHostname" . }}/frontend
         - name: image-tag
@@ -79,7 +77,7 @@ spec:
         name: build
       params:
         - name: context-path
-          value: app/backend
+          value: backend
         - name: image
           value: {{ template "runhub.imagePathWithHostname" . }}/backend
         - name: image-tag
