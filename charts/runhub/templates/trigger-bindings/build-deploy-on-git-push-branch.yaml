@@ -6,7 +6,7 @@ spec:
   params:
     - name: git-revision
       value: $(body.ref)
-    - name: route-tag
+    - name: subroute-tag
       value: $(extensions.branch)-{{ template "runhub.labelBranch" . }}
     - name: image-tag
       value: $(extensions.branch)-{{ template "runhub.labelBranch" . }}

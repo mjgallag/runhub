@@ -4,7 +4,7 @@ metadata:
   name: undeploy
 spec:
   params:
-    - name: route-tag
+    - name: subroute-tag
       type: string
   tasks:
     - name: undeploy-frontend
@@ -13,13 +13,13 @@ spec:
       params:
         - name: service
           value: app
-        - name: route-tag
-          value: $(params.route-tag)
+        - name: subroute-tag
+          value: $(params.subroute-tag)
     - name: undeploy-backend
       taskRef:
         name: undeploy
       params:
         - name: service
           value: backend
-        - name: route-tag
-          value: $(params.route-tag)
+        - name: subroute-tag
+          value: $(params.subroute-tag)

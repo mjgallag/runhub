@@ -4,15 +4,15 @@ metadata:
   name: undeploy
 spec:
   params:
-    - name: route-tag
+    - name: subroute-tag
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: undeploy-$(tt.params.route-tag)-
+        generateName: undeploy-$(tt.params.subroute-tag)-
       spec:
         pipelineRef:
           name: undeploy
         params:
-          - name: route-tag
-            value: $(tt.params.route-tag)
+          - name: subroute-tag
+            value: $(tt.params.subroute-tag)

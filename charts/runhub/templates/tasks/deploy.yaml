@@ -6,7 +6,7 @@ spec:
   params:
     - name: service
       type: string
-    - name: route-tag
+    - name: subroute-tag
       type: string
     - name: image
       type: string
@@ -24,11 +24,11 @@ spec:
           kn service create '$(params.service)' \
             --image '$(params.image):$(params.main-route-image-tag)' \
             --pull-secret container-registry-dockerconfigjson
-        kn service update '$(params.service)' --untag '$(params.route-tag)' || true
+        kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
         kn service update '$(params.service)' \
           --traffic '$(params.main-route-image-tag)=100' \
           --image '$(params.image):$(params.image-tag)' \
-          --revision-name '$(params.service)-$(params.route-tag)-$(context.taskRun.uid)' \
-          --tag '$(params.service)-$(params.route-tag)-$(context.taskRun.uid)=$(params.route-tag)' \
-          --env 'RUNHUB_FRONTEND_URL=http://$(params.route-tag)-app.{{ template "runhub.domainWithNamespace" . }}' \
-          --env 'RUNHUB_BACKEND_URL=http://$(params.route-tag)-backend.{{ template "runhub.domainWithNamespace" . }}'
+          --revision-name '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)' \
+          --tag '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)=$(params.subroute-tag)' \
+          --env 'RUNHUB_FRONTEND_URL=http://$(params.subroute-tag)-app.{{ template "runhub.domainWithNamespace" . }}' \
+          --env 'RUNHUB_BACKEND_URL=http://$(params.subroute-tag)-backend.{{ template "runhub.domainWithNamespace" . }}'

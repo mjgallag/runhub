@@ -6,7 +6,7 @@ spec:
   params:
     - name: git-url
     - name: git-revision
-    - name: route-tag
+    - name: subroute-tag
     - name: image-tag
     - name: cache-from-image-tag
     - name: main-route-tag
@@ -15,7 +15,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: build-deploy-$(tt.params.route-tag)-
+        generateName: build-deploy-$(tt.params.subroute-tag)-
       spec:
         serviceAccountName: build-deploy
         pipelineRef:
@@ -25,8 +25,8 @@ spec:
             value: $(tt.params.git-url)
           - name: git-revision
             value: $(tt.params.git-revision)
-          - name: route-tag
-            value: $(tt.params.route-tag)
+          - name: subroute-tag
+            value: $(tt.params.subroute-tag)
           - name: image-tag
             value: $(tt.params.image-tag)
           - name: cache-from-image-tag

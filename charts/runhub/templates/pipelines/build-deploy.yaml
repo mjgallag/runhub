@@ -8,7 +8,7 @@ spec:
       type: string
     - name: git-revision
       type: string
-    - name: route-tag
+    - name: subroute-tag
       type: string
     - name: image-tag
       type: string
@@ -62,8 +62,8 @@ spec:
       params:
         - name: service
           value: app
-        - name: route-tag
-          value: $(params.route-tag)
+        - name: subroute-tag
+          value: $(params.subroute-tag)
         - name: image
           value: {{ template "runhub.imagePathWithHostname" . }}/frontend
         - name: image-tag
@@ -101,8 +101,8 @@ spec:
       params:
         - name: service
           value: backend
-        - name: route-tag
-          value: $(params.route-tag)
+        - name: subroute-tag
+          value: $(params.subroute-tag)
         - name: image
           value: {{ template "runhub.imagePathWithHostname" . }}/backend
         - name: image-tag
