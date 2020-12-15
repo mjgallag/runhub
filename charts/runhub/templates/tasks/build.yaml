@@ -31,6 +31,6 @@ spec:
             --frontend dockerfile.v0 \
             --local dockerfile='$(workspaces.dockerfile.path)' \
             --local context='$(workspaces.src.path)/$(params.context-path)' \
-            --output type=image,name="${IMAGE}":'$(params.image-tag)',push=true \
-            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE}":'$(params.image-tag)' \
-            --import-cache type=registry,\"ref="${CACHE_IMAGE}":'$(params.image-tag)',"${CACHE_IMAGE}":'$(params.cache-from-image-tag)'\"
+            --output type=image,name="${IMAGE:?}":'$(params.image-tag)',push=true \
+            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}":'$(params.image-tag)' \
+            --import-cache type=registry,\"ref="${CACHE_IMAGE:?}":'$(params.image-tag)',"${CACHE_IMAGE:?}":'$(params.cache-from-image-tag)'\"
