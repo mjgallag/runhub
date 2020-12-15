@@ -30,6 +30,8 @@ spec:
           value: $(params.git-url)
         - name: revision
           value: $(params.git-revision)
+        - name: deleteExisting
+          value: 'false'
       workspaces:
         - name: output
           workspace: src
