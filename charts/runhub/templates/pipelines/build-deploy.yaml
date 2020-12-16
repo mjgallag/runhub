@@ -35,18 +35,19 @@ spec:
       workspaces:
         - name: output
           workspace: src
-    - name: build-frontend
+    {{- range $key, $val := .Values.services }}
+    - name: build-{{ $key }}
       runAfter:
         - get-src
       taskRef:
         name: build
       params:
         - name: context-path
-          value: frontend
+          value: {{ $val.srcPath }}
         - name: image-path-with-hostname
-          value: {{ template "runhub.imagePathWithHostname" . }}
+          value: {{ template "runhub.imagePathWithHostname" $ }}
         - name: image-name
-          value: frontend
+          value: {{ $key }}
         - name: image-tag
           value: $(params.image-tag)
         - name: cache-from-image-tag
@@ -56,60 +57,22 @@ spec:
           workspace: dockerfile
         - name: src
           workspace: src
-    - name: deploy-frontend
+    - name: deploy-{{ $key }}
       runAfter:
-        - build-frontend
+        - build-{{ $key }}
       taskRef:
         name: deploy
       params:
         - name: service
-          value: app
+          value: {{ $val.subdomain }}
         - name: subroute-tag
           value: $(params.subroute-tag)
         - name: image
-          value: {{ template "runhub.imagePathWithHostname" . }}/frontend
+          value: {{ template "runhub.imagePathWithHostname" $ }}/{{ $key }}
         - name: image-tag
           value: $(params.image-tag)
         - name: main-route-tag
           value: $(params.main-route-tag)
         - name: main-route-image-tag
           value: $(params.main-route-image-tag)
-    - name: build-backend
-      runAfter:
-        - get-src
-      taskRef:
-        name: build
-      params:
-        - name: context-path
-          value: backend
-        - name: image-path-with-hostname
-          value: {{ template "runhub.imagePathWithHostname" . }}
-        - name: image-name
-          value: backend
-        - name: image-tag
-          value: $(params.image-tag)
-        - name: cache-from-image-tag
-          value: $(params.cache-from-image-tag)
-      workspaces:
-        - name: dockerfile
-          workspace: dockerfile
-        - name: src
-          workspace: src
-    - name: deploy-backend
-      runAfter:
-        - build-backend
-      taskRef:
-        name: deploy
-      params:
-        - name: service
-          value: backend
-        - name: subroute-tag
-          value: $(params.subroute-tag)
-        - name: image
-          value: {{ template "runhub.imagePathWithHostname" . }}/backend
-        - name: image-tag
-          value: $(params.image-tag)
-        - name: main-route-tag
-          value: $(params.main-route-tag)
-        - name: main-route-image-tag
-          value: $(params.main-route-image-tag)
+    {{- end }}

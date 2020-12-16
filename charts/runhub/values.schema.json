@@ -5,6 +5,25 @@
     "domain": {
       "type": "string"
     },
+    "services": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "subdomain": {
+            "type": "string"
+          },
+          "srcPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subdomain",
+          "srcPath"
+        ],
+        "additionalProperties": false
+      }
+    },
     "imagePath": {
       "type": "string"
     },

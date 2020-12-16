@@ -31,4 +31,4 @@ spec:
           --revision-name '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)' \
           --tag '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)=$(params.subroute-tag)' \
           --env 'RUNHUB_FRONTEND_URL=http://$(params.subroute-tag)-app.{{ template "runhub.domainWithNamespace" . }}' \
-          --env 'RUNHUB_BACKEND_URL=http://$(params.subroute-tag)-backend.{{ template "runhub.domainWithNamespace" . }}'
+          --env 'RUNHUB_BACKEND_URL=http://$(params.subroute-tag)-api.{{ template "runhub.domainWithNamespace" . }}'
