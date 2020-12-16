@@ -75,6 +75,7 @@
   },
   "required": [
     "domain",
+    "services",
     "imagePath",
     "credentials"
   ],
