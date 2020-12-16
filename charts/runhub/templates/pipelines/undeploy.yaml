@@ -13,7 +13,7 @@ spec:
         name: undeploy
       params:
         - name: service
-          value: {{ $serviceName }}
+          value: {{ $service.subdomain }}
         - name: subroute-tag
           value: $(params.subroute-tag)
     {{- end }}

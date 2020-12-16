@@ -64,7 +64,7 @@ spec:
         name: deploy
       params:
         - name: service
-          value: {{ $serviceName }}
+          value: {{ $service.subdomain }}
         - name: subroute-tag
           value: $(params.subroute-tag)
         - name: image
