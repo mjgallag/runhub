@@ -7,19 +7,13 @@ spec:
     - name: subroute-tag
       type: string
   tasks:
-    - name: undeploy-frontend
+    {{- range $key, $val := .Values.services }}
+    - name: undeploy-{{ $key }}
       taskRef:
         name: undeploy
       params:
         - name: service
-          value: app
+          value: {{ $val.subdomain }}
         - name: subroute-tag
           value: $(params.subroute-tag)
-    - name: undeploy-backend
-      taskRef:
-        name: undeploy
-      params:
-        - name: service
-          value: backend
-        - name: subroute-tag
-          value: $(params.subroute-tag)
+    {{- end }}
