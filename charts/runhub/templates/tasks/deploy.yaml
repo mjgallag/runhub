@@ -28,8 +28,8 @@ spec:
         kn service update '$(params.service)' \
           --traffic '$(params.main-route-image-tag)=100' \
           --image '$(params.image):$(params.image-tag)' \
-          {{- range $key, $val := .Values.services }}
-          --env 'RUNHUB_{{ upper $key }}_URL=http://$(params.subroute-tag)-{{ $val.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+          {{- range $serviceName, $service := .Values.services }}
+          --env 'RUNHUB_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $serviceName }}.{{ template "runhub.domainWithNamespace" $ }}' \
           {{- end }}
           --revision-name '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)' \
           --tag '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)=$(params.subroute-tag)'

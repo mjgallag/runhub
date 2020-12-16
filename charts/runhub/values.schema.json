@@ -10,15 +10,11 @@
       "additionalProperties": {
         "type": "object",
         "properties": {
-          "subdomain": {
-            "type": "string"
-          },
           "srcPath": {
             "type": "string"
           }
         },
         "required": [
-          "subdomain",
           "srcPath"
         ],
         "additionalProperties": false
