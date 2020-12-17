@@ -14,7 +14,7 @@ data:
     RUN npm run --if-present build
     RUN rm -R node_modules
 
-    FROM base AS serve
+    FROM base AS production
     ENV NODE_ENV=production
     RUN npm ci && npm cache clean --force
     COPY --from=build /app .
