@@ -9,13 +9,11 @@ spec:
     - name: subroute-tag
     - name: image-tag
     - name: cache-from-image-tag
-    - name: main-route-tag
-    - name: main-route-image-tag
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: build-deploy-$(tt.params.subroute-tag)-
+        generateName: build-deploy-$(tt.params.image-tag)-
       spec:
         serviceAccountName: build-deploy
         pipelineRef:
@@ -31,10 +29,6 @@ spec:
             value: $(tt.params.image-tag)
           - name: cache-from-image-tag
             value: $(tt.params.cache-from-image-tag)
-          - name: main-route-tag
-            value: $(tt.params.main-route-tag)
-          - name: main-route-image-tag
-            value: $(tt.params.main-route-image-tag)
         workspaces:
           - name: dockerfile
             configMap:

@@ -12,24 +12,40 @@ spec:
       type: string
     - name: image-tag
       type: string
-    - name: main-route-tag
-      type: string
-    - name: main-route-image-tag
-      type: string
   steps:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.19.1@sha256:d49c937341792a6144e61d251dc174688665c39c433dc0fcf468027ea4309ec6
       script: |
-        kn service describe '$(params.service)' || \
-          kn service create '$(params.service)' \
-            --image '$(params.image):$(params.main-route-image-tag)' \
-            --pull-secret container-registry-dockerconfigjson
-        kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
-        kn service update '$(params.service)' \
-          --traffic '$(params.main-route-image-tag)=100' \
-          --image '$(params.image):$(params.image-tag)' \
-          {{- range $serviceName, $service := .Values.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
-          {{- end }}
-          --revision-name '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)' \
-          --tag '$(params.service)-$(params.subroute-tag)-$(context.taskRun.uid)=$(params.subroute-tag)'
+        IMAGE='$(params.image):$(params.image-tag)'
+        REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
+
+        if [ -z '$(params.subroute-tag)' ]; then
+          if ! kn service describe '$(params.service)'; then
+            kn service create '$(params.service)' \
+              --pull-secret container-registry-dockerconfigjson \
+              --image "${IMAGE:?}" \
+              {{- range $serviceName, $service := .Values.services }}
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+              {{- end }}
+              --revision-name "${REVISION_NAME:?}"
+            kn service update '$(params.service)' \
+              --traffic "${REVISION_NAME:?}=100"
+          else
+            kn service update '$(params.service)' \
+              --image "${IMAGE:?}" \
+              {{- range $serviceName, $service := .Values.services }}
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+              {{- end }}
+              --revision-name "${REVISION_NAME:?}" \
+              --traffic "${REVISION_NAME:?}=100"
+          fi
+        else
+          kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
+          kn service update '$(params.service)' \
+            --image "${IMAGE:?}" \
+              {{- range $serviceName, $service := .Values.services }}
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+              {{- end }}
+            --revision-name "${REVISION_NAME:?}" \
+            --tag "${REVISION_NAME:?}"='$(params.subroute-tag)'
+        fi

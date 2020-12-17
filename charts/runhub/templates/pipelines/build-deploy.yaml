@@ -14,10 +14,6 @@ spec:
       type: string
     - name: cache-from-image-tag
       type: string
-    - name: main-route-tag
-      type: string
-    - name: main-route-image-tag
-      type: string
   workspaces:
     - name: dockerfile
     - name: src
@@ -71,8 +67,4 @@ spec:
           value: {{ template "runhub.imagePathWithHostname" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
-        - name: main-route-tag
-          value: $(params.main-route-tag)
-        - name: main-route-image-tag
-          value: $(params.main-route-image-tag)
     {{- end }}

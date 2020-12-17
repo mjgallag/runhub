@@ -7,7 +7,7 @@ spec:
     - name: git-revision
       value: $(body.ref)
     - name: subroute-tag
-      value: $(extensions.branch)-{{ template "runhub.labelBranch" . }}
+      value: $(extensions.subroute-tag)
     - name: image-tag
       value: $(extensions.branch)-{{ template "runhub.labelBranch" . }}
     - name: cache-from-image-tag

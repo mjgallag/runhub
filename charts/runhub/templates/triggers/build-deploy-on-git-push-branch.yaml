@@ -13,6 +13,11 @@ spec:
     - cel:
         filter: body.ref.split('/')[1] == 'heads' && !body.deleted
         overlays:
+          - key: subroute-tag
+            expression: |
+              body.ref.split('/')[2] == body.repository.default_branch
+                ? ''
+                : body.ref.split('/')[2] + '-{{ template "runhub.labelBranch" . }}'
           - key: branch
             expression: body.ref.split('/')[2]
           - key: cache-from-branch
