@@ -5,7 +5,8 @@ metadata:
 data:
   dockerfile: |
     FROM node:14.15.2-alpine3.12@sha256:21ca98bf1a05dd4a9f7467974e256c271501f0734ba21c6de4d9a6b1684994b1 AS base
-    WORKDIR /app
+    ARG CONTEXT_PATH
+    WORKDIR /$CONTEXT_PATH
     COPY package.json package-lock.json ./
 
     FROM base AS build
@@ -17,6 +18,7 @@ data:
     FROM base AS production
     ENV NODE_ENV=production
     RUN npm ci && npm cache clean --force
-    COPY --from=build /app .
+    ARG CONTEXT_PATH
+    COPY --from=build /$CONTEXT_PATH .
     ENTRYPOINT ["npm", "run", "runhub-serve"]
     EXPOSE 8080
