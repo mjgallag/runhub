@@ -11,12 +11,12 @@ data:
     FROM base AS build
     RUN npm ci && npm cache clean --force
     COPY . .
-    RUN npm run --if-present build
+    RUN npm run --if-present runhub-build
     RUN rm -R node_modules
 
     FROM base AS production
     ENV NODE_ENV=production
     RUN npm ci && npm cache clean --force
     COPY --from=build /app .
-    ENTRYPOINT ["npm", "run", "serve"]
+    ENTRYPOINT ["npm", "run", "runhub-serve"]
     EXPOSE 8080
