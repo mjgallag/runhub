@@ -2,10 +2,10 @@ domain: 127.0.0.1.xip.io
 services:
   frontend:
     subdomain: app
-    srcPath: packages/frontend
+    srcPath: frontend
   backend:
     subdomain: backend
-    srcPath: packages/backend
+    srcPath: backend
 dependencies:
   shared:
-    srcPath: packages/shared
+    srcPath: shared
