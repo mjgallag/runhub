@@ -4,20 +4,49 @@ metadata:
   name: dockerfile
 data:
   dockerfile: |
-    FROM node:14.15.2-alpine3.12@sha256:21ca98bf1a05dd4a9f7467974e256c271501f0734ba21c6de4d9a6b1684994b1 AS base
+    FROM node:14.15.2-alpine3.12@sha256:21ca98bf1a05dd4a9f7467974e256c271501f0734ba21c6de4d9a6b1684994b1 AS node
+
+    {{ range $dependencyName, $dependency := .Values.dependencies -}}
+    FROM node AS {{ $dependencyName }}-base
+    WORKDIR /{{ $dependency.srcPath }}
+    COPY {{ $dependency.srcPath }}/package.json {{ $dependency.srcPath }}/package-lock.json .
+
+    FROM {{ $dependencyName }}-base AS {{ $dependencyName }}-build
+    RUN npm ci && npm cache clean --force
+    COPY {{ $dependency.srcPath }} .
+    RUN npm run --if-present build
+    RUN rm -R node_modules
+
+    FROM {{ $dependencyName }}-base AS {{ $dependencyName }}-production
+    ENV NODE_ENV=production
+    RUN npm ci && npm cache clean --force
+    COPY --from={{ $dependencyName }}-build /{{ $dependency.srcPath }} .
+    {{- end }}
+
+    FROM node AS base
     ARG CONTEXT_PATH
     WORKDIR /$CONTEXT_PATH
-    COPY package.json package-lock.json ./
+    COPY $CONTEXT_PATH/package.json $CONTEXT_PATH/package-lock.json .
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    RUN mkdir /{{ $dependency.srcPath }}
+    COPY {{ $dependency.srcPath }}/package.json /{{ $dependency.srcPath }}
+    {{- end }}
 
     FROM base AS build
     RUN npm ci && npm cache clean --force
-    COPY . .
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
+    {{- end }}
+    COPY $CONTEXT_PATH .
     RUN npm run --if-present build
     RUN rm -R node_modules
 
     FROM base AS production
     ENV NODE_ENV=production
     RUN npm ci && npm cache clean --force
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
+    {{- end }}
     ARG CONTEXT_PATH
     COPY --from=build /$CONTEXT_PATH .
     ENTRYPOINT ["npm", "run", "serve"]

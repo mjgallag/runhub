@@ -24,6 +24,21 @@
         "additionalProperties": false
       }
     },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "srcPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "srcPath"
+        ],
+        "additionalProperties": false
+      }
+    },
     "imagePath": {
       "type": "string"
     },
