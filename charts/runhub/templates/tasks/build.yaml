@@ -4,7 +4,7 @@ metadata:
   name: build
 spec:
   params:
-    - name: context-path
+    - name: src-path
       type: string
     - name: image-path-with-hostname
       type: string
@@ -31,7 +31,7 @@ spec:
             --frontend dockerfile.v0 \
             --local dockerfile='$(workspaces.dockerfile.path)' \
             --local context='$(workspaces.src.path)' \
-            --opt build-arg:CONTEXT_PATH='$(params.context-path)' \
+            --opt build-arg:SRC_PATH='$(params.src-path)' \
             --output type=image,name="${IMAGE:?}":'$(params.image-tag)',push=true \
             --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}":'$(params.image-tag)' \
             --import-cache type=registry,\"ref="${CACHE_IMAGE:?}":'$(params.image-tag)',"${CACHE_IMAGE:?}":'$(params.cache-from-image-tag)'\"

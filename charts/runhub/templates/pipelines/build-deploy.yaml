@@ -38,7 +38,7 @@ spec:
       taskRef:
         name: build
       params:
-        - name: context-path
+        - name: src-path
           value: {{ $service.srcPath }}
         - name: image-path-with-hostname
           value: {{ template "runhub.imagePathWithHostname" $ }}

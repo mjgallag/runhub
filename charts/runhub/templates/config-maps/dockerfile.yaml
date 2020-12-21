@@ -24,9 +24,9 @@ data:
     {{- end }}
 
     FROM node AS base
-    ARG CONTEXT_PATH
-    WORKDIR /$CONTEXT_PATH
-    COPY $CONTEXT_PATH/package.json $CONTEXT_PATH/package-lock.json .
+    ARG SRC_PATH
+    WORKDIR /$SRC_PATH
+    COPY $SRC_PATH/package.json $SRC_PATH/package-lock.json .
     {{- range $dependencyName, $dependency := .Values.dependencies }}
     RUN mkdir /{{ $dependency.srcPath }}
     COPY {{ $dependency.srcPath }}/package.json /{{ $dependency.srcPath }}
@@ -37,7 +37,7 @@ data:
     {{- range $dependencyName, $dependency := .Values.dependencies }}
     COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
     {{- end }}
-    COPY $CONTEXT_PATH .
+    COPY $SRC_PATH .
     RUN npm run --if-present build
     RUN rm -R node_modules
 
@@ -47,7 +47,7 @@ data:
     {{- range $dependencyName, $dependency := .Values.dependencies }}
     COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
     {{- end }}
-    ARG CONTEXT_PATH
-    COPY --from=build /$CONTEXT_PATH .
+    ARG SRC_PATH
+    COPY --from=build /$SRC_PATH .
     ENTRYPOINT ["npm", "run", "serve"]
     EXPOSE 8080
