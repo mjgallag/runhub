@@ -11,19 +11,27 @@ spec:
         eventTypes:
           - push
     - cel:
-        filter: body.ref.split('/', 3)[1] == 'heads' && !body.deleted
+        overlays:
+          - key: ref_type
+            expression: body.ref.split('/', 3)[1]
+          - key: base_ref_type
+            expression: body.base_ref.split('/', 3)[1]
+          - key: branch
+            expression: body.ref.split('/', 3)[2]
+          - key: base_branch
+            expression: body.base_ref.split('/', 3)[2]
+    - cel:
+        filter: extensions.ref_type == 'heads' && !body.deleted
         overlays:
           - key: subroute-tag
             expression: |
-              body.ref.split('/', 3)[2] == body.repository.default_branch
+              extensions.branch == body.repository.default_branch
                 ? ''
-                : body.ref.split('/', 3)[2] + '-{{ template "runhub.labelBranch" . }}'
-          - key: branch
-            expression: body.ref.split('/', 3)[2]
+                : extensions.branch + '-{{ template "runhub.labelBranch" . }}'
           - key: cache-from-branch
             expression: |
-              body.created && body.base_ref.split('/', 3)[1] == 'heads'
-                ? body.base_ref.split('/', 3)[2]
+              body.created && extensions.base_ref_type == 'heads'
+                ? extensions.base_branch
                 : body.repository.default_branch
   bindings:
     - ref: build-deploy-on-git

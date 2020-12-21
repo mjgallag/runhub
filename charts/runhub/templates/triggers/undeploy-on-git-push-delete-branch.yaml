@@ -11,10 +11,13 @@ spec:
         eventTypes:
           - push
     - cel:
-        filter: body.ref.split('/', 3)[1] == 'heads' && body.deleted
         overlays:
+          - key: ref_type
+            expression: body.ref.split('/', 3)[1]
           - key: branch
             expression: body.ref.split('/', 3)[2]
+    - cel:
+        filter: extensions.ref_type == 'heads' && body.deleted
   bindings:
     - ref: undeploy-on-git-push-delete-branch
   template:
