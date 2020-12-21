@@ -24,13 +24,13 @@ data:
     {{- end }}
 
     FROM node AS base
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    WORKDIR /{{ $dependency.srcPath }}
+    COPY {{ $dependency.srcPath }}/package.json .
+    {{- end }}
     ARG SRC_PATH
     WORKDIR /$SRC_PATH
     COPY $SRC_PATH/package.json $SRC_PATH/package-lock.json .
-    {{- range $dependencyName, $dependency := .Values.dependencies }}
-    RUN mkdir /{{ $dependency.srcPath }}
-    COPY {{ $dependency.srcPath }}/package.json /{{ $dependency.srcPath }}
-    {{- end }}
 
     FROM base AS build
     RUN npm ci && npm cache clean --force
