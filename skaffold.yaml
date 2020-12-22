@@ -5,9 +5,11 @@ deploy:
     releases:
       - name: runhub-crds
         chartPath: charts/runhub-crds
+        namespace: runhub
         createNamespace: true
       - name: runhub
         chartPath: charts/runhub
+        namespace: runhub
         valuesFiles:
           - values.yaml
     flags:
