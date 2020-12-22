@@ -7,11 +7,13 @@ deploy:
         chartPath: charts/runhub-crds
         namespace: runhub
         createNamespace: true
-      - name: runhub
+      - name: dev-app
         chartPath: charts/runhub
         namespace: runhub
         valuesFiles:
           - values.yaml
+        setValues:
+          domain: dev.127.0.0.1.xip.io
     flags:
       install:
         - --atomic

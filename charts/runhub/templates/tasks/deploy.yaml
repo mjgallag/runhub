@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy
+  namespace: {{ template "runhub.namespaceReleaseChart" . }}
 spec:
   params:
     - name: service
@@ -25,7 +26,7 @@ spec:
               --pull-secret container-registry-dockerconfigjson \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ $.Values.domain }}' \
               {{- end }}
               --revision-name "${REVISION_NAME:?}"
             kn service update '$(params.service)' \
@@ -34,7 +35,7 @@ spec:
             kn service update '$(params.service)' \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ $.Values.domain }}' \
               {{- end }}
               --revision-name "${REVISION_NAME:?}" \
               --traffic "${REVISION_NAME:?}=100"
@@ -44,7 +45,7 @@ spec:
           kn service update '$(params.service)' \
             --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.{{ template "runhub.domainWithNamespace" $ }}' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.{{ $.Values.domain }}' \
               {{- end }}
             --revision-name "${REVISION_NAME:?}" \
             --tag "${REVISION_NAME:?}"='$(params.subroute-tag)'

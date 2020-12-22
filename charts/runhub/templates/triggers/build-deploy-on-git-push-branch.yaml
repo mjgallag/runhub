@@ -2,6 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: Trigger
 metadata:
   name: build-deploy-on-git-push-branch
+  namespace: {{ template "runhub.namespaceReleaseChart" . }}
 spec:
   interceptors:
     - github:

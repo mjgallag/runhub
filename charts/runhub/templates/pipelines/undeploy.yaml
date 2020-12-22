@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: undeploy
+  namespace: {{ template "runhub.namespaceReleaseChart" . }}
 spec:
   params:
     - name: subroute-tag
