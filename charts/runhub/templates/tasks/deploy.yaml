@@ -23,6 +23,7 @@ spec:
         if [ -z '$(params.subroute-tag)' ]; then
           if ! kn service describe '$(params.service)'; then
             kn service create '$(params.service)' \
+              --scale-init 0 \
               --pull-secret container-registry-dockerconfigjson \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
