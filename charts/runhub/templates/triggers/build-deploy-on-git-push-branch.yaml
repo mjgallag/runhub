@@ -28,7 +28,7 @@ spec:
             expression: |
               extensions.branch == body.repository.default_branch
                 ? ''
-                : extensions.branch + '-{{ template "runhub.labelBranch" . }}'
+                : extensions.branch
           - key: cache-from-branch
             expression: |
               body.created && extensions.base_ref_type == 'heads'

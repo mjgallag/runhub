@@ -6,4 +6,4 @@ metadata:
 spec:
   params:
     - name: subroute-tag
-      value: $(extensions.branch)-{{ template "runhub.labelBranch" . }}
+      value: $(extensions.branch)
