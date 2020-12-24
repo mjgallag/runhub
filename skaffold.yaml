@@ -7,6 +7,7 @@ deploy:
         chartPath: charts/runhub-crds
         namespace: runhub
         createNamespace: true
+        skipBuildDependencies: true
       - name: dev-app
         chartPath: charts/runhub
         namespace: runhub
