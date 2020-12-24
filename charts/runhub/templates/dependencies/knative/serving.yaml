@@ -758,7 +758,6 @@ data:
     svc.cluster.local: |
       selector:
         app: secret
-  {{ .Values.domain }}: |
 
 ---
 # Copyright 2020 The Knative Authors
@@ -1249,7 +1248,13 @@ data:
     # http connections, asking the clients to use HTTPS.
     httpProtocol: "Enabled"
   ingress.class: "kourier.ingress.networking.knative.dev"
-  domainTemplate: "{{"{{"}}.Name}}.{{"{{"}}.Domain}}"
+  domainTemplate: |-
+    {{"{{"}} if index .Annotations "domain" -}}
+      {{"{{"}} .Name }}.{{"{{"}} index .Annotations "domain" }}
+    {{"{{"}}- else -}}
+      {{"{{"}} .Name }}.{{"{{"}} .Namespace }}.{{"{{"}} .Domain }}
+    {{"{{"}}- end }}
+
 
 ---
 # Copyright 2018 The Knative Authors
