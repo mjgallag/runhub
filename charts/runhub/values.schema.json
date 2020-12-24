@@ -87,6 +87,15 @@
       ],
       "additionalProperties": false
     },
+    "runhub-knative": {
+      "type": "object",
+      "properties": {
+        "global": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
     "runhub-tekton": {
       "type": "object",
       "properties": {

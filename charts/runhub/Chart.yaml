@@ -2,5 +2,7 @@ apiVersion: v2
 name: runhub
 version: 0.0.0
 dependencies:
+  - name: runhub-knative
+    version: 0.0.0
   - name: runhub-tekton
     version: 0.0.0
