@@ -91,18 +91,26 @@
       "type": "object",
       "properties": {
         "global": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": false
         }
       },
+      "required": [
+        "global"
+      ],
       "additionalProperties": false
     },
     "runhub-tekton": {
       "type": "object",
       "properties": {
         "global": {
-          "type": "object"
+          "type": "object",
+          "additionalProperties": false
         }
       },
+      "required": [
+        "global"
+      ],
       "additionalProperties": false
     }
   },
