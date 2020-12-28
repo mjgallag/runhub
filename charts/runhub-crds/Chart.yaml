@@ -2,7 +2,7 @@ apiVersion: v2
 name: runhub-crds
 version: 0.0.0
 dependencies:
-  - name: runhub-knative-crds
+  - name: knative-crds
     version: 0.0.0
-  - name: runhub-tekton-crds
+  - name: tekton-crds
     version: 0.0.0
