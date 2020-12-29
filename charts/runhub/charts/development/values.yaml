@@ -1,0 +1,10 @@
+services:
+  frontend:
+    subdomain: app
+    srcPath: frontend
+  backend:
+    subdomain: backend
+    srcPath: backend
+dependencies:
+  shared:
+    srcPath: shared

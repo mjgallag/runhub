@@ -1,5 +1,3 @@
-environment:
-  development: true
 defaults:
   dependencies:
     enabled: false
