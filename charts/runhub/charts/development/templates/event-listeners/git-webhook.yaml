@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: git-webhook
-  namespace: {{ template "runhub.namespaceReleaseChart" . }}
+  namespace: {{ template "runhub.development.namespaceReleaseChart" . }}
 spec:
   triggers:
     - triggerRef: build-deploy-on-git-ping

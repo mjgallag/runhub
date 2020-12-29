@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: build-deploy
-  namespace: {{ template "runhub.namespaceReleaseChart" . }}
+  namespace: {{ template "runhub.development.namespaceReleaseChart" . }}
 secrets:
 {{- if .Values.credentials.git }}
   - name: git-basic-auth
