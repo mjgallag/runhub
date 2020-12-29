@@ -45,32 +45,16 @@
       "properties": {
         "enabled": {
           "type": "boolean"
-        },
-        "global": {
-          "type": "object",
-          "additionalProperties": false
         }
-      },
-      "required": [
-        "global"
-      ],
-      "additionalProperties": false
+      }
     },
     "tekton-crds": {
       "type": "object",
       "properties": {
         "enabled": {
           "type": "boolean"
-        },
-        "global": {
-          "type": "object",
-          "additionalProperties": false
         }
-      },
-      "required": [
-        "global"
-      ],
-      "additionalProperties": false
+      }
     }
   },
   "required": [
