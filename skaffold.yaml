@@ -14,7 +14,7 @@ deploy:
         valuesFiles:
           - values.yaml
         setValues:
-          domain: dev.127.0.0.1.xip.io
+          development.domain: dev.127.0.0.1.xip.io
         skipBuildDependencies: true
     flags:
       install:

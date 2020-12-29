@@ -2,6 +2,9 @@ apiVersion: v2
 name: runhub
 version: 0.0.0
 dependencies:
+  - name: development
+    version: 0.0.0
+    condition: environment.development,defaults.dependencies.enabled
   - name: knative
     version: 0.0.0
     condition: knative.enabled,environment.development,environment.production,defaults.dependencies.enabled

@@ -18,91 +18,6 @@
       "maxProperties": 1,
       "additionalProperties": false
     },
-    "domain": {
-      "type": "string"
-    },
-    "services": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "subdomain": {
-            "type": "string"
-          },
-          "srcPath": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "subdomain",
-          "srcPath"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "dependencies": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "srcPath": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "srcPath"
-        ],
-        "additionalProperties": false
-      }
-    },
-    "imagePath": {
-      "type": "string"
-    },
-    "credentials": {
-      "type": "object",
-      "properties": {
-        "git": {
-          "type": "object",
-          "properties": {
-            "username": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "username",
-            "password"
-          ],
-          "additionalProperties": false
-        },
-        "containerRegistry": {
-          "type": "object",
-          "properties": {
-            "hostname": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "hostname",
-            "username",
-            "password"
-          ],
-          "additionalProperties": false
-        }
-      },
-      "required": [
-        "containerRegistry"
-      ],
-      "additionalProperties": false
-    },
     "defaults": {
       "type": "object",
       "properties": {
@@ -124,6 +39,14 @@
         "dependencies"
       ],
       "additionalProperties": false
+    },
+    "development": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
     },
     "knative": {
       "type": "object",
@@ -160,10 +83,6 @@
   },
   "required": [
     "environment",
-    "domain",
-    "services",
-    "imagePath",
-    "credentials",
     "defaults"
   ],
   "additionalProperties": false

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "domain": {
+      "type": "string"
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "subdomain": {
+            "type": "string"
+          },
+          "srcPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subdomain",
+          "srcPath"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "srcPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "srcPath"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "imagePath": {
+      "type": "string"
+    },
+    "credentials": {
+      "type": "object",
+      "properties": {
+        "git": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "username",
+            "password"
+          ],
+          "additionalProperties": false
+        },
+        "containerRegistry": {
+          "type": "object",
+          "properties": {
+            "hostname": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "hostname",
+            "username",
+            "password"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "containerRegistry"
+      ],
+      "additionalProperties": false
+    },
+    "global": {
+      "type": "object",
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "domain",
+    "services",
+    "imagePath",
+    "credentials",
+    "global"
+  ],
+  "additionalProperties": false
+}

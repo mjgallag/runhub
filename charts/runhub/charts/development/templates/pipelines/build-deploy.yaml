@@ -42,7 +42,7 @@ spec:
         - name: src-path
           value: {{ $service.srcPath }}
         - name: image-path-with-hostname
-          value: {{ template "runhub.imagePathWithHostname" $ }}
+          value: {{ template "runhub.development.imagePathWithHostname" $ }}
         - name: image-name
           value: {{ $serviceName }}
         - name: image-tag
@@ -65,7 +65,7 @@ spec:
         - name: subroute-tag
           value: $(params.subroute-tag)
         - name: image
-          value: {{ template "runhub.imagePathWithHostname" $ }}/{{ $serviceName }}
+          value: {{ template "runhub.development.imagePathWithHostname" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
     {{- end }}
