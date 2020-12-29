@@ -2,6 +2,22 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
+    "environment": {
+      "type": "object",
+      "properties": {
+        "development": {
+          "type": "boolean",
+          "const": true
+        },
+        "production": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "minProperties": 1,
+      "maxProperties": 1,
+      "additionalProperties": false
+    },
     "domain": {
       "type": "string"
     },
@@ -87,9 +103,34 @@
       ],
       "additionalProperties": false
     },
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "dependencies": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "const": false
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "dependencies"
+      ],
+      "additionalProperties": false
+    },
     "knative": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
         "global": {
           "type": "object",
           "additionalProperties": false
@@ -103,6 +144,9 @@
     "tekton": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
         "global": {
           "type": "object",
           "additionalProperties": false
@@ -115,10 +159,12 @@
     }
   },
   "required": [
+    "environment",
     "domain",
     "services",
     "imagePath",
-    "credentials"
+    "credentials",
+    "defaults"
   ],
   "additionalProperties": false
 }

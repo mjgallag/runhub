@@ -4,5 +4,7 @@ version: 0.0.0
 dependencies:
   - name: knative
     version: 0.0.0
+    condition: knative.enabled,environment.development,environment.production,defaults.dependencies.enabled
   - name: tekton
     version: 0.0.0
+    condition: tekton.enabled,environment.development,defaults.dependencies.enabled
