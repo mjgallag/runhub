@@ -3,14 +3,14 @@ kind: Config
 deploy:
   helm:
     releases:
-      - name: runhub-crds
+      - name: dev-runhub-crds
         chartPath: charts/runhub-crds
-        namespace: runhub
+        namespace: dev-runhub
         createNamespace: true
         skipBuildDependencies: true
       - name: dev-app
         chartPath: charts/runhub
-        namespace: runhub
+        namespace: dev-runhub
         valuesFiles:
           - values.yaml
         setValues:
