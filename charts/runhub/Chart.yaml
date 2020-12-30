@@ -5,6 +5,9 @@ dependencies:
   - name: development
     version: 0.0.0
     condition: environment.development,defaults.dependencies.enabled
+  - name: production
+    version: 0.0.0
+    condition: environment.production,defaults.dependencies.enabled
   - name: knative
     version: 0.0.0
     condition: knative.enabled,environment.development,environment.production,defaults.dependencies.enabled

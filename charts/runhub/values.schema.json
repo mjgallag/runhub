@@ -43,6 +43,9 @@
     "development": {
       "type": "object"
     },
+    "production": {
+      "type": "object"
+    },
     "knative": {
       "type": "object",
       "properties": {
