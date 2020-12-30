@@ -4,13 +4,13 @@ version: 0.0.0
 dependencies:
   - name: dev
     version: 0.0.0
-    condition: environment.dev,defaults.dependencies.enabled
+    condition: global.environment.dev,defaults.dependencies.enabled
   - name: prod
     version: 0.0.0
-    condition: environment.prod,defaults.dependencies.enabled
+    condition: global.environment.prod,defaults.dependencies.enabled
   - name: knative
     version: 0.0.0
-    condition: knative.enabled,environment.dev,environment.prod,defaults.dependencies.enabled
+    condition: knative.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
   - name: tekton
     version: 0.0.0
-    condition: tekton.enabled,environment.dev,defaults.dependencies.enabled
+    condition: tekton.enabled,global.environment.dev,defaults.dependencies.enabled

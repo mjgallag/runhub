@@ -2,21 +2,29 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "environment": {
+    "global": {
       "type": "object",
       "properties": {
-        "dev": {
-          "type": "boolean",
-          "const": true
-        },
-        "prod": {
-          "type": "boolean",
-          "const": true
+        "environment": {
+          "type": "object",
+          "properties": {
+            "dev": {
+              "type": "boolean",
+              "const": true
+            },
+            "prod": {
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "minProperties": 1,
+          "maxProperties": 1,
+          "additionalProperties": false
         }
       },
-      "minProperties": 1,
-      "maxProperties": 1,
-      "additionalProperties": false
+      "required": [
+        "environment"
+      ]
     },
     "defaults": {
       "type": "object",
@@ -58,7 +66,7 @@
     }
   },
   "required": [
-    "environment",
+    "global",
     "defaults"
   ],
   "additionalProperties": false

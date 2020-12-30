@@ -88,8 +88,7 @@
       "additionalProperties": false
     },
     "global": {
-      "type": "object",
-      "additionalProperties": false
+      "type": "object"
     }
   },
   "required": [
