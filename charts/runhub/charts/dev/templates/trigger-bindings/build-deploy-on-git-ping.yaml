@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: build-deploy-on-git-ping
-  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+  namespace: {{ template "runhub.namespaceReleaseChart" . }}
 spec:
   params:
     - name: git-revision

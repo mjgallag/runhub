@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: undeploy-on-git-push-delete-branch
-  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+  namespace: {{ template "runhub.namespaceReleaseChart" . }}
 spec:
   params:
     - name: subroute-tag
