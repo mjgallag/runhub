@@ -41,12 +41,7 @@
       "additionalProperties": false
     },
     "development": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
+      "type": "object"
     },
     "knative": {
       "type": "object",
