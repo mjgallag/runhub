@@ -1,0 +1,41 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: build-deploy-on-git-push-branch
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+spec:
+  interceptors:
+    - github:
+        secretRef:
+          secretName: git-webhook-opaque
+          secretKey: secret
+        eventTypes:
+          - push
+    - cel:
+        overlays:
+          - key: ref_type
+            expression: body.ref.split('/', 3)[1]
+          - key: base_ref_type
+            expression: body.base_ref.split('/', 3)[1]
+          - key: branch
+            expression: body.ref.split('/', 3)[2]
+          - key: base_branch
+            expression: body.base_ref.split('/', 3)[2]
+    - cel:
+        filter: extensions.ref_type == 'heads' && !body.deleted
+        overlays:
+          - key: subroute-tag
+            expression: |
+              extensions.branch == body.repository.default_branch
+                ? ''
+                : extensions.branch
+          - key: cache-from-branch
+            expression: |
+              body.created && extensions.base_ref_type == 'heads'
+                ? extensions.base_branch
+                : body.repository.default_branch
+  bindings:
+    - ref: build-deploy-on-git
+    - ref: build-deploy-on-git-push-branch
+  template:
+    ref: build-deploy

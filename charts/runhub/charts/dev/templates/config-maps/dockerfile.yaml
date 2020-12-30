@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dockerfile
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+data:
+  dockerfile: |
+    FROM node:14.15.3-alpine3.12@sha256:3fcd65a94320827a74eacd80da24a190f2c3e65ce0f66e4fe7764629f11afde3 AS node
+
+    {{ range $dependencyName, $dependency := .Values.dependencies -}}
+    FROM node AS {{ $dependencyName }}-base
+    WORKDIR /{{ $dependency.srcPath }}
+    COPY {{ $dependency.srcPath }}/package.json {{ $dependency.srcPath }}/package-lock.json .
+
+    FROM {{ $dependencyName }}-base AS {{ $dependencyName }}-build
+    RUN npm ci && npm cache clean --force
+    COPY {{ $dependency.srcPath }} .
+    RUN npm run --if-present build
+    RUN rm -R node_modules
+
+    FROM {{ $dependencyName }}-base AS {{ $dependencyName }}-production
+    ENV NODE_ENV=production
+    RUN npm ci && npm cache clean --force
+    COPY --from={{ $dependencyName }}-build /{{ $dependency.srcPath }} .
+    {{- end }}
+
+    FROM node AS base
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    WORKDIR /{{ $dependency.srcPath }}
+    COPY {{ $dependency.srcPath }}/package.json .
+    {{- end }}
+    ARG SRC_PATH
+    WORKDIR /$SRC_PATH
+    COPY $SRC_PATH/package.json $SRC_PATH/package-lock.json .
+
+    FROM base AS build
+    RUN npm ci && npm cache clean --force
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
+    {{- end }}
+    COPY $SRC_PATH .
+    RUN npm run --if-present build
+    RUN rm -R node_modules
+
+    FROM base AS production
+    ENV NODE_ENV=production
+    RUN npm ci && npm cache clean --force
+    {{- range $dependencyName, $dependency := .Values.dependencies }}
+    COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
+    {{- end }}
+    ARG SRC_PATH
+    COPY --from=build /$SRC_PATH .
+    ENTRYPOINT ["npm", "run", "serve"]
+    EXPOSE 8080

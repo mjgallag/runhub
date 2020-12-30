@@ -1,0 +1,20 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: undeploy
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+spec:
+  params:
+    - name: subroute-tag
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: undeploy-$(tt.params.subroute-tag)-
+        namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+      spec:
+        pipelineRef:
+          name: undeploy
+        params:
+          - name: subroute-tag
+            value: $(tt.params.subroute-tag)

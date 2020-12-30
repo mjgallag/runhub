@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: undeploy
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+spec:
+  params:
+    - name: subroute-tag
+      type: string
+  tasks:
+    {{- range $serviceName, $service := .Values.services }}
+    - name: undeploy-{{ $serviceName }}
+      taskRef:
+        name: undeploy
+      params:
+        - name: service
+          value: {{ $service.subdomain }}
+        - name: subroute-tag
+          value: $(params.subroute-tag)
+    {{- end }}

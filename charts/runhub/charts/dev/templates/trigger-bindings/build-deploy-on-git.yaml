@@ -1,0 +1,9 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: build-deploy-on-git
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+spec:
+  params:
+    - name: git-url
+      value: $(body.repository.clone_url)

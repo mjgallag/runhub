@@ -1,0 +1,18 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: build-deploy-on-git-ping
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+spec:
+  interceptors:
+    - github:
+        secretRef:
+          secretName: git-webhook-opaque
+          secretKey: secret
+        eventTypes:
+          - ping
+  bindings:
+    - ref: build-deploy-on-git
+    - ref: build-deploy-on-git-ping
+  template:
+    ref: build-deploy

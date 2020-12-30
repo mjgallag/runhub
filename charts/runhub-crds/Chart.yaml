@@ -4,7 +4,7 @@ version: 0.0.0
 dependencies:
   - name: knative-crds
     version: 0.0.0
-    condition: knative-crds.enabled,environment.development,environment.production,defaults.dependencies.enabled
+    condition: knative-crds.enabled,environment.dev,environment.prod,defaults.dependencies.enabled
   - name: tekton-crds
     version: 0.0.0
-    condition: tekton-crds.enabled,environment.development,defaults.dependencies.enabled
+    condition: tekton-crds.enabled,environment.dev,defaults.dependencies.enabled

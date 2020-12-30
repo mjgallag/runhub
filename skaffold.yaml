@@ -7,7 +7,7 @@ deploy:
         chartPath: charts/runhub-crds
         namespace: dev-runhub
         setValues:
-          environment.development: true
+          environment.dev: true
         createNamespace: true
         skipBuildDependencies: true
       - name: app
@@ -16,14 +16,14 @@ deploy:
         valuesFiles:
           - values.yaml
         setValues:
-          environment.development: true
-          development.domain: dev.127.0.0.1.xip.io
+          environment.dev: true
+          dev.domain: dev.127.0.0.1.xip.io
         skipBuildDependencies: true
       - name: runhub-crds
         chartPath: charts/runhub-crds
         namespace: prod-runhub
         setValues:
-          environment.production: true
+          environment.prod: true
           knative-crds.enabled: false
         createNamespace: true
         skipBuildDependencies: true
@@ -31,7 +31,7 @@ deploy:
         chartPath: charts/runhub
         namespace: prod-runhub
         setValues:
-          environment.production: true
+          environment.prod: true
           knative.enabled: false
         skipBuildDependencies: true
     flags:

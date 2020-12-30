@@ -2,15 +2,15 @@ apiVersion: v2
 name: runhub
 version: 0.0.0
 dependencies:
-  - name: development
+  - name: dev
     version: 0.0.0
-    condition: environment.development,defaults.dependencies.enabled
-  - name: production
+    condition: environment.dev,defaults.dependencies.enabled
+  - name: prod
     version: 0.0.0
-    condition: environment.production,defaults.dependencies.enabled
+    condition: environment.prod,defaults.dependencies.enabled
   - name: knative
     version: 0.0.0
-    condition: knative.enabled,environment.development,environment.production,defaults.dependencies.enabled
+    condition: knative.enabled,environment.dev,environment.prod,defaults.dependencies.enabled
   - name: tekton
     version: 0.0.0
-    condition: tekton.enabled,environment.development,defaults.dependencies.enabled
+    condition: tekton.enabled,environment.dev,defaults.dependencies.enabled

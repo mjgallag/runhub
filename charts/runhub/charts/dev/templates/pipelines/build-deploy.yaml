@@ -1,0 +1,71 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-deploy
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+spec:
+  params:
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
+    - name: subroute-tag
+      type: string
+    - name: image-tag
+      type: string
+    - name: cache-from-image-tag
+      type: string
+  workspaces:
+    - name: dockerfile
+    - name: src
+  tasks:
+    - name: get-src
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+        - name: deleteExisting
+          value: 'false'
+      workspaces:
+        - name: output
+          workspace: src
+    {{- range $serviceName, $service := .Values.services }}
+    - name: build-{{ $serviceName }}
+      runAfter:
+        - get-src
+      taskRef:
+        name: build
+      params:
+        - name: src-path
+          value: {{ $service.srcPath }}
+        - name: image-path-with-hostname
+          value: {{ template "runhub.dev.imagePathWithHostname" $ }}
+        - name: image-name
+          value: {{ $serviceName }}
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: cache-from-image-tag
+          value: $(params.cache-from-image-tag)
+      workspaces:
+        - name: dockerfile
+          workspace: dockerfile
+        - name: src
+          workspace: src
+    - name: deploy-{{ $serviceName }}
+      runAfter:
+        - build-{{ $serviceName }}
+      taskRef:
+        name: deploy
+      params:
+        - name: service
+          value: {{ $service.subdomain }}
+        - name: subroute-tag
+          value: $(params.subroute-tag)
+        - name: image
+          value: {{ template "runhub.dev.imagePathWithHostname" $ }}/{{ $serviceName }}
+        - name: image-tag
+          value: $(params.image-tag)
+    {{- end }}

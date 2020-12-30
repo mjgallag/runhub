@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: git-webhook
+  namespace: {{ template "runhub.dev.namespaceReleaseChart" . }}
+secrets:
+  - name: git-webhook-opaque

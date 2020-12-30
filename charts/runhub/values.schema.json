@@ -5,11 +5,11 @@
     "environment": {
       "type": "object",
       "properties": {
-        "development": {
+        "dev": {
           "type": "boolean",
           "const": true
         },
-        "production": {
+        "prod": {
           "type": "boolean",
           "const": true
         }
@@ -40,10 +40,10 @@
       ],
       "additionalProperties": false
     },
-    "development": {
+    "dev": {
       "type": "object"
     },
-    "production": {
+    "prod": {
       "type": "object"
     },
     "knative": {
