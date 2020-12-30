@@ -20,10 +20,40 @@
           "minProperties": 1,
           "maxProperties": 1,
           "additionalProperties": false
+        },
+        "credentials": {
+          "type": "object",
+          "properties": {
+            "containerRegistry": {
+              "type": "object",
+              "properties": {
+                "hostname": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "hostname",
+                "username",
+                "password"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "containerRegistry"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
-        "environment"
+        "environment",
+        "credentials"
       ]
     },
     "defaults": {

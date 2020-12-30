@@ -60,31 +60,8 @@
             "password"
           ],
           "additionalProperties": false
-        },
-        "containerRegistry": {
-          "type": "object",
-          "properties": {
-            "hostname": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "hostname",
-            "username",
-            "password"
-          ],
-          "additionalProperties": false
         }
       },
-      "required": [
-        "containerRegistry"
-      ],
       "additionalProperties": false
     },
     "global": {

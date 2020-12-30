@@ -14,7 +14,8 @@ deploy:
         chartPath: charts/runhub
         namespace: dev-runhub
         valuesFiles:
-          - values.yaml
+          - values-development.yaml
+          - values-global.yaml
         setValues:
           global.environment.dev: true
           dev.domain: dev.127.0.0.1.xip.io
@@ -30,6 +31,8 @@ deploy:
       - name: app
         chartPath: charts/runhub
         namespace: prod-runhub
+        valuesFiles:
+          - values-global.yaml
         setValues:
           global.environment.prod: true
           knative.enabled: false
