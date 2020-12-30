@@ -81,9 +81,6 @@
     "dev": {
       "type": "object"
     },
-    "prod": {
-      "type": "object"
-    },
     "knative": {
       "type": "object",
       "properties": {
