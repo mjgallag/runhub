@@ -22,7 +22,8 @@
           "srcPath"
         ],
         "additionalProperties": false
-      }
+      },
+      "minProperties": 1
     },
     "dependencies": {
       "type": "object",
@@ -37,7 +38,8 @@
           "srcPath"
         ],
         "additionalProperties": false
-      }
+      },
+      "minProperties": 1
     },
     "imagePath": {
       "type": "string"
