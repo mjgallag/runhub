@@ -41,6 +41,22 @@
       },
       "minProperties": 1
     },
+    "release": {
+      "type": "object",
+      "properties": {
+        "prod-domain": {
+          "type": "string"
+        },
+        "prod-branch": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "prod-domain",
+        "prod-branch"
+      ],
+      "additionalProperties": false
+    },
     "imagePath": {
       "type": "string"
     },
