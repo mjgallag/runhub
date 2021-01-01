@@ -16,6 +16,9 @@ deploy:
         valuesFiles:
           - values-development.yaml
           - values-global.yaml
+        setFiles:
+          dev.gitCredentials.password: password-git.txt
+          global.containerRegistryCredentials.password: password-containerRegistry.txt
         setValues:
           global.environment.dev: true
           dev.domain: dev.127.0.0.1.xip.io
@@ -34,6 +37,8 @@ deploy:
         namespace: prod-runhub
         valuesFiles:
           - values-global.yaml
+        setFiles:
+          global.containerRegistryCredentials.password: password-containerRegistry.txt
         setValues:
           global.environment.prod: true
           knative.enabled: false
