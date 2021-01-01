@@ -60,26 +60,20 @@
     "imagePath": {
       "type": "string"
     },
-    "credentials": {
+    "gitCredentials": {
       "type": "object",
       "properties": {
-        "git": {
-          "type": "object",
-          "properties": {
-            "username": {
-              "type": "string"
-            },
-            "password": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "username",
-            "password"
-          ],
-          "additionalProperties": false
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
         }
       },
+      "required": [
+        "username",
+        "password"
+      ],
       "additionalProperties": false
     },
     "global": {
@@ -90,7 +84,6 @@
     "domain",
     "services",
     "imagePath",
-    "credentials",
     "global"
   ],
   "additionalProperties": false

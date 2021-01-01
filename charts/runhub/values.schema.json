@@ -21,39 +21,30 @@
           "maxProperties": 1,
           "additionalProperties": false
         },
-        "credentials": {
+        "containerRegistryCredentials": {
           "type": "object",
           "properties": {
-            "containerRegistry": {
-              "type": "object",
-              "properties": {
-                "hostname": {
-                  "type": "string"
-                },
-                "username": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "hostname",
-                "username",
-                "password"
-              ],
-              "additionalProperties": false
+            "hostname": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
             }
           },
           "required": [
-            "containerRegistry"
+            "hostname",
+            "username",
+            "password"
           ],
           "additionalProperties": false
         }
       },
       "required": [
         "environment",
-        "credentials"
+        "containerRegistryCredentials"
       ]
     },
     "defaults": {
