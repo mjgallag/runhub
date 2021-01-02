@@ -7,7 +7,7 @@ spec:
   params:
     - name: src-path
       type: string
-    - name: image-path-with-hostname
+    - name: image-path-with-registry
       type: string
     - name: image-name
       type: string
@@ -24,8 +24,8 @@ spec:
       securityContext:
         privileged: true
       script: |
-        IMAGE='$(params.image-path-with-hostname)/$(params.image-name)'
-        CACHE_IMAGE='$(params.image-path-with-hostname)/cache/$(params.image-name)'
+        IMAGE='$(params.image-path-with-registry)/$(params.image-name)'
+        CACHE_IMAGE='$(params.image-path-with-registry)/cache/$(params.image-name)'
 
         buildctl-daemonless.sh \
           build \

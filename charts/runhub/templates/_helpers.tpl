@@ -4,7 +4,7 @@
 {{- end }}
 {{- end }}
 
-{{ define "runhub.imagePathWithHostname" -}}
+{{ define "runhub.imagePathWithRegistry" -}}
   {{ .Values.global.containerRegistryCredentials.server }}/{{ .Values.imagePath }}
 {{- end }}
 
