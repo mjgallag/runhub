@@ -19,7 +19,7 @@ deploy:
         setValues:
           global.environment.dev: true
           dev.domain: dev.127.0.0.1.xip.io
-          dev.release.prod-domain: 127.0.0.1.xip.io
+          dev.release.prodDomain: 127.0.0.1.xip.io
         skipBuildDependencies: true
       - name: runhub-crds
         chartPath: charts/runhub-crds

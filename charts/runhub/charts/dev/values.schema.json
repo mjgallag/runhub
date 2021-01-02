@@ -44,16 +44,16 @@
     "release": {
       "type": "object",
       "properties": {
-        "prod-domain": {
+        "prodDomain": {
           "type": "string"
         },
-        "prod-branch": {
+        "prodBranch": {
           "type": "string"
         }
       },
       "required": [
-        "prod-domain",
-        "prod-branch"
+        "prodDomain",
+        "prodBranch"
       ],
       "additionalProperties": false
     },
