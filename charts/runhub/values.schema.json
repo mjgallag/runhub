@@ -24,7 +24,7 @@
         "containerRegistryCredentials": {
           "type": "object",
           "properties": {
-            "hostname": {
+            "server": {
               "type": "string"
             },
             "username": {
@@ -35,7 +35,7 @@
             }
           },
           "required": [
-            "hostname",
+            "server",
             "username",
             "password"
           ],

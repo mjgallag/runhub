@@ -5,7 +5,7 @@
 {{- end }}
 
 {{ define "runhub.imagePathWithHostname" -}}
-  {{ .Values.global.containerRegistryCredentials.hostname }}/{{ .Values.imagePath }}
+  {{ .Values.global.containerRegistryCredentials.server }}/{{ .Values.imagePath }}
 {{- end }}
 
 {{ define "runhub.namespaceReleaseChart" -}}
