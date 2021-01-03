@@ -49,11 +49,36 @@
         },
         "prodBranch": {
           "type": "string"
+        },
+        "prodKubernetesCredentials": {
+          "type": "object",
+          "properties": {
+            "server": {
+              "type": "string"
+            },
+            "certificateAuthority": {
+              "type": "string"
+            },
+            "clientCertificate": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "server",
+            "certificateAuthority",
+            "clientCertificate",
+            "clientKey"
+          ],
+          "additionalProperties": false
         }
       },
       "required": [
         "prodDomain",
-        "prodBranch"
+        "prodBranch",
+        "prodKubernetesCredentials"
       ],
       "additionalProperties": false
     },
