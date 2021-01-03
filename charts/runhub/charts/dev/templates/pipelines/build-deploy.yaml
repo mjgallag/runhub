@@ -16,8 +16,8 @@ spec:
     - name: cache-from-image-tag
       type: string
   workspaces:
-    - name: dockerfile
     - name: src
+    - name: dockerfile
   tasks:
     - name: get-src
       taskRef:
