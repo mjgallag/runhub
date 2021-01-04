@@ -43,3 +43,8 @@ spec:
           - name: dockerfile
             configMap:
               name: dockerfile
+        {{- if .Values.release }}
+          - name: prod-kubeconfig
+            secret:
+              secretName: prod-kubeconfig-opaque
+        {{- end}}

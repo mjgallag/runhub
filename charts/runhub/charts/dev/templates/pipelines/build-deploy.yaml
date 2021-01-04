@@ -18,6 +18,9 @@ spec:
   workspaces:
     - name: src
     - name: dockerfile
+  {{- if .Values.release }}
+    - name: prod-kubeconfig
+  {{- end}}
   tasks:
     - name: get-src
       taskRef:
@@ -32,7 +35,7 @@ spec:
       workspaces:
         - name: output
           workspace: src
-    {{- range $serviceName, $service := .Values.services }}
+  {{- range $serviceName, $service := .Values.services }}
     - name: build-{{ $serviceName }}
       runAfter:
         - get-src
@@ -68,4 +71,32 @@ spec:
           value: {{ template "runhub.imagePathWithRegistry" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
-    {{- end }}
+        - name: domain
+          value: {{ $.Values.domain }}
+  {{- if $.Values.release }}
+    - name: deploy-prod-{{ $serviceName }}
+      when:
+        - input: "$(params.git-revision)"
+          operator: in
+          values:
+            - refs/heads/{{ $.Values.release.prodBranch }}
+      runAfter:
+        - build-{{ $serviceName }}
+      taskRef:
+        name: deploy
+      params:
+        - name: service
+          value: {{ $service.subdomain }}
+        - name: subroute-tag
+          value: ''
+        - name: image
+          value: {{ template "runhub.imagePathWithRegistry" $ }}/{{ $serviceName }}
+        - name: image-tag
+          value: $(params.image-tag)
+        - name: domain
+          value: {{ $.Values.release.prodDomain }}
+      workspaces:
+        - name: prod-kubeconfig
+          workspace: prod-kubeconfig
+  {{- end }}
+  {{- end }}

@@ -8,3 +8,6 @@ secrets:
   - name: git-basic-auth
 {{- end }}
   - name: container-registry-dockerconfigjson
+{{- if .Values.release }}
+  - name: prod-kubeconfig-opaque
+{{- end }}

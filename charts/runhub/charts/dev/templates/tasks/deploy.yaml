@@ -13,6 +13,11 @@ spec:
       type: string
     - name: image-tag
       type: string
+    - name: domain
+      type: string
+  workspaces:
+    - name: prod-kubeconfig
+      optional: true
   steps:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.19.1@sha256:d49c937341792a6144e61d251dc174688665c39c433dc0fcf468027ea4309ec6
@@ -20,15 +25,19 @@ spec:
         IMAGE='$(params.image):$(params.image-tag)'
         REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
 
+        if [ -n '$(workspaces.prod-kubeconfig.path)' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
+        fi
+
         if [ -z '$(params.subroute-tag)' ]; then
           if ! kn service describe '$(params.service)'; then
             kn service create '$(params.service)' \
-              --annotation-service domain='{{ .Values.domain }}' \
+              --annotation-service domain='$(params.domain)' \
               --scale-init 0 \
               --pull-secret container-registry-dockerconfigjson \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ $.Values.domain }}' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
               --revision-name "${REVISION_NAME:?}"
             kn service update '$(params.service)' \
@@ -37,7 +46,7 @@ spec:
             kn service update '$(params.service)' \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.{{ $.Values.domain }}' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
               --revision-name "${REVISION_NAME:?}" \
               --traffic "${REVISION_NAME:?}=100"
@@ -47,7 +56,7 @@ spec:
           kn service update '$(params.service)' \
             --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.{{ $.Values.domain }}' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
             --revision-name "${REVISION_NAME:?}" \
             --tag "${REVISION_NAME:?}"='$(params.subroute-tag)'
