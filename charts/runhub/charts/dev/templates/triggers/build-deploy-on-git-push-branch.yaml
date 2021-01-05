@@ -16,11 +16,13 @@ spec:
           - key: ref_type
             expression: body.ref.split('/', 3)[1]
           - key: base_ref_type
-            expression: body.base_ref.split('/', 3)[1]
+            expression: |
+              type(body.base_ref) != string ? '' : body.base_ref.split('/', 3)[1]
           - key: branch
             expression: body.ref.split('/', 3)[2]
           - key: base_branch
-            expression: body.base_ref.split('/', 3)[2]
+            expression: |
+              type(body.base_ref) != string ? '' : body.base_ref.split('/', 3)[2]
     - cel:
         filter: extensions.ref_type == 'heads' && !body.deleted
         overlays:
@@ -31,7 +33,7 @@ spec:
                 : extensions.branch
           - key: cache-from-branch
             expression: |
-              body.created && extensions.base_ref_type == 'heads'
+              extensions.base_ref_type == 'heads'
                 ? extensions.base_branch
                 : body.repository.default_branch
   bindings:
