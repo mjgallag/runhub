@@ -15,6 +15,10 @@ spec:
       type: string
     - name: domain
       type: string
+    - name: initialScale
+      type: string
+    - name: minScale
+      type: string
   workspaces:
     - name: prod-kubeconfig
       optional: true
@@ -33,7 +37,8 @@ spec:
           if ! kn service describe '$(params.service)'; then
             kn service create '$(params.service)' \
               --annotation-service domain='$(params.domain)' \
-              --scale-init 0 \
+              --scale-init '$(params.initialScale)' \
+              --scale-min '$(params.minScale)' \
               --pull-secret container-registry-dockerconfigjson \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}

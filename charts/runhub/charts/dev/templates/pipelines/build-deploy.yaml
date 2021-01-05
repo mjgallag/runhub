@@ -73,6 +73,10 @@ spec:
           value: $(params.image-tag)
         - name: domain
           value: {{ $.Values.domain }}
+        - name: initialScale
+          value: '0'
+        - name: minScale
+          value: '0'
   {{- if $.Values.release }}
     - name: deploy-prod-{{ $serviceName }}
       when:
@@ -95,6 +99,10 @@ spec:
           value: $(params.image-tag)
         - name: domain
           value: {{ $.Values.release.prodDomain }}
+        - name: initialScale
+          value: '1'
+        - name: minScale
+          value: '1'
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
