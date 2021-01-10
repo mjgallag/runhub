@@ -1,8 +1,7 @@
 .terraform/
 .terraform.tfstate.lock.info
-/terraform/backend.tf
-/terraform/development.tfvars
-/terraform/production.tfvars
+/terraform/*/backend.tf
+/terraform/*/terraform.tfvars
 /terraform/shared.tfvars
 /values-development.yaml
 /values-shared.yaml
