@@ -1,6 +1,7 @@
 locals {
   project_id_name = join("-", [var.environment, var.app, "rh", "v${var.project_version}"])
   location        = join("-", slice(split("-", var.zone), 0, 2))
+  isDev           = var.environment == "dev"
 }
 
 data "google_billing_account" "billing_account" {
@@ -28,4 +29,20 @@ resource "google_storage_bucket" "terraform_state_storage_bucket" {
   versioning {
     enabled = true
   }
+}
+
+resource "google_project_service" "project_service_artifact_registry" {
+  count   = local.isDev ? 1 : 0
+  project = google_project.project.project_id
+  service = "artifactregistry.googleapis.com"
+}
+
+resource "google_artifact_registry_repository" "artifact_registry_repository" {
+  count         = local.isDev ? 1 : 0
+  depends_on    = [google_project_service.project_service_artifact_registry]
+  provider      = google-beta
+  project       = google_project.project.project_id
+  repository_id = "app"
+  location      = local.location
+  format        = "DOCKER"
 }
