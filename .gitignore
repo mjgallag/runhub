@@ -1,2 +1,10 @@
+.terraform/
+.terraform.tfstate.lock.info
+/terraform/backend.tf
+/terraform/development.tfvars
+/terraform/production.tfvars
+/terraform/shared.tfvars
 /values-development.yaml
 /values-shared.yaml
+terraform.tfstate
+terraform.tfstate.backup
