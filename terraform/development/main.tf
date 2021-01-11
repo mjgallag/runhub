@@ -21,9 +21,12 @@ resource "google_project_default_service_accounts" "app_env" {
   action  = "DELETE"
 }
 
-resource "google_storage_bucket" "app_env_terraform_state" {
+resource "google_storage_bucket" "app_env" {
+  for_each = toset([
+    "terraform-state"
+  ])
   project                     = google_project.app_env.project_id
-  name                        = join("-", [google_project.app_env.project_id, "terraform", "state"])
+  name                        = join("-", [google_project.app_env.project_id, each.value])
   location                    = local.location
   uniform_bucket_level_access = true
   versioning {
@@ -31,15 +34,19 @@ resource "google_storage_bucket" "app_env_terraform_state" {
   }
 }
 
-resource "google_project_service" "app_env_artifact_registry" {
-  count   = local.isDev ? 1 : 0
+resource "google_project_service" "app_env" {
+  for_each = local.isDev ? {
+    artifact_registry = "artifactregistry.googleapis.com"
+  } : {}
   project = google_project.app_env.project_id
-  service = "artifactregistry.googleapis.com"
+  service = each.value
 }
 
-resource "google_artifact_registry_repository" "app_env_app" {
-  count         = local.isDev ? 1 : 0
-  depends_on    = [google_project_service.app_env_artifact_registry[0]]
+resource "google_artifact_registry_repository" "app_env" {
+  for_each = local.isDev ? toset([
+    "app"
+  ]) : toset([])
+  depends_on    = [google_project_service.app_env["artifact_registry"]]
   provider      = google-beta
   project       = google_project.app_env.project_id
   repository_id = "app"
