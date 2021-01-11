@@ -9,10 +9,6 @@ variable "environment" {
 variable "app" {
   type = string
 }
-variable "project_version" {
-  type    = number
-  default = 1
-}
 
 variable "zone" {
   type    = string
@@ -22,4 +18,9 @@ variable "zone" {
 variable "billing_account" {
   type    = string
   default = "My Billing Account"
+}
+
+variable "project_version" {
+  type    = number
+  default = 1
 }
