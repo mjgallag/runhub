@@ -1,7 +1,7 @@
 locals {
   project_id_name = join("-", [var.environment, var.app, "rh", "v${var.project_version}"])
   location        = join("-", slice(split("-", var.zone), 0, 2))
-  isDev           = var.environment == "dev"
+  is_dev           = var.environment == "dev"
 }
 
 data "google_billing_account" "app_env" {
@@ -35,7 +35,7 @@ resource "google_storage_bucket" "app_env" {
 }
 
 resource "google_project_service" "app_env" {
-  for_each = local.isDev ? {
+  for_each = local.is_dev ? {
     artifact_registry = "artifactregistry.googleapis.com"
   } : {}
   project = google_project.app_env.project_id
@@ -43,7 +43,7 @@ resource "google_project_service" "app_env" {
 }
 
 resource "google_artifact_registry_repository" "app_env" {
-  for_each = local.isDev ? toset([
+  for_each = local.is_dev ? toset([
     "app"
   ]) : toset([])
   depends_on    = [google_project_service.app_env["artifact_registry"]]
