@@ -10,10 +10,9 @@ data "google_billing_account" "app_env" {
 }
 
 resource "google_project" "app_env" {
-  project_id          = local.project_id_name
-  name                = local.project_id_name
-  billing_account     = data.google_billing_account.app_env.id
-  auto_create_network = false
+  project_id      = local.project_id_name
+  name            = local.project_id_name
+  billing_account = data.google_billing_account.app_env.id
 }
 
 provider "google" {
