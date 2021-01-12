@@ -15,18 +15,11 @@ resource "google_project" "app_env" {
   billing_account = data.google_billing_account.app_env.id
 }
 
-provider "google" {
-  project = local.project_id_name
-}
-
-provider "google-beta" {
-  project = local.project_id_name
-}
-
 resource "google_storage_bucket" "app_env" {
   for_each = toset([
     "terraform-state"
   ])
+  project                     = google_project.app_env.project_id
   name                        = join("-", [google_project.app_env.project_id, each.value])
   location                    = local.region
   uniform_bucket_level_access = true
@@ -39,8 +32,8 @@ resource "google_project_service" "app_env" {
   for_each = local.is_dev ? {
     artifact_registry = "artifactregistry.googleapis.com"
   } : {}
-  depends_on = [google_project.app_env]
-  service    = each.value
+  project = google_project.app_env.project_id
+  service = each.value
 }
 
 resource "google_artifact_registry_repository" "app_env" {
@@ -49,6 +42,7 @@ resource "google_artifact_registry_repository" "app_env" {
   ]) : toset([])
   depends_on    = [google_project_service.app_env["artifact_registry"]]
   provider      = google-beta
+  project       = google_project.app_env.project_id
   repository_id = "app"
   location      = local.region
   format        = "DOCKER"
