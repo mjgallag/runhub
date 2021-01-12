@@ -1,7 +1,7 @@
 locals {
   project_id_name = join("-", [var.environment, var.app, "rh", "v${var.project_version}"])
-  location        = join("-", slice(split("-", var.zone), 0, 2))
-  is_dev           = var.environment == "dev"
+  region          = join("-", slice(split("-", var.zone), 0, 2))
+  is_dev          = var.environment == "dev"
 }
 
 data "google_billing_account" "app_env" {
@@ -27,7 +27,7 @@ resource "google_storage_bucket" "app_env" {
   ])
   project                     = google_project.app_env.project_id
   name                        = join("-", [google_project.app_env.project_id, each.value])
-  location                    = local.location
+  location                    = local.region
   uniform_bucket_level_access = true
   versioning {
     enabled = true
@@ -50,6 +50,6 @@ resource "google_artifact_registry_repository" "app_env" {
   provider      = google-beta
   project       = google_project.app_env.project_id
   repository_id = "app"
-  location      = local.location
+  location      = local.region
   format        = "DOCKER"
 }
