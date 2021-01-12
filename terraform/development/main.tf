@@ -24,11 +24,6 @@ provider "google-beta" {
   project = local.project_id_name
 }
 
-resource "google_project_default_service_accounts" "app_env" {
-  project = local.project_id_name
-  action = "DELETE"
-}
-
 resource "google_storage_bucket" "app_env" {
   for_each = toset([
     "terraform-state"
