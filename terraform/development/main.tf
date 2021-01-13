@@ -63,11 +63,14 @@ resource "google_container_cluster" "app_env" {
   name       = local.app_env_name
   location   = var.zone
   release_channel {
-    channel = "STABLE"
+    channel = "REGULAR"
   }
   networking_mode = "VPC_NATIVE"
   ip_allocation_policy {}
   initial_node_count = 1
+  node_config {
+    machine_type = "n1-standard-1"
+  }
   cluster_autoscaling {
     enabled = true
     resource_limits {
@@ -78,7 +81,7 @@ resource "google_container_cluster" "app_env" {
     resource_limits {
       resource_type = "memory"
       minimum       = 0
-      maximum       = 48
+      maximum       = 45
     }
   }
 }
