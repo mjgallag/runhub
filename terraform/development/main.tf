@@ -1,7 +1,17 @@
 locals {
-  project_id_name = join("-", [var.environment, var.app, "rh", "v${var.project_version}"])
+  app_env_name    = join("-", [var.environment, var.app])
+  project_id_name = join("-", [local.app_env_name, "rh", "v${var.project_version}"])
   region          = join("-", slice(split("-", var.zone), 0, 2))
   is_dev          = var.environment == "dev"
+  project_services_shared = {
+    container = "container.googleapis.com"
+  }
+  project_services = {
+    dev = merge({
+      artifactregistry = "artifactregistry.googleapis.com"
+    }, local.project_services_shared)
+    prod = merge({}, local.project_services_shared)
+  }
 }
 
 data "google_billing_account" "app_env" {
@@ -29,21 +39,46 @@ resource "google_storage_bucket" "app_env" {
 }
 
 resource "google_project_service" "app_env" {
-  for_each = local.is_dev ? {
-    artifact_registry = "artifactregistry.googleapis.com"
-  } : {}
-  project = google_project.app_env.project_id
-  service = each.value
+  for_each = local.is_dev ? local.project_services.dev : local.project_services.prod
+  project  = google_project.app_env.project_id
+  service  = each.value
 }
 
 resource "google_artifact_registry_repository" "app_env" {
   for_each = local.is_dev ? toset([
     "app"
   ]) : toset([])
-  depends_on    = [google_project_service.app_env["artifact_registry"]]
+  depends_on    = [google_project_service.app_env["artifactregistry"]]
   provider      = google-beta
   project       = google_project.app_env.project_id
   repository_id = "app"
   location      = local.region
   format        = "DOCKER"
+}
+
+resource "google_container_cluster" "app_env" {
+  depends_on = [google_project_service.app_env["container"]]
+  provider   = google-beta
+  project    = google_project.app_env.project_id
+  name       = local.app_env_name
+  location   = var.zone
+  release_channel {
+    channel = "STABLE"
+  }
+  networking_mode = "VPC_NATIVE"
+  ip_allocation_policy {}
+  initial_node_count = 1
+  cluster_autoscaling {
+    enabled = true
+    resource_limits {
+      resource_type = "cpu"
+      minimum       = 0
+      maximum       = 12
+    }
+    resource_limits {
+      resource_type = "memory"
+      minimum       = 0
+      maximum       = 48
+    }
+  }
 }
