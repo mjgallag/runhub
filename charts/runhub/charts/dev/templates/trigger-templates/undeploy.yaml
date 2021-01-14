@@ -13,6 +13,7 @@ spec:
         generateName: undeploy-$(tt.params.subroute-tag)-
         namespace: {{ template "runhub.namespaceReleaseChart" . }}
       spec:
+        serviceAccountName: undeploy
         pipelineRef:
           name: undeploy
         params:
