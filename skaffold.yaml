@@ -6,37 +6,37 @@ deploy:
       - name: runhub-crds
         chartPath: charts/runhub-crds
         namespace: dev-runhub
+        createNamespace: true
         setValues:
           global.environment.dev: true
-        createNamespace: true
         skipBuildDependencies: true
       - name: app
         chartPath: charts/runhub
         namespace: dev-runhub
-        valuesFiles:
-          - values-development.yaml
-          - values-shared.yaml
         setValues:
           global.environment.dev: true
           dev.domain: dev.127.0.0.1.xip.io
           dev.release.prodDomain: 127.0.0.1.xip.io
+        valuesFiles:
+          - values-development.yaml
+          - values-shared.yaml
         skipBuildDependencies: true
       - name: runhub-crds
         chartPath: charts/runhub-crds
         namespace: prod-runhub
+        createNamespace: true
         setValues:
           global.environment.prod: true
           knative-crds.enabled: false
-        createNamespace: true
         skipBuildDependencies: true
       - name: app
         chartPath: charts/runhub
         namespace: prod-runhub
-        valuesFiles:
-          - values-shared.yaml
         setValues:
           global.environment.prod: true
           knative.enabled: false
+        valuesFiles:
+          - values-shared.yaml
         skipBuildDependencies: true
     flags:
       install:
