@@ -75,7 +75,6 @@ rules:
       - update
       - delete
       - patch
-      - add
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -279,9 +278,9 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.12.0
-    dashboard.tekton.dev/release: v0.12.0
-    version: v0.12.0
+    app.kubernetes.io/version: v0.13.0
+    dashboard.tekton.dev/release: v0.13.0
+    version: v0.13.0
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
@@ -305,9 +304,9 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.12.0
-    dashboard.tekton.dev/release: v0.12.0
-    version: v0.12.0
+    app.kubernetes.io/version: v0.13.0
+    dashboard.tekton.dev/release: v0.13.0
+    version: v0.13.0
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
@@ -326,7 +325,7 @@ spec:
         app.kubernetes.io/instance: default
         app.kubernetes.io/name: dashboard
         app.kubernetes.io/part-of: tekton-dashboard
-        app.kubernetes.io/version: v0.12.0
+        app.kubernetes.io/version: v0.13.0
       name: tekton-dashboard
     spec:
       containers:
@@ -348,7 +347,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:3edfba26eb25012b1d479d7de59b687d78a301826a01bc38426a323d5cdb2f31
+          image: gcr.io/tekton-releases/github.com/tektoncd/dashboard/cmd/dashboard@sha256:0df1f3d488596190b5d03b5b08af994ab2791daf11ec894cbd0c74c0cdda6a04
           livenessProbe:
             httpGet:
               path: /health
