@@ -24,7 +24,7 @@ spec:
       optional: true
   steps:
     - name: deploy
-      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.20.0@sha256:688c8d46c77ca515fdc9f0fdf6abc28178929bd07ca98df9fea2f3f2d15150fc
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub.dev.knImageTag" . }}
       script: |
         IMAGE='$(params.image):$(params.image-tag)'
         REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
