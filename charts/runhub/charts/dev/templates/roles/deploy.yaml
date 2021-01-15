@@ -3,3 +3,19 @@ kind: Role
 metadata:
   name: deploy
   namespace: {{ template "runhub.namespaceReleaseChart" . }}
+rules:
+  - apiGroups:
+      - serving.knative.dev
+    resources:
+      - services
+    verbs:
+      - get
+      - create
+      - update
+      - watch
+  - apiGroups:
+      - serving.knative.dev
+    resources:
+      - revisions
+    verbs:
+      - get
