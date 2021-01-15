@@ -11,6 +11,6 @@ spec:
       type: string
   steps:
     - name: undeploy
-      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.19.1@sha256:d49c937341792a6144e61d251dc174688665c39c433dc0fcf468027ea4309ec6
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:v0.20.0@sha256:688c8d46c77ca515fdc9f0fdf6abc28178929bd07ca98df9fea2f3f2d15150fc
       script: |
         kn service update '$(params.service)' --untag '$(params.subroute-tag)'
