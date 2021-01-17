@@ -21,6 +21,7 @@ spec:
       type: string
   workspaces:
     - name: prod-kubeconfig
+      readOnly: true
       optional: true
   steps:
     - name: deploy

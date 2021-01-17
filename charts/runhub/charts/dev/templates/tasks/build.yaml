@@ -17,6 +17,7 @@ spec:
       type: string
   workspaces:
     - name: dockerfile
+      readOnly: true
     - name: src
   steps:
     - name: build
