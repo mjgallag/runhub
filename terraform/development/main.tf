@@ -76,12 +76,12 @@ resource "google_container_cluster" "app_env" {
     resource_limits {
       resource_type = "cpu"
       minimum       = 0
-      maximum       = 12
+      maximum       = 64
     }
     resource_limits {
       resource_type = "memory"
       minimum       = 0
-      maximum       = 45
+      maximum       = 240
     }
   }
 }
