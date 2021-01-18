@@ -32,7 +32,8 @@ spec:
           - name: cache-from-image-tag
             value: $(tt.params.cache-from-image-tag)
         workspaces:
-          - name: src
+        {{- range $serviceName, $service := .Values.services }}
+          - name: src-{{ $serviceName }}
             volumeClaimTemplate:
               spec:
                 accessModes:
@@ -40,6 +41,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+        {{- end}}
           - name: dockerfile
             configMap:
               name: dockerfile

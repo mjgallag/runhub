@@ -5,6 +5,10 @@ metadata:
   namespace: {{ template "runhub.namespaceReleaseChart" . }}
 spec:
   params:
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
     - name: src-path
       type: string
     - name: image-path-with-registry
@@ -20,6 +24,10 @@ spec:
       readOnly: true
     - name: src
   steps:
+    - name: get-src
+      image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.20.0@sha256:6b6a8fd4a7aeae8995a4acd2b2fb77458c287b309f2ccabdb257a067f37521b8
+      script: |
+        /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.src.path)'
     - name: build
       image: moby/buildkit:v0.8.1@sha256:ecd5ad4910c322cad6995f8a1a0805d9da4b09ed4aaef40627f5bcb8ebf74068
       securityContext:
