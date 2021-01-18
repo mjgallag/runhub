@@ -20,3 +20,7 @@ rules:
 - apiGroups: [""]
   resources: ["serviceaccounts"]
   verbs: ["impersonate"]
+- apiGroups: ["policy"]
+  resources: ["podsecuritypolicies"]
+  resourceNames: ["tekton-triggers"]
+  verbs: ["use"]
