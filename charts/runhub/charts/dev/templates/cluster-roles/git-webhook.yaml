@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: git-webhook
+rules:
+rules:
+  - apiGroups:
+      - triggers.tekton.dev
+    resources:
+      - clustertriggerbindings
+    verbs:
+      - list
+      - get
+      - watch
