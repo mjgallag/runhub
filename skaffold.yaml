@@ -25,6 +25,7 @@ deploy:
         createNamespace: true
         setValues:
           global.environment.prod: true
+          cert-manager-crds.enabled: false
           knative-crds.enabled: false
         skipBuildDependencies: true
       - name: app
@@ -32,6 +33,7 @@ deploy:
         namespace: prod-runhub
         setValues:
           global.environment.prod: true
+          cert-manager.enabled: false
           knative.enabled: false
         valuesFiles:
           - values-shared.yaml
