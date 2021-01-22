@@ -1,3 +1,7 @@
+{{ define "runhub.dev.imagePathWithRegistry" -}}
+  {{ .Values.global.containerRegistryCredentials.server }}/{{ .Values.imagePath }}
+{{- end }}
+
 {{ define "runhub.dev.namespaceProdReleaseChart" -}}
   prod-{{ .Release.Name }}-runhub
 {{- end }}
