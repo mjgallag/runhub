@@ -45,7 +45,8 @@
       "required": [
         "environment",
         "containerRegistryCredentials"
-      ]
+      ],
+      "additionalProperties": false
     },
     "defaults": {
       "type": "object",
