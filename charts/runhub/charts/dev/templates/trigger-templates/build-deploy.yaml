@@ -2,7 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: build-deploy
-  namespace: {{ template "runhub.namespaceReleaseChart" . }}
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
 spec:
   params:
     - name: git-url
@@ -15,7 +15,7 @@ spec:
       kind: PipelineRun
       metadata:
         generateName: build-deploy-$(tt.params.image-tag)-
-        namespace: {{ template "runhub.namespaceReleaseChart" . }}
+        namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
       spec:
         serviceAccountName: build-deploy
         pipelineRef:

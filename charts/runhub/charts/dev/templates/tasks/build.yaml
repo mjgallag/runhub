@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: build
-  namespace: {{ template "runhub.namespaceReleaseChart" . }}
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
 spec:
   params:
     - name: git-url
