@@ -44,9 +44,6 @@
     "release": {
       "type": "object",
       "properties": {
-        "prodDomain": {
-          "type": "string"
-        },
         "prodBranch": {
           "type": "string"
         },
@@ -76,7 +73,6 @@
         }
       },
       "required": [
-        "prodDomain",
         "prodBranch",
         "prodKubernetesCredentials"
       ],

@@ -21,6 +21,9 @@
           "maxProperties": 1,
           "additionalProperties": false
         },
+        "prodDomain": {
+          "type": "string"
+        },
         "containerRegistryCredentials": {
           "type": "object",
           "properties": {
@@ -38,6 +41,44 @@
             "server",
             "username",
             "password"
+          ],
+          "additionalProperties": false
+        },
+        "tls": {
+          "type": "object",
+          "properties": {
+            "letsEncrypt": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "email"
+              ],
+              "additionalProperties": false
+            },
+            "cloudflareCredentials": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "apiToken": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "email",
+                "apiToken"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "letsEncrypt",
+            "cloudflareCredentials"
           ],
           "additionalProperties": false
         }

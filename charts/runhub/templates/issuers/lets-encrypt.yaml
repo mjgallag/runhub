@@ -1,0 +1,22 @@
+{{- with .Values.global }}
+{{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: lets-encrypt
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" $ }}
+spec:
+  acme:
+    email: {{ .tls.letsEncrypt.email }}
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: issuer-lets-encrypt-private-key-opaque
+    solvers:
+      - dns01:
+          cloudflare:
+            email: {{ .tls.cloudflareCredentials.email }}
+            apiTokenSecretRef:
+              name: cloudflare-api-token-opaque
+              key: api-token
+{{- end }}
+{{- end }}

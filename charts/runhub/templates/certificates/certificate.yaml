@@ -1,0 +1,19 @@
+{{- with .Values.global }}
+{{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" $ }}
+spec:
+  secretName: certificate-tls
+  dnsNames:
+    {{- if .environment.dev}}
+    - '*.{{ $.Values.dev.domain }}'
+    {{- else if .environment.prod }}
+    - '*.{{ .prodDomain }}'
+    {{- end }}
+  issuerRef:
+    name: lets-encrypt
+{{- end }}
+{{- end }}
