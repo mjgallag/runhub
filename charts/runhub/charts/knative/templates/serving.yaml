@@ -1244,6 +1244,12 @@ data:
     {{"{{"}}- else -}}
       {{"{{"}} .Name }}.{{"{{"}} .Namespace }}.{{"{{"}} .Domain }}
     {{"{{"}}- end }}
+  {{- with .Values.global }}
+  {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+  autoTLS: "Enabled"
+  httpProtocol: "Redirected"
+  {{- end }}
+  {{- end }}
 
 ---
 # Copyright 2018 The Knative Authors

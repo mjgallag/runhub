@@ -13,6 +13,8 @@ spec:
       type: string
     - name: image-tag
       type: string
+    - name: protocol
+      type: string
     - name: domain
       type: string
     - name: initialScale
@@ -43,7 +45,7 @@ spec:
               --pull-secret container-registry-dockerconfigjson \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.$(params.domain)' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
               --revision-name "${REVISION_NAME:?}"
             kn service update '$(params.service)' \
@@ -52,7 +54,7 @@ spec:
             kn service update '$(params.service)' \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://{{ $service.subdomain }}.$(params.domain)' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
               --revision-name "${REVISION_NAME:?}" \
               --traffic "${REVISION_NAME:?}=100"
@@ -62,7 +64,7 @@ spec:
           kn service update '$(params.service)' \
             --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=http://$(params.subroute-tag)-{{ $service.subdomain }}.$(params.domain)' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://$(params.subroute-tag)-{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
             --revision-name "${REVISION_NAME:?}" \
             --tag "${REVISION_NAME:?}"='$(params.subroute-tag)'

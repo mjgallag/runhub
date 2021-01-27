@@ -62,6 +62,8 @@ spec:
           value: {{ template "runhub.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
+        - name: protocol
+          value: http{{ if $.Values.global.tls }}s{{ end }}
         - name: domain
           value: {{ $.Values.domain }}
         - name: initialScale
@@ -88,6 +90,8 @@ spec:
           value: {{ template "runhub.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
+        - name: protocol
+          value: http{{ if $.Values.global.tls }}s{{ end }}
         - name: domain
           value: {{ $.Values.global.prodDomain }}
         - name: initialScale
