@@ -10,6 +10,7 @@ deploy:
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
+        wait: true
       - name: app
         chartPath: charts/runhub
         namespace: dev-runhub
@@ -28,6 +29,7 @@ deploy:
           cert-manager-crds.enabled: false
           knative-crds.enabled: false
         skipBuildDependencies: true
+        wait: true
       - name: app
         chartPath: charts/runhub
         namespace: prod-runhub
@@ -38,8 +40,3 @@ deploy:
         valuesFiles:
           - values-shared.yaml
         skipBuildDependencies: true
-    flags:
-      install:
-        - --atomic
-      upgrade:
-        - --atomic
