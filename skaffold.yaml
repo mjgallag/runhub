@@ -27,6 +27,7 @@ deploy:
         setValues:
           global.environment.prod: true
           cert-manager-crds.enabled: false
+          istio-crds.enabled: false
           knative-crds.enabled: false
         skipBuildDependencies: true
         wait: true
@@ -36,6 +37,7 @@ deploy:
         setValues:
           global.environment.prod: true
           cert-manager.enabled: false
+          istio.enabled: false
           knative.enabled: false
         valuesFiles:
           - values-shared.yaml
