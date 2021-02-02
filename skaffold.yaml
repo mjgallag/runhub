@@ -11,6 +11,13 @@ deploy:
           global.environment.dev: true
         skipBuildDependencies: true
         wait: true
+      - name: runhub-deps
+        chartPath: charts/runhub-deps
+        namespace: dev-runhub
+        setValues:
+          global.environment.dev: true
+        skipBuildDependencies: true
+        wait: true
       - name: app
         chartPath: charts/runhub
         namespace: dev-runhub
@@ -31,14 +38,21 @@ deploy:
           knative-crds.enabled: false
         skipBuildDependencies: true
         wait: true
-      - name: app
-        chartPath: charts/runhub
+      - name: runhub-deps
+        chartPath: charts/runhub-deps
         namespace: prod-runhub
         setValues:
           global.environment.prod: true
           cert-manager.enabled: false
           istio.enabled: false
           knative.enabled: false
+        skipBuildDependencies: true
+        wait: true
+      - name: app
+        chartPath: charts/runhub
+        namespace: prod-runhub
+        setValues:
+          global.environment.prod: true
         valuesFiles:
           - values-shared.yaml
         skipBuildDependencies: true

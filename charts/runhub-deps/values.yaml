@@ -1,0 +1,3 @@
+defaults:
+  dependencies:
+    enabled: false

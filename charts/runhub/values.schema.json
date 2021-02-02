@@ -113,38 +113,6 @@
     },
     "dev": {
       "type": "object"
-    },
-    "cert-manager": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
-    "istio": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
-    "knative": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
-    "tekton": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
     }
   },
   "required": [
