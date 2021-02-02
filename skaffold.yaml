@@ -11,6 +11,14 @@ deploy:
           global.environment.dev: true
         skipBuildDependencies: true
         wait: true
+      - name: runhub-deps-operators
+        chartPath: charts/runhub-deps-operators
+        namespace: dev-runhub
+        createNamespace: true
+        setValues:
+          global.environment.dev: true
+        skipBuildDependencies: true
+        wait: true
       - name: runhub-deps
         chartPath: charts/runhub-deps
         namespace: dev-runhub
@@ -36,6 +44,16 @@ deploy:
           cert-manager-crds.enabled: false
           istio-crds.enabled: false
           knative-crds.enabled: false
+        skipBuildDependencies: true
+        wait: true
+      - name: runhub-deps-operators
+        chartPath: charts/runhub-deps-operators
+        namespace: prod-runhub
+        createNamespace: true
+        setValues:
+          global.environment.prod: true
+          istio-operator.enabled: false
+          knative-operator.enabled: false
         skipBuildDependencies: true
         wait: true
       - name: runhub-deps

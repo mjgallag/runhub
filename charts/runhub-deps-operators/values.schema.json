@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "global": {
+      "type": "object",
+      "properties": {
+        "environment": {
+          "type": "object",
+          "properties": {
+            "dev": {
+              "type": "boolean",
+              "const": true
+            },
+            "prod": {
+              "type": "boolean",
+              "const": true
+            }
+          },
+          "minProperties": 1,
+          "maxProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "environment"
+      ]
+    },
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "dependencies": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "const": false
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "dependencies"
+      ],
+      "additionalProperties": false
+    },
+    "istio-operator": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "knative-operator": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": [
+    "global",
+    "defaults"
+  ],
+  "additionalProperties": false
+}
