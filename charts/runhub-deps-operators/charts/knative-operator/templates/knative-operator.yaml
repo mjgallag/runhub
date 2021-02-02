@@ -18,7 +18,7 @@ metadata:
   name: config-logging
   namespace: default
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 data:
   _example: |
     ################################
@@ -80,7 +80,7 @@ metadata:
   name: config-observability
   namespace: default
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 data:
   _example: |
     ################################
@@ -182,7 +182,7 @@ metadata:
   name: knative-operator
   namespace: default
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 spec:
   replicas: 1
   selector:
@@ -198,7 +198,7 @@ spec:
       serviceAccountName: knative-operator
       containers:
         - name: knative-operator
-          image: gcr.io/knative-releases/knative.dev/operator/cmd/operator@sha256:7c8f7e3ad4c84ca314b0aa69cce8a148c41b027e3b408701ec7871581ea033fb
+          image: gcr.io/knative-releases/knative.dev/operator/cmd/operator@sha256:83c3d5c26d521976df8ac3867782ab615dfe861f5c38771d8be3aedce4e67d1b
           imagePullPolicy: IfNotPresent
           env:
             - name: POD_NAME
@@ -238,7 +238,7 @@ kind: ClusterRole
 metadata:
   name: knative-serving-operator-aggregated
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 aggregationRule:
   clusterRoleSelectors:
     # This (along with escalate below) allows the Operator to pick up any
@@ -253,7 +253,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: knative-serving-operator
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 rules:
   - apiGroups:
       - operator.knative.dev
@@ -440,7 +440,7 @@ kind: ClusterRole
 metadata:
   name: knative-eventing-operator-aggregated
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 aggregationRule:
   clusterRoleSelectors:
     # This (along with escalate below) allows the Operator to pick up any
@@ -455,7 +455,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: knative-eventing-operator
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 rules:
   - apiGroups:
       - operator.knative.dev
@@ -628,7 +628,7 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-serving-operator
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -643,7 +643,7 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-serving-operator-aggregated
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -659,7 +659,7 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-eventing-operator
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -674,7 +674,7 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-eventing-operator-aggregated
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -705,6 +705,6 @@ metadata:
   name: knative-operator
   namespace: default
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 
 ---

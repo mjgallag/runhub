@@ -17,7 +17,7 @@ kind: CustomResourceDefinition
 metadata:
   name: knativeeventings.operator.knative.dev
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 spec:
   additionalPrinterColumns:
     - JSONPath: .status.version
@@ -217,7 +217,7 @@ kind: CustomResourceDefinition
 metadata:
   name: knativeservings.operator.knative.dev
   labels:
-    operator.knative.dev/release: "v0.20.0"
+    operator.knative.dev/release: "v0.20.1"
 spec:
   additionalPrinterColumns:
     - JSONPath: .status.version
