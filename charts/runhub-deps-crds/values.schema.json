@@ -56,7 +56,7 @@
         }
       }
     },
-    "istio-crds": {
+    "istio-operator-crds": {
       "type": "object",
       "properties": {
         "enabled": {
