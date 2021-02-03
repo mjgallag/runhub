@@ -42,3 +42,36 @@ deploy:
         valuesFiles:
           - values-dev-and-prod.yaml
         skipBuildDependencies: true
+profiles:
+  - name: install-istio
+    deploy:
+      helm:
+        releases:
+          - name: runhub-deps-crds
+            chartPath: charts/runhub-deps-crds
+            namespace: dev-runhub
+            createNamespace: true
+            setValues:
+              global.environment.dev: true
+              cert-manager-crds.enabled: false
+              knative-operator-crds.enabled: false
+              tekton-crds.enabled: false
+            skipBuildDependencies: true
+          - name: runhub-deps-operators
+            chartPath: charts/runhub-deps-operators
+            namespace: dev-runhub
+            setValues:
+              global.environment.dev: true
+              knative-operator.enabled: false
+            skipBuildDependencies: true
+          - name: runhub-deps
+            chartPath: charts/runhub-deps
+            namespace: dev-runhub
+            setValues:
+              global.environment.dev: true
+              cert-manager.enabled: false
+              knative.enabled: false
+              tekton.enabled: false
+            valuesFiles:
+              - values-deps.yaml
+            skipBuildDependencies: true
