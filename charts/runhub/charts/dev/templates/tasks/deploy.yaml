@@ -45,42 +45,42 @@ spec:
         if [ -z '$(params.subroute-tag)' ]; then
           if ! kn service describe '$(params.service)'; then
             kn service create '$(params.service)' \
-              --annotation-service domain='$(params.domain)' \
-              --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
+              --image "${IMAGE:?}" \
+              --revision-name "${REVISION_NAME:?}" \
               --scale-init '$(params.initialScale)' \
               --scale-min '$(params.minScale)' \
-              --pull-secret container-registry-dockerconfigjson \
-              --image "${IMAGE:?}" \
+              --annotation-service domain='$(params.domain)' \
+              --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
               {{- range $serviceName, $service := .Values.services }}
               --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
-              --revision-name "${REVISION_NAME:?}"
+              --pull-secret container-registry-dockerconfigjson
             kn service update '$(params.service)' \
               --traffic "${REVISION_NAME:?}=100"
           else
             kn service update '$(params.service)' \
-              --annotation-service domain='$(params.domain)' \
-              --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
+              --image "${IMAGE:?}" \
+              --revision-name "${REVISION_NAME:?}" \
               --scale-init '$(params.initialScale)' \
               --scale-min '$(params.minScale)' \
-              --image "${IMAGE:?}" \
+              --annotation-service domain='$(params.domain)' \
+              --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
               {{- range $serviceName, $service := .Values.services }}
               --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://{{ $service.subdomain }}.$(params.domain)' \
               {{- end }}
-              --revision-name "${REVISION_NAME:?}" \
               --traffic "${REVISION_NAME:?}=100"
           fi
         else
           kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
           kn service update '$(params.service)' \
-            --annotation-service domain='$(params.domain)' \
-            --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
+            --image "${IMAGE:?}" \
+            --revision-name "${REVISION_NAME:?}" \
+            --tag "${REVISION_NAME:?}"='$(params.subroute-tag)' \
             --scale-init '$(params.initialScale)' \
             --scale-min '$(params.minScale)' \
-            --image "${IMAGE:?}" \
+            --annotation-service domain='$(params.domain)' \
+            --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
               {{- range $serviceName, $service := .Values.services }}
-              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://$(params.subroute-tag)-{{ $service.subdomain }}.$(params.domain)' \
+              --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://$(params.subroute-tag)-{{ $service.subdomain }}.$(params.domain)'
               {{- end }}
-            --revision-name "${REVISION_NAME:?}" \
-            --tag "${REVISION_NAME:?}"='$(params.subroute-tag)'
         fi
