@@ -10,7 +10,6 @@ deploy:
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
-        wait: true
       - name: runhub-deps-operators
         chartPath: charts/runhub-deps-operators
         namespace: dev-runhub
@@ -18,7 +17,6 @@ deploy:
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
-        wait: true
       - name: runhub-deps
         chartPath: charts/runhub-deps
         namespace: dev-runhub
@@ -27,7 +25,6 @@ deploy:
         valuesFiles:
           - values-deps.yaml
         skipBuildDependencies: true
-        wait: true
       - name: app
         chartPath: charts/runhub
         namespace: dev-runhub
