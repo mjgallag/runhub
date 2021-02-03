@@ -24,6 +24,8 @@ deploy:
         namespace: dev-runhub
         setValues:
           global.environment.dev: true
+        valuesFiles:
+          - values-deps.yaml
         skipBuildDependencies: true
         wait: true
       - name: app
@@ -64,6 +66,8 @@ deploy:
           cert-manager.enabled: false
           istio.enabled: false
           knative.enabled: false
+        valuesFiles:
+          - values-deps.yaml
         skipBuildDependencies: true
         wait: true
       - name: app

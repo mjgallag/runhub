@@ -4,6 +4,7 @@
 /terraform/*/backend.tf
 /terraform/*/terraform.tfvars
 /terraform/shared.tfvars
+/values-deps.yaml
 /values-development.yaml
 /values-shared.yaml
 terraform.tfstate
