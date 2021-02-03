@@ -37,42 +37,10 @@ deploy:
           - values-dev-and-prod.yaml
           - values-dev.yaml
         skipBuildDependencies: true
-      - name: runhub-deps-crds
-        chartPath: charts/runhub-deps-crds
-        namespace: prod-runhub
-        createNamespace: true
-        setValues:
-          global.environment.prod: true
-          cert-manager-crds.enabled: false
-          istio-operator-crds.enabled: false
-          knative-operator-crds.enabled: false
-        skipBuildDependencies: true
-        wait: true
-      - name: runhub-deps-operators
-        chartPath: charts/runhub-deps-operators
-        namespace: prod-runhub
-        createNamespace: true
-        setValues:
-          global.environment.prod: true
-          istio-operator.enabled: false
-          knative-operator.enabled: false
-        skipBuildDependencies: true
-        wait: true
-      - name: runhub-deps
-        chartPath: charts/runhub-deps
-        namespace: prod-runhub
-        setValues:
-          global.environment.prod: true
-          cert-manager.enabled: false
-          istio.enabled: false
-          knative.enabled: false
-        valuesFiles:
-          - values-deps.yaml
-        skipBuildDependencies: true
-        wait: true
       - name: app
         chartPath: charts/runhub
         namespace: prod-runhub
+        createNamespace: true
         setValues:
           global.environment.prod: true
         valuesFiles:
