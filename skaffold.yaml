@@ -13,7 +13,6 @@ deploy:
       - name: runhub-deps-operators
         chartPath: charts/runhub-deps-operators
         namespace: dev-runhub
-        createNamespace: true
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
