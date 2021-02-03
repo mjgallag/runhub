@@ -52,6 +52,9 @@ spec:
               --traffic "${REVISION_NAME:?}=100"
           else
             kn service update '$(params.service)' \
+              --annotation-service domain='$(params.domain)' \
+              --scale-init '$(params.initialScale)' \
+              --scale-min '$(params.minScale)' \
               --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
               --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://{{ $service.subdomain }}.$(params.domain)' \
@@ -62,6 +65,9 @@ spec:
         else
           kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
           kn service update '$(params.service)' \
+            --annotation-service domain='$(params.domain)' \
+            --scale-init '$(params.initialScale)' \
+            --scale-min '$(params.minScale)' \
             --image "${IMAGE:?}" \
               {{- range $serviceName, $service := .Values.services }}
               --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://$(params.subroute-tag)-{{ $service.subdomain }}.$(params.domain)' \
