@@ -32,6 +32,12 @@ spec:
         IMAGE='$(params.image):$(params.image-tag)'
         REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
 
+        if [ '$(params.protocol)' = 'http' ]; then
+          DISABLE_AUTO_TLS='true'
+        else
+          DISABLE_AUTO_TLS='false'
+        fi
+
         if [ -n '$(workspaces.prod-kubeconfig.path)' ]; then
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
         fi
@@ -40,6 +46,7 @@ spec:
           if ! kn service describe '$(params.service)'; then
             kn service create '$(params.service)' \
               --annotation-service domain='$(params.domain)' \
+              --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
               --scale-init '$(params.initialScale)' \
               --scale-min '$(params.minScale)' \
               --pull-secret container-registry-dockerconfigjson \
@@ -53,6 +60,7 @@ spec:
           else
             kn service update '$(params.service)' \
               --annotation-service domain='$(params.domain)' \
+              --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
               --scale-init '$(params.initialScale)' \
               --scale-min '$(params.minScale)' \
               --image "${IMAGE:?}" \
@@ -66,6 +74,7 @@ spec:
           kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
           kn service update '$(params.service)' \
             --annotation-service domain='$(params.domain)' \
+            --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
             --scale-init '$(params.initialScale)' \
             --scale-min '$(params.minScale)' \
             --image "${IMAGE:?}" \
