@@ -25,7 +25,7 @@ deploy:
         valuesFiles:
           - values-deps.yaml
         skipBuildDependencies: true
-      - name: app
+      - name: '{{.RUNHUB_APP}}'
         chartPath: charts/runhub
         namespace: dev-runhub
         setValues:
@@ -34,7 +34,7 @@ deploy:
           - values-dev-and-prod.yaml
           - values-dev.yaml
         skipBuildDependencies: true
-      - name: app
+      - name: '{{.RUNHUB_APP}}'
         chartPath: charts/runhub
         namespace: prod-runhub
         createNamespace: true
