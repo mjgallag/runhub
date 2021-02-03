@@ -34,7 +34,7 @@ deploy:
         setValues:
           global.environment.dev: true
         valuesFiles:
-          - values-development.yaml
+          - values-dev.yaml
           - values-shared.yaml
         skipBuildDependencies: true
       - name: runhub-deps-crds
