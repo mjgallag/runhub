@@ -4,7 +4,7 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: runhub
-  namespace: {{ template "runhub.namespaceEnvironmentReleaseChart" $ }}
+  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}
 spec:
   servers:
     - port:
@@ -12,6 +12,6 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - '*.runhub.{{ template "runhub.environmentDomain" $ }}'
+        - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
 {{- end }}
 {{- end }}

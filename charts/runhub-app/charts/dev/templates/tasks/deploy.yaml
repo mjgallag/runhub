@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: deploy
-  namespace: {{ template "runhub.namespaceEnvironmentReleaseChart" . }}
+  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
 spec:
   params:
     - name: service
@@ -27,7 +27,7 @@ spec:
       optional: true
   steps:
     - name: deploy
-      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub.dev.knImageTag" . }}
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
         IMAGE='$(params.image):$(params.image-tag)'
         REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'

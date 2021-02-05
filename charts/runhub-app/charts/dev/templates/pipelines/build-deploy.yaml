@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-deploy
-  namespace: {{ template "runhub.namespaceEnvironmentReleaseChart" . }}
+  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
 spec:
   params:
     - name: git-url
@@ -36,7 +36,7 @@ spec:
         - name: src-path
           value: {{ $service.srcPath }}
         - name: image-path-with-registry
-          value: {{ template "runhub.dev.imagePathWithRegistry" $ }}
+          value: {{ template "runhub-app.dev.imagePathWithRegistry" $ }}
         - name: image-name
           value: {{ $serviceName }}
         - name: image-tag
@@ -59,7 +59,7 @@ spec:
         - name: subroute-tag
           value: $(params.subroute-tag)
         - name: image
-          value: {{ template "runhub.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
+          value: {{ template "runhub-app.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
         - name: protocol
@@ -87,7 +87,7 @@ spec:
         - name: subroute-tag
           value: ''
         - name: image
-          value: {{ template "runhub.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
+          value: {{ template "runhub-app.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
         - name: protocol

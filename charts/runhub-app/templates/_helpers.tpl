@@ -1,14 +1,14 @@
-{{ define "runhub.chart" -}}
+{{ define "runhub-app.chart" -}}
   runhub
 {{- end }}
 
-{{ define "runhub.environment" -}}
+{{ define "runhub-app.environment" -}}
 {{ range $environmentName, $val := .Values.global.environment -}}
   {{ $environmentName }}
 {{- end }}
 {{- end }}
 
-{{ define "runhub.environmentDomain" -}}
+{{ define "runhub-app.environmentDomain" -}}
 {{ with .Values.global -}}
 {{ if .environment.dev -}}
   {{ $.Values.dev.domain }}
@@ -18,6 +18,6 @@
 {{- end }}
 {{- end }}
 
-{{ define "runhub.namespaceEnvironmentReleaseChart" -}}
-  {{ template "runhub.environment" . }}-{{ .Release.Name }}-{{ template "runhub.chart" . }}
+{{ define "runhub-app.namespaceEnvironmentReleaseChart" -}}
+  {{ template "runhub-app.environment" . }}-{{ .Release.Name }}-{{ template "runhub-app.chart" . }}
 {{- end }}

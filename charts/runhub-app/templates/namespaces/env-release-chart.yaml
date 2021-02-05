@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: {{ template "runhub.namespaceEnvironmentReleaseChart" . }}
+  name: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}

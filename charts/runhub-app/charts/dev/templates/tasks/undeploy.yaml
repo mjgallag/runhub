@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: undeploy
-  namespace: {{ template "runhub.namespaceEnvironmentReleaseChart" . }}
+  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
 spec:
   params:
     - name: service
@@ -11,6 +11,6 @@ spec:
       type: string
   steps:
     - name: undeploy
-      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub.dev.knImageTag" . }}
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
         kn service update '$(params.service)' --untag '$(params.subroute-tag)'
