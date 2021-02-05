@@ -12,10 +12,6 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        {{- if .environment.dev}}
-        - '*.runhub.{{ $.Values.dev.domain }}'
-        {{- else if .environment.prod }}
-        - '*.runhub.{{ .prodDomain }}'
-        {{- end }}
+        - '*.runhub.{{ template "runhub.environmentDomain" $ }}'
 {{- end }}
 {{- end }}

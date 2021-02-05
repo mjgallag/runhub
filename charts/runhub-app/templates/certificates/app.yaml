@@ -11,11 +11,7 @@ metadata:
     networking.knative.dev/wildcardDomain: example.com
 spec:
   dnsNames:
-    {{- if .environment.dev }}
-    - '*.{{ $.Values.dev.domain }}'
-    {{- else if .environment.prod }}
-    - '*.{{ .prodDomain }}'
-    {{- end }}
+    - '*.{{ template "runhub.environmentDomain" $ }}'
   secretName: app-certificate-tls
 {{- end }}
 {{- end }}
