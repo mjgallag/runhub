@@ -4,7 +4,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: issuer
-  namespace: {{ template "runhub.namespaceEnvReleaseChart" $ }}
+  namespace: {{ template "runhub.namespaceEnvironmentReleaseChart" $ }}
 spec:
   acme:
     email: {{ .tls.letsEncrypt.email }}
