@@ -1,9 +1,10 @@
-{{- if .Values.global.environment.dev }}
+{{- with .Values.global }}
+{{- if or .environment.dev (and .environment.prod .prodDomain) }}
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: runhub
-  namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" $ }}
 spec:
   servers:
     - port:
@@ -11,5 +12,10 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - '*.runhub.{{ .Values.dev.domain }}'
+        {{- if .environment.dev}}
+        - '*.runhub.{{ $.Values.dev.domain }}'
+        {{- else if .environment.prod }}
+        - '*.runhub.{{ .prodDomain }}'
+        {{- end }}
+{{- end }}
 {{- end }}
