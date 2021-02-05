@@ -11,7 +11,7 @@ metadata:
     networking.knative.dev/wildcardDomain: example.com
 spec:
   dnsNames:
-    {{- if .environment.dev}}
+    {{- if .environment.dev }}
     - '*.{{ $.Values.dev.domain }}'
     {{- else if .environment.prod }}
     - '*.{{ .prodDomain }}'
