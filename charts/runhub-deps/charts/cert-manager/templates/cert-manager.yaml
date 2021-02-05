@@ -925,6 +925,7 @@ spec:
         - --v=2
         - --cluster-resource-namespace=$(POD_NAMESPACE)
         - --leader-election-namespace=kube-system
+        - --enable-certificate-owner-ref
         env:
         - name: POD_NAMESPACE
           valueFrom:
