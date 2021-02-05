@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: git-webhook
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
+spec:
+  gateways:
+    - runhub
+  hosts:
+    - 'git-webhook.runhub.{{ .Values.domain }}'
+  http:
+    - name: git-webhook
+      route:
+        - destination:
+            host: el-git-webhook
+            port:
+              number: 8080

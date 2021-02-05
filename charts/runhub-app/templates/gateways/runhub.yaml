@@ -1,0 +1,15 @@
+{{- if .Values.global.environment.dev }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: runhub
+  namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
+spec:
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - '*.runhub.{{ .Values.dev.domain }}'
+{{- end }}
