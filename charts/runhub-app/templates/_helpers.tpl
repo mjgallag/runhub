@@ -8,6 +8,6 @@
 {{- end }}
 {{- end }}
 
-{{ define "runhub.namespaceEnvReleaseChart" -}}
+{{ define "runhub.namespaceEnvironmentReleaseChart" -}}
   {{ template "runhub.environment" . }}-{{ .Release.Name }}-{{ template "runhub.chart" . }}
 {{- end }}

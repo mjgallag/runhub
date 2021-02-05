@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: git-webhook
-  namespace: {{ template "runhub.namespaceEnvReleaseChart" . }}
+  namespace: {{ template "runhub.namespaceEnvironmentReleaseChart" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
