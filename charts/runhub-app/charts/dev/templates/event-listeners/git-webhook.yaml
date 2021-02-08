@@ -10,7 +10,6 @@ spec:
     - triggerRef: undeploy-on-git-push-delete-branch
   resources:
     kubernetesResource:
-      serviceType: LoadBalancer
       spec:
         template:
           spec:
