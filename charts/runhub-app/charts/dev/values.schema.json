@@ -61,13 +61,31 @@
             },
             "clientKey": {
               "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
             }
           },
           "required": [
             "server",
-            "certificateAuthority",
-            "clientCertificate",
-            "clientKey"
+            "certificateAuthority"
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "clientCertificate",
+                "clientKey"
+              ]
+            },
+            {
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           ],
           "additionalProperties": false
         }
