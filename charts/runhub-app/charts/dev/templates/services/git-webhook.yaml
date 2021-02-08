@@ -15,7 +15,7 @@ spec:
       containers:
         - args:
             - --el-name=git-webhook
-            - --el-namespace=dev-app-runhub
+            - --el-namespace={{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
             - --port=8000
             - --readtimeout=5
             - --writetimeout=40
