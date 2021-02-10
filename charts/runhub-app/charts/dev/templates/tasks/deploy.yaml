@@ -58,10 +58,10 @@ spec:
             kn service create '$(params.service)' "$@" \
               --pull-secret container-registry-dockerconfigjson
             kn service update '$(params.service)' \
-              --traffic "${REVISION_NAME:?}=100"
+              --traffic "${REVISION_NAME:?}"=100
           else
             kn service update '$(params.service)' "$@" \
-              --traffic "${REVISION_NAME:?}=100"
+              --traffic "${REVISION_NAME:?}"=100
           fi
         else
           kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
