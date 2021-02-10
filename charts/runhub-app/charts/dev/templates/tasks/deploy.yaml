@@ -38,6 +38,10 @@ spec:
           DISABLE_AUTO_TLS='false'
         fi
 
+        if [ '$(params.subroute-tag)' ]; then
+          SUBROUTE_SUBDOMAIN_PREFIX='$(params.subroute-tag)-'
+        fi
+
         set -- \
           --image "${IMAGE:?}" \
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
@@ -45,7 +49,7 @@ spec:
           --scale-init '$(params.initialScale)' \
           --scale-min '$(params.minScale)' \
         {{- range $serviceName, $service := .Values.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://{{ $service.subdomain }}.$(params.domain)' \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://'"${SUBROUTE_SUBDOMAIN_PREFIX}"'{{ $service.subdomain }}.$(params.domain)' \
         {{- end }}
           --revision-name "${REVISION_NAME:?}"
 
