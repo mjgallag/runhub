@@ -1,5 +1,5 @@
-{{ define "runhub-app.chart" -}}
   runhub
+{{ define "runhub-app.chart.name" -}}
 {{- end }}
 
 {{ define "runhub-app.environment" -}}
@@ -19,5 +19,5 @@
 {{- end }}
 
 {{ define "runhub-app.namespaceEnvironmentReleaseChart" -}}
-  {{ template "runhub-app.environment" . }}-{{ .Release.Name }}-{{ template "runhub-app.chart" . }}
+  {{ template "runhub-app.environment" . }}-{{ .Release.Name }}-{{ template "runhub-app.chart.name" . }}
 {{- end }}

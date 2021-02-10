@@ -7,5 +7,5 @@
 {{- end }}
 
 {{ define "runhub-app.dev.namespaceProdReleaseChart" -}}
-  prod-{{ .Release.Name }}-{{ template "runhub-app.chart" . }}
+  prod-{{ .Release.Name }}-{{ template "runhub-app.chart.name" . }}
 {{- end }}
