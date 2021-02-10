@@ -1,5 +1,5 @@
-  runhub
 {{ define "runhub-app.chart.name" -}}
+  runhub-app
 {{- end }}
 
 {{ define "runhub-app.environment" -}}
