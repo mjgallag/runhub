@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: migrate-traffic
+  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
+spec:
+  params:
+    - name: service
+      type: string
+    - name: subroute-tag
+      type: string
+    - name: revision-name
+      type: string
+  workspaces:
+    - name: prod-kubeconfig
+      readOnly: true
+      optional: true
+  steps:
+    - name: migrate-traffic
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
+      script: |
+        if [ '$(workspaces.prod-kubeconfig.path)' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
+        fi
+
+        if [ '$(params.subroute-tag)' ]; then
+          kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
+          kn service update '$(params.service)' --tag '$(params.revision-name)=$(params.subroute-tag)'
+        else
+          kn service update '$(params.service)' --traffic '$(params.revision-name)'=100
+        fi

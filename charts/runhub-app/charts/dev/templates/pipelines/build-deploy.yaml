@@ -72,6 +72,20 @@ spec:
           value: '0'
         - name: minScale
           value: '0'
+    - name: migrate-traffic-{{ $serviceName }}
+      runAfter:
+      {{- range $serviceName, $service := $.Values.services }}
+        - deploy-{{ $serviceName }}
+      {{- end}}
+      taskRef:
+        name: migrate-traffic
+      params:
+        - name: service
+          value: {{ $service.subdomain }}
+        - name: subroute-tag
+          value: $(params.subroute-tag)
+        - name: revision-name
+          value: $(tasks.deploy-{{ $serviceName }}.results.revision-name)
   {{- if (and $.Values.release $.Values.global.prodDomain) }}
     - name: deploy-prod-{{ $serviceName }}
       when:
@@ -102,6 +116,23 @@ spec:
           value: '1'
         - name: minScale
           value: '1'
+      workspaces:
+        - name: prod-kubeconfig
+          workspace: prod-kubeconfig
+    - name: migrate-traffic-prod-{{ $serviceName }}
+      runAfter:
+      {{- range $serviceName, $service := $.Values.services }}
+        - deploy-prod-{{ $serviceName }}
+      {{- end}}
+      taskRef:
+        name: migrate-traffic
+      params:
+        - name: service
+          value: {{ $service.subdomain }}
+        - name: subroute-tag
+          value: $(params.subroute-tag)
+        - name: revision-name
+          value: $(tasks.deploy-prod-{{ $serviceName }}.results.revision-name)
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
