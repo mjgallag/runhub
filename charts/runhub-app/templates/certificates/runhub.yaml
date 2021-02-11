@@ -1,0 +1,15 @@
+{{- with .Values.global }}
+{{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}--runhub
+  namespace: istio-system
+spec:
+  dnsNames:
+    - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
+  secretName: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}--runhub-certificate-tls
+  issuerRef:
+    name: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}
+{{- end }}
+{{- end }}
