@@ -24,8 +24,12 @@ spec:
         fi
 
         if [ '$(params.subroute-tag)' ]; then
-          kn service update '$(params.service)' --untag '$(params.subroute-tag)' || true
-          kn service update '$(params.service)' --tag '$(params.revision-name)=$(params.subroute-tag)'
+          set -- --tag '$(params.revision-name)=$(params.subroute-tag)'
+
+          if ! kn service update '$(params.service)' --untag '$(params.subroute-tag)' "$@"; then
+            kn service update '$(params.service)' "$@"
+          fi
         else
-          kn service update '$(params.service)' --traffic '$(params.revision-name)'=100
+          kn service update '$(params.service)' \
+            --traffic '$(params.revision-name)'=100
         fi
