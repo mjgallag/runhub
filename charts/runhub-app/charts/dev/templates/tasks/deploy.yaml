@@ -29,7 +29,6 @@ spec:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        IMAGE='$(params.image):$(params.image-tag)'
         REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
 
         if [ '$(params.protocol)' = 'http' ]; then
@@ -43,7 +42,7 @@ spec:
         fi
 
         set -- \
-          --image "${IMAGE:?}" \
+          --image '$(params.image):$(params.image-tag)' \
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
           --annotation-service domain='$(params.domain)' \
           --scale-init '$(params.initialScale)' \
