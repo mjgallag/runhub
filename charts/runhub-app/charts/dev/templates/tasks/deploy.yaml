@@ -58,9 +58,7 @@ spec:
         {{- end }}
           --revision-name "${REVISION_NAME:?}"
 
-        if kn service describe '$(params.service)'; then
-          kn service update '$(params.service)' "$@"
-        else
+        if ! kn service update '$(params.service)' "$@"; then
           kn service create '$(params.service)' "$@" \
             --pull-secret container-registry-dockerconfigjson
         fi
