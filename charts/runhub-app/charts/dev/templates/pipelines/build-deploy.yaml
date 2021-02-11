@@ -50,7 +50,9 @@ spec:
           workspace: src-{{ $serviceName }}
     - name: deploy-{{ $serviceName }}
       runAfter:
+      {{- range $serviceName, $service := $.Values.services }}
         - build-{{ $serviceName }}
+      {{- end}}
       taskRef:
         name: deploy
       params:
@@ -78,7 +80,9 @@ spec:
           values:
             - refs/heads/{{ $.Values.release.prodBranch }}
       runAfter:
+      {{- range $serviceName, $service := $.Values.services }}
         - build-{{ $serviceName }}
+      {{- end}}
       taskRef:
         name: deploy
       params:
