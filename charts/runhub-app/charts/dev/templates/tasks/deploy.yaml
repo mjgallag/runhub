@@ -13,8 +13,6 @@ spec:
       type: string
     - name: image-tag
       type: string
-    - name: protocol
-      type: string
     - name: domain
       type: string
     - name: initialScale
@@ -35,7 +33,9 @@ spec:
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
         fi
 
-        if [ '$(params.protocol)' = 'http' ]; then
+        PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
+
+        if [ "${PROTOCOL:?}" = 'http' ]; then
           DISABLE_AUTO_TLS='true'
         else
           DISABLE_AUTO_TLS='false'
@@ -54,7 +54,7 @@ spec:
           --scale-init '$(params.initialScale)' \
           --scale-min '$(params.minScale)' \
         {{- range $serviceName, $service := .Values.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=$(params.protocol)://'"${SUBROUTE_SUBDOMAIN_PREFIX}"'{{ $service.subdomain }}.$(params.domain)' \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SUBROUTE_SUBDOMAIN_PREFIX}"'{{ $service.subdomain }}.$(params.domain)' \
         {{- end }}
           --revision-name "${REVISION_NAME:?}"
 
