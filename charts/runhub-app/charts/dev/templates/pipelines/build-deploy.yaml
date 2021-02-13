@@ -34,8 +34,6 @@ spec:
           value: $(params.git-revision)
         - name: src-path
           value: {{ $service.srcPath }}
-        - name: image-path-with-registry
-          value: {{ template "runhub-app.dev.imagePathWithRegistry" $ }}
         - name: image-name
           value: {{ $serviceName }}
         - name: image-tag
