@@ -57,8 +57,8 @@ spec:
           value: {{ $service.subdomain }}
         - name: subroute-tag
           value: $(params.subroute-tag)
-        - name: image
-          value: {{ template "runhub-app.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
+        - name: image-name
+          value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
         - name: domain
@@ -99,8 +99,8 @@ spec:
           value: {{ $service.subdomain }}
         - name: subroute-tag
           value: ''
-        - name: image
-          value: {{ template "runhub-app.dev.imagePathWithRegistry" $ }}/{{ $serviceName }}
+        - name: image-name
+          value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
         - name: domain

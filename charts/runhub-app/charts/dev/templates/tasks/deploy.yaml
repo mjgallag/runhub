@@ -8,7 +8,7 @@ spec:
       type: string
     - name: subroute-tag
       type: string
-    - name: image
+    - name: image-name
       type: string
     - name: image-tag
       type: string
@@ -47,7 +47,7 @@ spec:
         REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
 
         set -- \
-          --image '$(params.image):$(params.image-tag)' \
+          --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image-name):$(params.image-tag)' \
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
           --annotation-service domain='$(params.domain)' \
           --scale-init '$(params.initialScale)' \
