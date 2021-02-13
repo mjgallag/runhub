@@ -22,6 +22,6 @@ spec:
         number: 443
       tls:
         mode: SIMPLE
-        credentialName: {{ $.Release.Namespace }}--runhub-certificate-tls
+        credentialName: {{ $.Release.Namespace }}--certificate-tls
     {{- end}}
     {{- end}}

@@ -3,12 +3,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ $.Release.Namespace }}--runhub
+  name: {{ $.Release.Namespace }}
   namespace: istio-system
 spec:
   dnsNames:
     - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
-  secretName: {{ $.Release.Namespace }}--runhub-certificate-tls
+  secretName: {{ $.Release.Namespace }}--certificate-tls
   issuerRef:
     name: {{ $.Release.Namespace }}
 {{- end }}
