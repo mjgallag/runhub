@@ -82,7 +82,7 @@ spec:
         - name: revision-name
           value: $(tasks.deploy-{{ $serviceName }}.results.revision-name)
   {{- if (and $.Values.release $.Values.global.prodDomain) }}
-    - name: deploy-prod-{{ $serviceName }}
+    - name: prod-deploy-{{ $serviceName }}
       when:
         - input: "$(params.git-revision)"
           operator: in
@@ -112,10 +112,10 @@ spec:
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
-    - name: migrate-traffic-prod-{{ $serviceName }}
+    - name: prod-migrate-traffic-{{ $serviceName }}
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
-        - deploy-prod-{{ $serviceName }}
+        - prod-deploy-{{ $serviceName }}
       {{- end}}
       taskRef:
         name: migrate-traffic
@@ -125,7 +125,7 @@ spec:
         - name: subroute-tag
           value: $(params.subroute-tag)
         - name: revision-name
-          value: $(tasks.deploy-prod-{{ $serviceName }}.results.revision-name)
+          value: $(tasks.prod-deploy-{{ $serviceName }}.results.revision-name)
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
