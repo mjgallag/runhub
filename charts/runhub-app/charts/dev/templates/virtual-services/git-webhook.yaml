@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: git-webhook
-  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
 spec:
   gateways:
     - runhub

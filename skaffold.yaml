@@ -5,20 +5,20 @@ deploy:
     releases:
       - name: runhub-deps-crds
         chartPath: charts/runhub-deps-crds
-        namespace: dev-runhub
+        namespace: runhub-deps
         createNamespace: true
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
       - name: runhub-deps-operators
         chartPath: charts/runhub-deps-operators
-        namespace: dev-runhub
+        namespace: runhub-deps
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
       - name: runhub-deps
         chartPath: charts/runhub-deps
-        namespace: dev-runhub
+        namespace: runhub-deps
         setValues:
           global.environment.dev: true
         valuesFiles:
@@ -26,7 +26,8 @@ deploy:
         skipBuildDependencies: true
       - name: '{{.RUNHUB_APP}}'
         chartPath: charts/runhub-app
-        namespace: dev-runhub
+        namespace: dev-{{.RUNHUB_APP}}
+        createNamespace: true
         setValues:
           global.environment.dev: true
         valuesFiles:
@@ -35,7 +36,7 @@ deploy:
         skipBuildDependencies: true
       - name: '{{.RUNHUB_APP}}'
         chartPath: charts/runhub-app
-        namespace: prod-runhub
+        namespace: prod-{{.RUNHUB_APP}}
         createNamespace: true
         setValues:
           global.environment.prod: true
@@ -49,7 +50,7 @@ profiles:
         releases:
           - name: runhub-deps-crds
             chartPath: charts/runhub-deps-crds
-            namespace: dev-runhub
+            namespace: runhub-deps
             createNamespace: true
             setValues:
               global.environment.dev: true
@@ -59,14 +60,14 @@ profiles:
             skipBuildDependencies: true
           - name: runhub-deps-operators
             chartPath: charts/runhub-deps-operators
-            namespace: dev-runhub
+            namespace: runhub-deps
             setValues:
               global.environment.dev: true
               knative-operator.enabled: false
             skipBuildDependencies: true
           - name: runhub-deps
             chartPath: charts/runhub-deps
-            namespace: dev-runhub
+            namespace: runhub-deps
             setValues:
               global.environment.dev: true
               cert-manager.enabled: false

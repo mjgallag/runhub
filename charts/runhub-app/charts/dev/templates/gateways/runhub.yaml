@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: runhub
-  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" . }}
 spec:
   servers:
     - hosts:
@@ -23,6 +22,6 @@ spec:
         number: 443
       tls:
         mode: SIMPLE
-        credentialName: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}--runhub-certificate-tls
+        credentialName: {{ $.Release.Namespace }}--runhub-certificate-tls
     {{- end}}
     {{- end}}

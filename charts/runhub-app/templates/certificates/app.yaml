@@ -4,7 +4,6 @@ apiVersion: networking.internal.knative.dev/v1alpha1
 kind: Certificate
 metadata:
   name: app
-  namespace: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}
   annotations:
     networking.knative.dev/certificate.class: cert-manager.certificate.networking.knative.dev
   labels:

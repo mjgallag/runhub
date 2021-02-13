@@ -3,20 +3,20 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}
+  name: {{ $.Release.Namespace}}
   namespace: istio-system
 spec:
   acme:
     email: {{ .tls.letsEncrypt.email }}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}--lets-encrypt-private-key-opaque
+      name: {{ $.Release.Namespace }}--lets-encrypt-private-key-opaque
     solvers:
       - dns01:
           cloudflare:
             email: {{ .tls.cloudflareCredentials.email }}
             apiTokenSecretRef:
-              name: {{ template "runhub-app.namespaceEnvironmentReleaseChart" $ }}--cloudflare-api-token-opaque
+              name: {{ $.Release.Namespace }}--cloudflare-api-token-opaque
               key: api-token
 {{- end }}
 {{- end }}
