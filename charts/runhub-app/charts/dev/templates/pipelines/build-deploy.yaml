@@ -63,10 +63,6 @@ spec:
           value: $(params.image-tag)
         - name: environment
           value: dev
-        - name: initialScale
-          value: '0'
-        - name: minScale
-          value: '0'
     - name: migrate-traffic-{{ $serviceName }}
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
@@ -105,10 +101,6 @@ spec:
           value: $(params.image-tag)
         - name: environment
           value: prod
-        - name: initialScale
-          value: '1'
-        - name: minScale
-          value: '1'
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
