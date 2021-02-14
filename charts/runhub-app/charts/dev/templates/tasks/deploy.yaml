@@ -12,8 +12,6 @@ spec:
       type: string
     - name: image-tag
       type: string
-    - name: domain
-      type: string
     - name: environment
       type: string
     - name: initialScale
@@ -42,6 +40,12 @@ spec:
           DISABLE_AUTO_TLS='false'
         fi
 
+        if [ '$(params.environment)' = 'dev' ]; then
+          DOMAIN='{{ $.Values.domain }}'
+        elif [ '$(params.environment)' = 'prod' ]; then
+          DOMAIN='{{ $.Values.global.prodDomain }}'
+        fi
+
         if [ '$(params.subroute-tag)' ]; then
           SUBROUTE_SUBDOMAIN_PREFIX='$(params.subroute-tag)-'
         fi
@@ -51,12 +55,12 @@ spec:
         set -- \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image-name):$(params.image-tag)' \
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
-          --annotation-service domain='$(params.domain)' \
+          --annotation-service domain="${DOMAIN:?}" \
           --scale-init '$(params.initialScale)' \
           --scale-min '$(params.minScale)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SUBROUTE_SUBDOMAIN_PREFIX}"'{{ $service.subdomain }}.$(params.domain)' \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SUBROUTE_SUBDOMAIN_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
         {{- end }}
           --revision-name "${REVISION_NAME:?}"
 

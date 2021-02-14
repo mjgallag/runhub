@@ -61,8 +61,6 @@ spec:
           value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
-        - name: domain
-          value: {{ $.Values.domain }}
         - name: environment
           value: dev
         - name: initialScale
@@ -105,8 +103,6 @@ spec:
           value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
-        - name: domain
-          value: {{ $.Values.global.prodDomain }}
         - name: environment
           value: prod
         - name: initialScale
