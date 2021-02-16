@@ -41,7 +41,10 @@ spec:
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
         if [ '$(params.service-tag)' ]; then
-          SERVICE_PREFIX='$(params.service-tag)-'
+          SERVICE='$(params.service)-$(params.service-tag)'
+          SERVICE_SUFFIX='-$(params.service-tag)'
+        else
+          SERVICE='$(params.service)'
         fi
 
         if [ "${PROTOCOL:?}" = 'http' ]; then
@@ -50,13 +53,13 @@ spec:
           DISABLE_AUTO_TLS='false'
         fi
 
-        SERVICE_REVISION='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
+        SERVICE_REVISION="${SERVICE:?}"'-$(context.taskRun.uid)'
 
         set -- \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image):$(params.image-tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SERVICE_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://{{ $service.subdomain }}'"${SERVICE_SUFFIX}"'.'"${DOMAIN:?}" \
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
@@ -64,8 +67,8 @@ spec:
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
           --revision-name "${SERVICE_REVISION:?}"
 
-        if ! kn service update '$(params.service)' "$@"; then
-          kn service create '$(params.service)' "$@" \
+        if ! kn service update "${SERVICE:?}" "$@"; then
+          kn service create "${SERVICE:?}" "$@" \
             --pull-secret container-registry-dockerconfigjson
         fi
 

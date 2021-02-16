@@ -8,12 +8,4 @@ rules:
     resources:
       - services
     verbs:
-      - get
-      - update
-      - watch
-  - apiGroups:
-      - serving.knative.dev
-    resources:
-      - revisions
-    verbs:
-      - get
+      - delete

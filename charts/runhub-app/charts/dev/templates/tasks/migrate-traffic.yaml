@@ -23,12 +23,9 @@ spec:
         fi
 
         if [ '$(params.service-tag)' ]; then
-          set -- --tag '$(params.service-revision)=$(params.service-tag)'
-
-          if ! kn service update '$(params.service)' --untag '$(params.service-tag)' "$@"; then
-            kn service update '$(params.service)' "$@"
-          fi
+          SERVICE='$(params.service)-$(params.service-tag)'
         else
-          kn service update '$(params.service)' \
-            --traffic '$(params.service-revision)'=100
+          SERVICE='$(params.service)'
         fi
+
+        kn service update "${SERVICE:?}" --traffic '$(params.service-revision)'=100

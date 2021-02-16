@@ -12,4 +12,10 @@ spec:
     - name: undeploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        kn service update '$(params.service)' --untag '$(params.service-tag)'
+        if [ '$(params.service-tag)' ]; then
+          SERVICE='$(params.service)-$(params.service-tag)'
+        else
+          SERVICE='$(params.service)'
+        fi
+
+        kn service delete "${SERVICE:?}"
