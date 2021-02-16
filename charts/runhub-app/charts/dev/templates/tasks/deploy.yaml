@@ -38,14 +38,14 @@ spec:
           SCALE_MIN=1
         fi
 
-        PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
-
         if [ '$(params.service-tag)' ]; then
           SERVICE='$(params.service)-$(params.service-tag)'
           SERVICE_SUFFIX='-$(params.service-tag)'
         else
           SERVICE='$(params.service)'
         fi
+
+        PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
         if [ "${PROTOCOL:?}" = 'http' ]; then
           DISABLE_AUTO_TLS='true'
