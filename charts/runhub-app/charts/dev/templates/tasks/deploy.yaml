@@ -56,6 +56,7 @@ spec:
         SERVICE_REVISION="${SERVICE:?}"'-$(context.taskRun.uid)'
 
         set -- \
+          --revision-name "${SERVICE_REVISION:?}" \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image):$(params.image-tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.services }}
@@ -64,8 +65,7 @@ spec:
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
           --annotation-service domain="${DOMAIN:?}" \
-          --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
-          --revision-name "${SERVICE_REVISION:?}"
+          --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}"
 
         if ! kn service update "${SERVICE:?}" "$@"; then
           kn service create "${SERVICE:?}" "$@" \
