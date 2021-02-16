@@ -6,7 +6,7 @@ spec:
   params:
     - name: git-url
     - name: git-revision
-    - name: subroute-tag
+    - name: service-tag
     - name: image-tag
     - name: cache-from-image-tag
   resourcetemplates:
@@ -23,8 +23,8 @@ spec:
             value: $(tt.params.git-url)
           - name: git-revision
             value: $(tt.params.git-revision)
-          - name: subroute-tag
-            value: $(tt.params.subroute-tag)
+          - name: service-tag
+            value: $(tt.params.service-tag)
           - name: image-tag
             value: $(tt.params.image-tag)
           - name: cache-from-image-tag

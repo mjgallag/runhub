@@ -6,7 +6,7 @@ spec:
   params:
     - name: service
       type: string
-    - name: subroute-tag
+    - name: service-tag
       type: string
     - name: image-name
       type: string
@@ -40,8 +40,8 @@ spec:
 
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
-        if [ '$(params.subroute-tag)' ]; then
-          SUBROUTE_PREFIX='$(params.subroute-tag)-'
+        if [ '$(params.service-tag)' ]; then
+          SUBROUTE_PREFIX='$(params.service-tag)-'
         fi
 
         if [ "${PROTOCOL:?}" = 'http' ]; then

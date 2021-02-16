@@ -25,7 +25,7 @@ spec:
     - cel:
         filter: extensions.ref_type == 'heads' && !body.deleted
         overlays:
-          - key: subroute-tag
+          - key: service-tag
             expression: |
               extensions.branch == body.repository.default_branch
                 ? ''

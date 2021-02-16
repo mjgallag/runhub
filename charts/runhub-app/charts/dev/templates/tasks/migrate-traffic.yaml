@@ -6,7 +6,7 @@ spec:
   params:
     - name: service
       type: string
-    - name: subroute-tag
+    - name: service-tag
       type: string
     - name: revision-name
       type: string
@@ -22,10 +22,10 @@ spec:
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
         fi
 
-        if [ '$(params.subroute-tag)' ]; then
-          set -- --tag '$(params.revision-name)=$(params.subroute-tag)'
+        if [ '$(params.service-tag)' ]; then
+          set -- --tag '$(params.revision-name)=$(params.service-tag)'
 
-          if ! kn service update '$(params.service)' --untag '$(params.subroute-tag)' "$@"; then
+          if ! kn service update '$(params.service)' --untag '$(params.service-tag)' "$@"; then
             kn service update '$(params.service)' "$@"
           fi
         else

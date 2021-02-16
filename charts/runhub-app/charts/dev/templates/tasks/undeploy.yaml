@@ -6,10 +6,10 @@ spec:
   params:
     - name: service
       type: string
-    - name: subroute-tag
+    - name: service-tag
       type: string
   steps:
     - name: undeploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        kn service update '$(params.service)' --untag '$(params.subroute-tag)'
+        kn service update '$(params.service)' --untag '$(params.service-tag)'

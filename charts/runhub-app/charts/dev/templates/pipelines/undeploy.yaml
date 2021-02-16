@@ -4,7 +4,7 @@ metadata:
   name: undeploy
 spec:
   params:
-    - name: subroute-tag
+    - name: service-tag
       type: string
   tasks:
     {{- range $serviceName, $service := .Values.services }}
@@ -14,6 +14,6 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: subroute-tag
-          value: $(params.subroute-tag)
+        - name: service-tag
+          value: $(params.service-tag)
     {{- end }}

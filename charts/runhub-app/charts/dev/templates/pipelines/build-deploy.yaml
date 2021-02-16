@@ -8,7 +8,7 @@ spec:
       type: string
     - name: git-revision
       type: string
-    - name: subroute-tag
+    - name: service-tag
       type: string
     - name: image-tag
       type: string
@@ -55,8 +55,8 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: subroute-tag
-          value: $(params.subroute-tag)
+        - name: service-tag
+          value: $(params.service-tag)
         - name: image-name
           value: {{ $serviceName }}
         - name: image-tag
@@ -73,8 +73,8 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: subroute-tag
-          value: $(params.subroute-tag)
+        - name: service-tag
+          value: $(params.service-tag)
         - name: revision-name
           value: $(tasks.deploy-{{ $serviceName }}.results.revision-name)
   {{- if (and $.Values.release $.Values.global.prodDomain) }}
@@ -93,7 +93,7 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: subroute-tag
+        - name: service-tag
           value: ''
         - name: image-name
           value: {{ $serviceName }}
@@ -114,8 +114,8 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: subroute-tag
-          value: $(params.subroute-tag)
+        - name: service-tag
+          value: $(params.service-tag)
         - name: revision-name
           value: $(tasks.prod-deploy-{{ $serviceName }}.results.revision-name)
       workspaces:
