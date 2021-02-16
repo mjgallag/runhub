@@ -8,9 +8,6 @@ spec:
   hosts:
     - git-webhook.runhub.{{ .Values.domain }}
   http:
-    - name: el-git-webhook
-      route:
+    - route:
         - destination:
             host: el-git-webhook
-            port:
-              number: 8080
