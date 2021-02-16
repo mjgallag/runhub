@@ -64,12 +64,12 @@ spec:
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
+          --pull-secret container-registry-dockerconfigjson \
           --annotation-service domain="${DOMAIN:?}" \
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}"
 
         if ! kn service update "${SERVICE:?}" "$@"; then
-          kn service create "${SERVICE:?}" "$@" \
-            --pull-secret container-registry-dockerconfigjson
+          kn service create "${SERVICE:?}" "$@"
         fi
 
         printf "${SERVICE_REVISION:?}" > '$(results.service-revision.path)'
