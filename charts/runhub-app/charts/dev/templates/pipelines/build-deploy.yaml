@@ -75,8 +75,8 @@ spec:
           value: {{ $service.subdomain }}
         - name: service-tag
           value: $(params.service-tag)
-        - name: revision-name
-          value: $(tasks.deploy-{{ $serviceName }}.results.revision-name)
+        - name: service-revision
+          value: $(tasks.deploy-{{ $serviceName }}.results.service-revision)
   {{- if (and $.Values.release $.Values.global.prodDomain) }}
     - name: prod-deploy-{{ $serviceName }}
       when:
@@ -116,8 +116,8 @@ spec:
           value: {{ $service.subdomain }}
         - name: service-tag
           value: $(params.service-tag)
-        - name: revision-name
-          value: $(tasks.prod-deploy-{{ $serviceName }}.results.revision-name)
+        - name: service-revision
+          value: $(tasks.prod-deploy-{{ $serviceName }}.results.service-revision)
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig

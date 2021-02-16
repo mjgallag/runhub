@@ -8,7 +8,7 @@ spec:
       type: string
     - name: service-tag
       type: string
-    - name: revision-name
+    - name: service-revision
       type: string
   workspaces:
     - name: prod-kubeconfig
@@ -23,12 +23,12 @@ spec:
         fi
 
         if [ '$(params.service-tag)' ]; then
-          set -- --tag '$(params.revision-name)=$(params.service-tag)'
+          set -- --tag '$(params.service-revision)=$(params.service-tag)'
 
           if ! kn service update '$(params.service)' --untag '$(params.service-tag)' "$@"; then
             kn service update '$(params.service)' "$@"
           fi
         else
           kn service update '$(params.service)' \
-            --traffic '$(params.revision-name)'=100
+            --traffic '$(params.service-revision)'=100
         fi

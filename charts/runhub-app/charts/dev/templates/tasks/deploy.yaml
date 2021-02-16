@@ -19,7 +19,7 @@ spec:
       readOnly: true
       optional: true
   results:
-    - name: revision-name
+    - name: service-revision
   steps:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
@@ -50,7 +50,7 @@ spec:
           DISABLE_AUTO_TLS='false'
         fi
 
-        REVISION_NAME='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
+        SERVICE_REVISION='$(params.service)-$(params.image-tag)-$(context.taskRun.uid)'
 
         set -- \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image):$(params.image-tag)' \
@@ -62,11 +62,11 @@ spec:
           --scale-min "${SCALE_MIN:?}" \
           --annotation-service domain="${DOMAIN:?}" \
           --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}" \
-          --revision-name "${REVISION_NAME:?}"
+          --revision-name "${SERVICE_REVISION:?}"
 
         if ! kn service update '$(params.service)' "$@"; then
           kn service create '$(params.service)' "$@" \
             --pull-secret container-registry-dockerconfigjson
         fi
 
-        printf "${REVISION_NAME:?}" > '$(results.revision-name.path)'
+        printf "${SERVICE_REVISION:?}" > '$(results.service-revision.path)'
