@@ -10,4 +10,4 @@ spec:
   http:
     - route:
         - destination:
-            host: el-git-webhook
+            host: el-git-webhook.{{ .Release.Namespace }}.svc.cluster.local
