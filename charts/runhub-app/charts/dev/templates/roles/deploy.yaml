@@ -12,9 +12,3 @@ rules:
       - create
       - update
       - watch
-  - apiGroups:
-      - serving.knative.dev
-    resources:
-      - revisions
-    verbs:
-      - get
