@@ -34,7 +34,7 @@ spec:
           value: $(params.git-revision)
         - name: src-path
           value: {{ $service.srcPath }}
-        - name: image-name
+        - name: image
           value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
@@ -57,7 +57,7 @@ spec:
           value: {{ $service.subdomain }}
         - name: service-tag
           value: $(params.service-tag)
-        - name: image-name
+        - name: image
           value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)
@@ -95,7 +95,7 @@ spec:
           value: {{ $service.subdomain }}
         - name: service-tag
           value: ''
-        - name: image-name
+        - name: image
           value: {{ $serviceName }}
         - name: image-tag
           value: $(params.image-tag)

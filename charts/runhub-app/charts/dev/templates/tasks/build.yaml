@@ -10,7 +10,7 @@ spec:
       type: string
     - name: src-path
       type: string
-    - name: image-name
+    - name: image
       type: string
     - name: image-tag
       type: string
@@ -30,8 +30,8 @@ spec:
       securityContext:
         privileged: true
       script: |
-        IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image-name)'
-        CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.image-name)'
+        IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image)'
+        CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.image)'
 
         buildctl-daemonless.sh \
           build \
