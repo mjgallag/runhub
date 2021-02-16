@@ -41,7 +41,7 @@ spec:
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
         if [ '$(params.subroute-tag)' ]; then
-          SUBROUTE_SUBDOMAIN_PREFIX='$(params.subroute-tag)-'
+          SUBROUTE_PREFIX='$(params.subroute-tag)-'
         fi
 
         if [ "${PROTOCOL:?}" = 'http' ]; then
@@ -56,7 +56,7 @@ spec:
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image-name):$(params.image-tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SUBROUTE_SUBDOMAIN_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SUBROUTE_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
