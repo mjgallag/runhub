@@ -10,18 +10,16 @@ spec:
         name: http
         protocol: HTTP
         number: 80
-    {{- with .Values.global }}
-    {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+    {{- if .Values.global.tls }}
       tls:
         httpsRedirect: true
     - hosts:
-        - git-webhook.runhub.{{ $.Values.domain }}
+        - git-webhook.runhub.{{ .Values.domain }}
       port:
         name: https
         protocol: HTTPS
         number: 443
       tls:
         mode: SIMPLE
-        credentialName: {{ $.Release.Namespace }}--certificate-tls
-    {{- end}}
+        credentialName: {{ .Release.Namespace }}--certificate-tls
     {{- end}}
