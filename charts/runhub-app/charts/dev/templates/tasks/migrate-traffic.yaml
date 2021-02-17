@@ -8,8 +8,6 @@ spec:
       type: string
     - name: service-tag
       type: string
-    - name: service-revision
-      type: string
   workspaces:
     - name: prod-kubeconfig
       readOnly: true
@@ -28,4 +26,7 @@ spec:
           SERVICE='$(params.service)'
         fi
 
-        kn service update "${SERVICE:?}" --traffic '$(params.service-revision)'=100
+        REVISION=$(kn service describe "${SERVICE:?}" \
+          --output go-template --template '{{"{{"}} .status.latestReadyRevisionName }}')
+
+        kn service update "${SERVICE:?}" --traffic "${REVISION:?}"=100

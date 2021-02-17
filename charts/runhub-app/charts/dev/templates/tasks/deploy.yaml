@@ -18,8 +18,6 @@ spec:
     - name: prod-kubeconfig
       readOnly: true
       optional: true
-  results:
-    - name: service-revision
   steps:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
@@ -53,10 +51,7 @@ spec:
           DISABLE_AUTO_TLS='false'
         fi
 
-        SERVICE_REVISION="${SERVICE:?}"'-$(context.taskRun.uid)'
-
         set -- \
-          --revision-name "${SERVICE_REVISION:?}" \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image):$(params.image-tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.services }}
@@ -71,5 +66,3 @@ spec:
         if ! kn service update "${SERVICE:?}" "$@"; then
           kn service create "${SERVICE:?}" "$@"
         fi
-
-        printf "${SERVICE_REVISION:?}" > '$(results.service-revision.path)'
