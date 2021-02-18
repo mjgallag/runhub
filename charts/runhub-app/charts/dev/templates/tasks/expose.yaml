@@ -36,38 +36,12 @@ spec:
 
         kubectl apply --filename - <<EOF
         apiVersion: networking.istio.io/v1beta1
-        kind: Gateway
-        metadata:
-          name: ${SERVICE:?}
-        spec:
-          servers:
-            - hosts:
-                - ${SERVICE:?}.${DOMAIN:?}
-              port:
-                name: http
-                protocol: HTTP
-                number: 80
-            {{- if .Values.global.tls }}
-              tls:
-                httpsRedirect: true
-            - hosts:
-                - ${SERVICE:?}.${DOMAIN:?}
-              port:
-                name: https
-                protocol: HTTPS
-                number: 443
-              tls:
-                mode: SIMPLE
-                credentialName: $(params.environment)-{{ .Release.Name }}--certificate-tls
-            {{- end}}
-        ---
-        apiVersion: networking.istio.io/v1beta1
         kind: VirtualService
         metadata:
           name: ${SERVICE:?}
         spec:
           gateways:
-            - ${SERVICE:?}
+            - gateway
           hosts:
             - ${SERVICE:?}.${DOMAIN:?}
           http:

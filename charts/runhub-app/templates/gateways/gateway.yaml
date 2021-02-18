@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: gateway
+spec:
+  servers:
+    - hosts:
+        - '*.{{ template "runhub-app.environmentDomain" . }}'
+        - '*.runhub.{{ template "runhub-app.environmentDomain" . }}'
+      port:
+        name: http
+        protocol: HTTP
+        number: 80
+    {{- with .Values.global }}
+    {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+      tls:
+        httpsRedirect: true
+    - hosts:
+        - '*.{{ template "runhub-app.environmentDomain" $ }}'
+        - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
+      port:
+        name: https
+        protocol: HTTPS
+        number: 443
+      tls:
+        mode: SIMPLE
+        credentialName: {{ $.Release.Namespace }}--certificate-tls
+    {{- end}}
+    {{- end}}

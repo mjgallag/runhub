@@ -4,7 +4,7 @@ metadata:
   name: git-webhook
 spec:
   gateways:
-    - runhub
+    - gateway
   hosts:
     - git-webhook.runhub.{{ .Values.domain }}
   http:

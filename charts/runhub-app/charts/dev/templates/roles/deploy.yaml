@@ -15,7 +15,6 @@ rules:
   - apiGroups:
       - networking.istio.io
     resources:
-      - gateways
       - virtualservices
     verbs:
       - get
