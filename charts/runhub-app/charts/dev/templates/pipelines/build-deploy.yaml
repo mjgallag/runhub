@@ -63,18 +63,20 @@ spec:
           value: $(params.image-tag)
         - name: environment
           value: dev
-    - name: migrate-traffic-{{ $serviceName }}
+    - name: expose-{{ $serviceName }}
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
         - deploy-{{ $serviceName }}
       {{- end}}
       taskRef:
-        name: migrate-traffic
+        name: expose
       params:
         - name: service
           value: {{ $service.subdomain }}
         - name: service-tag
           value: $(params.service-tag)
+        - name: environment
+          value: dev
   {{- if (and $.Values.release $.Values.global.prodDomain) }}
     - name: prod-deploy-{{ $serviceName }}
       when:
@@ -102,18 +104,20 @@ spec:
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
-    - name: prod-migrate-traffic-{{ $serviceName }}
+    - name: prod-expose-{{ $serviceName }}
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
         - prod-deploy-{{ $serviceName }}
       {{- end}}
       taskRef:
-        name: migrate-traffic
+        name: expose
       params:
         - name: service
           value: {{ $service.subdomain }}
         - name: service-tag
           value: $(params.service-tag)
+        - name: environment
+          value: prod
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig

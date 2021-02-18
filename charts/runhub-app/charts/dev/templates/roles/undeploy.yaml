@@ -9,3 +9,10 @@ rules:
       - services
     verbs:
       - delete
+  - apiGroups:
+      - networking.istio.io
+    resources:
+      - gateways
+      - virtualservices
+    verbs:
+      - delete

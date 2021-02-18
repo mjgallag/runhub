@@ -1,0 +1,96 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: expose
+spec:
+  params:
+    - name: service
+      type: string
+    - name: service-tag
+      type: string
+    - name: environment
+      type: string
+  workspaces:
+    - name: prod-kubeconfig
+      readOnly: true
+      optional: true
+  steps:
+    - name: expose
+      image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
+      script: |
+        if [ '$(workspaces.prod-kubeconfig.path)' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
+        fi
+
+        if [ '$(params.environment)' = 'dev' ]; then
+          DOMAIN='{{ $.Values.domain }}'
+        elif [ '$(params.environment)' = 'prod' ]; then
+          DOMAIN='{{ $.Values.global.prodDomain }}'
+        fi
+
+        if [ '$(params.service-tag)' ]; then
+          SERVICE='$(params.service)-$(params.service-tag)'
+        else
+          SERVICE='$(params.service)'
+        fi
+
+        kubectl apply --filename - <<EOF
+        apiVersion: networking.istio.io/v1beta1
+        kind: Gateway
+        metadata:
+          name: ${SERVICE:?}
+        spec:
+          servers:
+            - hosts:
+                - ${SERVICE:?}.${DOMAIN:?}
+              port:
+                name: http
+                protocol: HTTP
+                number: 80
+            {{- if .Values.global.tls }}
+              tls:
+                httpsRedirect: true
+            - hosts:
+                - ${SERVICE:?}.${DOMAIN:?}
+              port:
+                name: https
+                protocol: HTTPS
+                number: 443
+              tls:
+                mode: SIMPLE
+                credentialName: $(params.environment)-{{ .Release.Name }}--certificate-tls
+            {{- end}}
+        ---
+        apiVersion: networking.istio.io/v1beta1
+        kind: VirtualService
+        metadata:
+          name: ${SERVICE:?}
+        spec:
+          gateways:
+            - ${SERVICE:?}
+          hosts:
+            - ${SERVICE:?}.${DOMAIN:?}
+          http:
+            - rewrite:
+                authority: ${SERVICE:?}.$(params.environment)-{{ .Release.Name }}.svc.cluster.local
+              route:
+                - destination:
+                    host: ${SERVICE:?}.$(params.environment)-{{ .Release.Name }}.svc.cluster.local
+        EOF
+    - name: migrate-traffic
+      image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
+      script: |
+        if [ '$(workspaces.prod-kubeconfig.path)' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
+        fi
+
+        if [ '$(params.service-tag)' ]; then
+          SERVICE='$(params.service)-$(params.service-tag)'
+        else
+          SERVICE='$(params.service)'
+        fi
+
+        REVISION=$(kn service describe "${SERVICE:?}" \
+          --output go-template --template '{{"{{"}} .status.latestReadyRevisionName }}')
+
+        kn service update "${SERVICE:?}" --traffic "${REVISION:?}"=100

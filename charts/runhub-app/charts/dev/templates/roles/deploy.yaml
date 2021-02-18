@@ -12,3 +12,12 @@ rules:
       - create
       - update
       - watch
+  - apiGroups:
+      - networking.istio.io
+    resources:
+      - gateways
+      - virtualservices
+    verbs:
+      - get
+      - create
+      - patch

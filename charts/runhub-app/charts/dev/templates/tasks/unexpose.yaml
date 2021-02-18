@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: unexpose
+spec:
+  params:
+    - name: service
+      type: string
+    - name: service-tag
+      type: string
+  steps:
+    - name: unexpose
+      image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
+      script: |
+        if [ '$(params.service-tag)' ]; then
+          SERVICE='$(params.service)-$(params.service-tag)'
+        else
+          SERVICE='$(params.service)'
+        fi
+
+        kubectl delete gateways,virtualservices ${SERVICE:?}

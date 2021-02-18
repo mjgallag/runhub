@@ -45,12 +45,6 @@ spec:
 
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
-        if [ "${PROTOCOL:?}" = 'http' ]; then
-          DISABLE_AUTO_TLS='true'
-        else
-          DISABLE_AUTO_TLS='false'
-        fi
-
         set -- \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image):$(params.image-tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
@@ -60,8 +54,7 @@ spec:
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
           --pull-secret container-registry-dockerconfigjson \
-          --annotation-service domain="${DOMAIN:?}" \
-          --annotation-service networking.knative.dev/disableAutoTLS="${DISABLE_AUTO_TLS:?}"
+          --cluster-local
 
         if ! kn service update "${SERVICE:?}" "$@"; then
           kn service create "${SERVICE:?}" "$@"

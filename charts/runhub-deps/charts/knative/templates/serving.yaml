@@ -12,20 +12,3 @@ spec:
   config:
     autoscaler:
       allow-zero-initial-scale: "true"
-    config-certmanager:
-       issuerRef: |
-        kind: Issuer
-        name: issuer
-    network:
-      domainTemplate: |-
-        {{"{{"}} if index .Annotations "domain" -}}
-          {{"{{"}} .Name }}.{{"{{"}} index .Annotations "domain" }}
-        {{"{{"}}- else -}}
-          {{"{{"}} .Name }}.{{"{{"}} .Namespace }}.{{"{{"}} .Domain }}
-        {{"{{"}}- end }}
-      autoTLS: "Enabled"
-      {{- if .Values.redirectHTTPtoHTTPS }}
-      httpProtocol: "Redirected"
-      {{- end }}
-  additionalManifests:
-    - URL: https://github.com/knative-sandbox/net-certmanager/releases/download/v${VERSION}/net-certmanager.yaml

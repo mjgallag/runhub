@@ -8,6 +8,14 @@ spec:
       type: string
   tasks:
     {{- range $serviceName, $service := .Values.services }}
+    - name: unexpose-{{ $serviceName }}
+      taskRef:
+        name: unexpose
+      params:
+        - name: service
+          value: {{ $service.subdomain }}
+        - name: service-tag
+          value: $(params.service-tag)
     - name: undeploy-{{ $serviceName }}
       taskRef:
         name: undeploy

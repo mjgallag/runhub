@@ -21,8 +21,6 @@ deploy:
         namespace: runhub-deps
         setValues:
           global.environment.dev: true
-        valuesFiles:
-          - values-deps.yaml
         skipBuildDependencies: true
       - name: '{{.RUNHUB_APP}}'
         chartPath: charts/runhub-app
@@ -73,6 +71,4 @@ profiles:
               cert-manager.enabled: false
               knative.enabled: false
               tekton.enabled: false
-            valuesFiles:
-              - values-deps.yaml
             skipBuildDependencies: true

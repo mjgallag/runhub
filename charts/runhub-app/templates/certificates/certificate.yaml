@@ -7,6 +7,7 @@ metadata:
   namespace: istio-system
 spec:
   dnsNames:
+    - '*.{{ template "runhub-app.environmentDomain" $ }}'
     - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
   secretName: {{ $.Release.Namespace }}--certificate-tls
   issuerRef:
