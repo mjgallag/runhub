@@ -13,7 +13,7 @@ spec:
         name: unexpose
       params:
         - name: service
-          value: {{ $service.subdomain }}
+          value: {{ $serviceName }}
         - name: tag
           value: $(params.tag)
     - name: undeploy-{{ $serviceName }}
@@ -21,7 +21,7 @@ spec:
         name: undeploy
       params:
         - name: service
-          value: {{ $service.subdomain }}
+          value: {{ $serviceName }}
         - name: tag
           value: $(params.tag)
     {{- end }}

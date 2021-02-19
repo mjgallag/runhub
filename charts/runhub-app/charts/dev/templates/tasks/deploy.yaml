@@ -6,8 +6,6 @@ spec:
   params:
     - name: service
       type: string
-    - name: image
-      type: string
     - name: tag
       type: string
     - name: environment
@@ -38,7 +36,7 @@ spec:
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
         set -- \
-          --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.image):$(params.tag)' \
+          --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.services }}
           --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://{{ $service.subdomain }}'"${SERVICE_SUFFIX}"'.'"${DOMAIN:?}" \

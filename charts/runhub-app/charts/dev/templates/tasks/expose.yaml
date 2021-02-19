@@ -6,6 +6,8 @@ spec:
   params:
     - name: service
       type: string
+    - name: subdomain
+      type: string
     - name: tag
       type: string
     - name: environment
@@ -22,10 +24,12 @@ spec:
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SERVICE='$(params.service)-$(params.tag)'
+          SUBDOMAIN='$(params.subdomain)-$(params.tag)'
         elif [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SERVICE='$(params.service)'
+          SUBDOMAIN='$(params.subdomain)'
         fi
 
         kubectl apply --filename - <<EOF
@@ -37,7 +41,7 @@ spec:
           gateways:
             - gateway
           hosts:
-            - ${SERVICE:?}.${DOMAIN:?}
+            - ${SUBDOMAIN:?}.${DOMAIN:?}
           http:
             - rewrite:
                 authority: ${SERVICE:?}.$(params.environment)-{{ .Release.Name }}.svc.cluster.local
