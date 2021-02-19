@@ -25,11 +25,6 @@ spec:
     - cel:
         filter: extensions.ref_type == 'heads' && !body.deleted
         overlays:
-          - key: service-tag
-            expression: |
-              extensions.branch == body.repository.default_branch
-                ? ''
-                : extensions.branch
           - key: cache-from-branch
             expression: |
               extensions.base_ref_type == 'heads'

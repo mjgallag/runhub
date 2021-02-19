@@ -6,14 +6,14 @@ spec:
   params:
     - name: service
       type: string
-    - name: service-tag
+    - name: image-tag
       type: string
   steps:
     - name: unexpose
       image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
       script: |
-        if [ '$(params.service-tag)' ]; then
-          SERVICE='$(params.service)-$(params.service-tag)'
+        if [ '$(params.image-tag)' ]; then
+          SERVICE='$(params.service)-$(params.image-tag)'
         else
           SERVICE='$(params.service)'
         fi

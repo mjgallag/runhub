@@ -4,7 +4,7 @@ metadata:
   name: undeploy
 spec:
   params:
-    - name: service-tag
+    - name: image-tag
       type: string
   tasks:
     {{- range $serviceName, $service := .Values.services }}
@@ -14,14 +14,14 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: service-tag
-          value: $(params.service-tag)
+        - name: image-tag
+          value: $(params.image-tag)
     - name: undeploy-{{ $serviceName }}
       taskRef:
         name: undeploy
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: service-tag
-          value: $(params.service-tag)
+        - name: image-tag
+          value: $(params.image-tag)
     {{- end }}

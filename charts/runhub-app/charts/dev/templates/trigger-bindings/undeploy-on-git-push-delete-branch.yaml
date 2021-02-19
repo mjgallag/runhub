@@ -4,5 +4,5 @@ metadata:
   name: undeploy-on-git-push-delete-branch
 spec:
   params:
-    - name: service-tag
+    - name: image-tag
       value: $(extensions.branch)

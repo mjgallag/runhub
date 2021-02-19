@@ -4,16 +4,16 @@ metadata:
   name: undeploy
 spec:
   params:
-    - name: service-tag
+    - name: image-tag
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: undeploy-$(tt.params.service-tag)-
+        generateName: undeploy-$(tt.params.image-tag)-
       spec:
         serviceAccountName: undeploy
         pipelineRef:
           name: undeploy
         params:
-          - name: service-tag
-            value: $(tt.params.service-tag)
+          - name: image-tag
+            value: $(tt.params.image-tag)

@@ -8,8 +8,6 @@ spec:
       type: string
     - name: git-revision
       type: string
-    - name: service-tag
-      type: string
     - name: image-tag
       type: string
     - name: cache-from-image-tag
@@ -55,8 +53,6 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: service-tag
-          value: $(params.service-tag)
         - name: image
           value: {{ $serviceName }}
         - name: image-tag
@@ -73,8 +69,8 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: service-tag
-          value: $(params.service-tag)
+        - name: image-tag
+          value: $(params.image-tag)
         - name: environment
           value: dev
   {{- if (and $.Values.release $.Values.global.prodDomain) }}
@@ -93,8 +89,6 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: service-tag
-          value: ''
         - name: image
           value: {{ $serviceName }}
         - name: image-tag
@@ -114,8 +108,8 @@ spec:
       params:
         - name: service
           value: {{ $service.subdomain }}
-        - name: service-tag
-          value: ''
+        - name: image-tag
+          value: $(params.image-tag)
         - name: environment
           value: prod
       workspaces:
