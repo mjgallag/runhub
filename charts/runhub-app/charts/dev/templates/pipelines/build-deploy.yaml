@@ -115,7 +115,7 @@ spec:
         - name: service
           value: {{ $service.subdomain }}
         - name: service-tag
-          value: $(params.service-tag)
+          value: ''
         - name: environment
           value: prod
       workspaces:
