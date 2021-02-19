@@ -36,7 +36,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-        {{- end}}
+        {{- end }}
           - name: dockerfile
             configMap:
               name: dockerfile
@@ -44,4 +44,4 @@ spec:
           - name: prod-kubeconfig
             secret:
               secretName: prod-kubeconfig-opaque
-        {{- end}}
+        {{- end }}

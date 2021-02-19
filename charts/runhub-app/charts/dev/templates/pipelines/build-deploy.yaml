@@ -15,11 +15,11 @@ spec:
   workspaces:
   {{- range $serviceName, $service := .Values.services }}
     - name: src-{{ $serviceName }}
-  {{- end}}
+  {{- end }}
     - name: dockerfile
   {{- if .Values.release }}
     - name: prod-kubeconfig
-  {{- end}}
+  {{- end }}
   tasks:
   {{- range $serviceName, $service := .Values.services }}
     - name: build-{{ $serviceName }}
@@ -47,7 +47,7 @@ spec:
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
         - build-{{ $serviceName }}
-      {{- end}}
+      {{- end }}
       taskRef:
         name: deploy
       params:
@@ -63,7 +63,7 @@ spec:
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
         - deploy-{{ $serviceName }}
-      {{- end}}
+      {{- end }}
       taskRef:
         name: expose
       params:
@@ -83,7 +83,7 @@ spec:
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
         - build-{{ $serviceName }}
-      {{- end}}
+      {{- end }}
       taskRef:
         name: deploy
       params:
@@ -102,7 +102,7 @@ spec:
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
         - prod-deploy-{{ $serviceName }}
-      {{- end}}
+      {{- end }}
       taskRef:
         name: expose
       params:
