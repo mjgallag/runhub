@@ -6,7 +6,7 @@ spec:
   params:
     - name: git-revision
       value: refs/heads/$(body.repository.default_branch)
-    - name: image-tag
+    - name: tag
       value: $(body.repository.default_branch)
-    - name: cache-from-image-tag
+    - name: cache-from-tag
       value: $(body.repository.default_branch)

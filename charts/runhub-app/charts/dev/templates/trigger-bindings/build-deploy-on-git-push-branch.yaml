@@ -6,7 +6,7 @@ spec:
   params:
     - name: git-revision
       value: $(body.ref)
-    - name: image-tag
+    - name: tag
       value: $(extensions.branch)
-    - name: cache-from-image-tag
+    - name: cache-from-tag
       value: $(extensions.cache-from-branch)

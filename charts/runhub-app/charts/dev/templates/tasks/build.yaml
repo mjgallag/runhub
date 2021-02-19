@@ -12,9 +12,9 @@ spec:
       type: string
     - name: image
       type: string
-    - name: image-tag
+    - name: tag
       type: string
-    - name: cache-from-image-tag
+    - name: cache-from-tag
       type: string
   workspaces:
     - name: dockerfile
@@ -39,6 +39,6 @@ spec:
             --local dockerfile='$(workspaces.dockerfile.path)' \
             --local context='$(workspaces.src.path)' \
             --opt build-arg:SRC_PATH='$(params.src-path)' \
-            --output type=image,name="${IMAGE:?}":'$(params.image-tag)',push=true \
-            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}":'$(params.image-tag)' \
-            --import-cache type=registry,\"ref="${CACHE_IMAGE:?}":'$(params.image-tag)',"${CACHE_IMAGE:?}":'$(params.cache-from-image-tag)'\"
+            --output type=image,name="${IMAGE:?}":'$(params.tag)',push=true \
+            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}":'$(params.tag)' \
+            --import-cache type=registry,\"ref="${CACHE_IMAGE:?}":'$(params.tag)',"${CACHE_IMAGE:?}":'$(params.cache-from-tag)'\"

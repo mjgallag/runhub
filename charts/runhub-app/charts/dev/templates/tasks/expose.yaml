@@ -6,7 +6,7 @@ spec:
   params:
     - name: service
       type: string
-    - name: image-tag
+    - name: tag
       type: string
     - name: environment
       type: string
@@ -24,7 +24,7 @@ spec:
 
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
-          SERVICE='$(params.service)-$(params.image-tag)'
+          SERVICE='$(params.service)-$(params.tag)'
         elif [ '$(params.environment)' = 'prod' ]; then
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SERVICE='$(params.service)'
@@ -55,7 +55,7 @@ spec:
         fi
 
         if [ '$(params.environment)' = 'dev' ]; then
-          SERVICE='$(params.service)-$(params.image-tag)'
+          SERVICE='$(params.service)-$(params.tag)'
         elif [ '$(params.environment)' = 'prod' ]; then
           SERVICE='$(params.service)'
         fi
