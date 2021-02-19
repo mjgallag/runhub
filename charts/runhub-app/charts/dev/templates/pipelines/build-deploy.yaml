@@ -34,7 +34,7 @@ spec:
           value: $(params.git-revision)
         - name: src-path
           value: {{ $service.srcPath }}
-        - name: image
+        - name: service
           value: {{ $serviceName }}
         - name: tag
           value: $(params.tag)
