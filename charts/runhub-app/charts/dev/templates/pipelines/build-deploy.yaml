@@ -12,6 +12,8 @@ spec:
       type: string
     - name: cache-from-tag
       type: string
+    - name: environment
+      type: string
   workspaces:
   {{- range $serviceName, $service := .Values.services }}
     - name: src-{{ $serviceName }}
@@ -58,7 +60,12 @@ spec:
         - name: tag
           value: $(params.tag)
         - name: environment
-          value: dev
+          value: $(params.environment)
+    {{- if $.Values.release }}
+      workspaces:
+        - name: prod-kubeconfig
+          workspace: prod-kubeconfig
+    {{- end }}
     - name: expose-{{ $serviceName }}
       runAfter:
       {{- range $serviceName, $service := $.Values.services }}
@@ -72,48 +79,10 @@ spec:
         - name: tag
           value: $(params.tag)
         - name: environment
-          value: dev
-  {{- if (and $.Values.release $.Values.global.prodDomain) }}
-    - name: prod-deploy-{{ $serviceName }}
-      when:
-        - input: "$(params.git-revision)"
-          operator: in
-          values:
-            - refs/heads/{{ $.Values.release.prodBranch }}
-      runAfter:
-      {{- range $serviceName, $service := $.Values.services }}
-        - build-{{ $serviceName }}
-      {{- end }}
-      taskRef:
-        name: deploy
-      params:
-        - name: service
-          value: {{ $service.subdomain }}
-        - name: image
-          value: {{ $serviceName }}
-        - name: tag
-          value: $(params.tag)
-        - name: environment
-          value: prod
+          value: $(params.environment)
+    {{- if $.Values.release }}
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
-    - name: prod-expose-{{ $serviceName }}
-      runAfter:
-      {{- range $serviceName, $service := $.Values.services }}
-        - prod-deploy-{{ $serviceName }}
-      {{- end }}
-      taskRef:
-        name: expose
-      params:
-        - name: service
-          value: {{ $service.subdomain }}
-        - name: tag
-          value: $(params.tag)
-        - name: environment
-          value: prod
-      workspaces:
-        - name: prod-kubeconfig
-          workspace: prod-kubeconfig
-  {{- end }}
+    {{- end }}
   {{- end }}

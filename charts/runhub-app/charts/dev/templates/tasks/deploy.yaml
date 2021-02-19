@@ -12,18 +12,15 @@ spec:
       type: string
     - name: environment
       type: string
+{{- if .Values.release }}
   workspaces:
     - name: prod-kubeconfig
       readOnly: true
-      optional: true
+{{- end }}
   steps:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        if [ '$(workspaces.prod-kubeconfig.path)' ]; then
-          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
-        fi
-
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SCALE_INIT=0
@@ -31,6 +28,7 @@ spec:
           SERVICE='$(params.service)-$(params.tag)'
           SERVICE_SUFFIX='-$(params.tag)'
         elif [ '$(params.environment)' = 'prod' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SCALE_INIT=1
           SCALE_MIN=1

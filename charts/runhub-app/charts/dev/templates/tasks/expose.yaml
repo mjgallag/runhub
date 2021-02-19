@@ -10,22 +10,20 @@ spec:
       type: string
     - name: environment
       type: string
+{{- if .Values.release }}
   workspaces:
     - name: prod-kubeconfig
       readOnly: true
-      optional: true
+{{- end }}
   steps:
     - name: expose
       image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
       script: |
-        if [ '$(workspaces.prod-kubeconfig.path)' ]; then
-          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
-        fi
-
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SERVICE='$(params.service)-$(params.tag)'
         elif [ '$(params.environment)' = 'prod' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SERVICE='$(params.service)'
         fi
@@ -50,13 +48,10 @@ spec:
     - name: migrate-traffic
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        if [ '$(workspaces.prod-kubeconfig.path)' ]; then
-          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
-        fi
-
         if [ '$(params.environment)' = 'dev' ]; then
           SERVICE='$(params.service)-$(params.tag)'
         elif [ '$(params.environment)' = 'prod' ]; then
+          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
           SERVICE='$(params.service)'
         fi
 

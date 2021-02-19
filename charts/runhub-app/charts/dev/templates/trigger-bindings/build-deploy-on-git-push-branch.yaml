@@ -10,3 +10,5 @@ spec:
       value: $(extensions.branch)
     - name: cache-from-tag
       value: $(extensions.cache-from-branch)
+    - name: environment
+      value: $(extensions.environment)
