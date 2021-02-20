@@ -18,6 +18,10 @@ spec:
             expression: body.ref.split('/', 3)[2]
     - cel:
         filter: extensions.ref_type == 'heads' && body.deleted
+  {{- if (and .Values.release .Values.global.prodDomain) }}
+    - cel:
+        filter: extensions.branch != '{{ .Values.release.prodBranch }}'
+  {{- end }}
   bindings:
     - ref: undeploy-on-git-push-delete-branch
   template:
