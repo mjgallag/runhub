@@ -5,26 +5,6 @@
     "domain": {
       "type": "string"
     },
-    "services": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "subdomain": {
-            "type": "string"
-          },
-          "srcPath": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "subdomain",
-          "srcPath"
-        ],
-        "additionalProperties": false
-      },
-      "minProperties": 1
-    },
     "dependencies": {
       "type": "object",
       "additionalProperties": {
@@ -121,7 +101,6 @@
   },
   "required": [
     "domain",
-    "services",
     "imagePath",
     "global"
   ],

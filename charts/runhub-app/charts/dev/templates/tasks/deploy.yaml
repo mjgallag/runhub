@@ -38,7 +38,7 @@ spec:
         set -- \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
-        {{- range $serviceName, $service := .Values.services }}
+        {{- range $serviceName, $service := .Values.global.services }}
           --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://{{ $service.subdomain }}'"${SERVICE_SUFFIX}"'.'"${DOMAIN:?}" \
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \

@@ -7,7 +7,7 @@ spec:
     - name: tag
       type: string
   tasks:
-    {{- range $serviceName, $service := .Values.services }}
+    {{- range $serviceName, $service := .Values.global.services }}
     - name: unexpose-{{ $serviceName }}
       taskRef:
         name: unexpose

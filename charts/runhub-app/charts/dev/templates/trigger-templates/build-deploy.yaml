@@ -30,7 +30,7 @@ spec:
           - name: environment
             value: $(tt.params.environment)
         workspaces:
-        {{- range $serviceName, $service := .Values.services }}
+        {{- range $serviceName, $service := .Values.global.services }}
           - name: src-{{ $serviceName }}
             volumeClaimTemplate:
               spec:
