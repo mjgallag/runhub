@@ -25,7 +25,7 @@ spec:
           DOMAIN='{{ $.Values.domain }}'
           SUBDOMAIN='$(params.tag).$(params.subdomain)'
         elif [ '$(params.environment)' = 'prod' ]; then
-          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
+          export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SUBDOMAIN='$(params.subdomain)'
         fi
@@ -52,7 +52,7 @@ spec:
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
         if [ '$(params.environment)' = 'prod' ]; then
-          export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
+          export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
         fi
 
         REVISION=$(kn service describe '$(params.tag)' \
