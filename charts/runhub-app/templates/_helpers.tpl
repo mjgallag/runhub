@@ -1,5 +1,23 @@
-{{ define "runhub-app.chart.name" -}}
-  runhub-app
+{{- define "runhub-app.container-registry-dockerconfigjson" }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: container-registry-dockerconfigjson
+  namespace: {{ .namespace }}
+type: kubernetes.io/dockerconfigjson
+stringData:
+  .dockerconfigjson: |
+    {{- with .top.Values.global.containerRegistryCredentials }}
+    {
+      "auths": {
+        "{{ .server }}": {
+          "username": "{{ .username }}",
+          "password": "{{ js .password }}",
+          "auth": "{{ print .username ":" .password | b64enc }}"
+        }
+      }
+    }
+    {{- end }}
 {{- end }}
 
 {{ define "runhub-app.environment" -}}

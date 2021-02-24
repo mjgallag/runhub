@@ -4,19 +4,31 @@ metadata:
   name: gateway
 spec:
   servers:
+{{- with .Values.global }}
     - hosts:
-        - '*.{{ template "runhub-app.environmentDomain" . }}'
-        - '*.runhub.{{ template "runhub-app.environmentDomain" . }}'
+    {{- if .environment.dev }}
+      {{- range $serviceName, $service := .services }}
+        - '*.{{ $service.subdomain }}.{{ template "runhub-app.environmentDomain" $ }}'
+      {{- end }}
+    {{- else if .environment.prod }}
+        - '*.{{ template "runhub-app.environmentDomain" $ }}'
+    {{- end }}
+        - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
       port:
         name: http
         protocol: HTTP
         number: 80
-    {{- with .Values.global }}
-    {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+  {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
       tls:
         httpsRedirect: true
     - hosts:
+    {{- if .environment.dev }}
+      {{- range $serviceName, $service := .services }}
+        - '*.{{ $service.subdomain }}.{{ template "runhub-app.environmentDomain" $ }}'
+      {{- end }}
+    {{- else if .environment.prod }}
         - '*.{{ template "runhub-app.environmentDomain" $ }}'
+    {{- end }}
         - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
       port:
         name: https
@@ -25,5 +37,5 @@ spec:
       tls:
         mode: SIMPLE
         credentialName: {{ $.Release.Namespace }}--certificate-tls
-    {{- end }}
-    {{- end }}
+  {{- end }}
+{{- end }}

@@ -23,12 +23,10 @@ spec:
       script: |
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
-          SERVICE='$(params.service)-$(params.tag)'
-          SUBDOMAIN='$(params.subdomain)-$(params.tag)'
+          SUBDOMAIN='$(params.tag).$(params.subdomain)'
         elif [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
           DOMAIN='{{ $.Values.global.prodDomain }}'
-          SERVICE='$(params.service)'
           SUBDOMAIN='$(params.subdomain)'
         fi
 
@@ -36,30 +34,31 @@ spec:
         apiVersion: networking.istio.io/v1beta1
         kind: VirtualService
         metadata:
-          name: ${SERVICE:?}
+          name: $(params.tag)
+          namespace: $(params.environment)-{{ .Release.Name }}-$(params.service)
         spec:
           gateways:
-            - gateway
+            - $(params.environment)-{{ .Release.Name }}/gateway
           hosts:
             - ${SUBDOMAIN:?}.${DOMAIN:?}
           http:
             - rewrite:
-                authority: ${SERVICE:?}.$(params.environment)-{{ .Release.Name }}.svc.cluster.local
+                authority: $(params.tag).$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
               route:
                 - destination:
-                    host: ${SERVICE:?}.$(params.environment)-{{ .Release.Name }}.svc.cluster.local
+                    host: $(params.tag).$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
         EOF
     - name: migrate-traffic
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        if [ '$(params.environment)' = 'dev' ]; then
-          SERVICE='$(params.service)-$(params.tag)'
-        elif [ '$(params.environment)' = 'prod' ]; then
+        if [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
-          SERVICE='$(params.service)'
         fi
 
-        REVISION=$(kn service describe "${SERVICE:?}" \
+        REVISION=$(kn service describe '$(params.tag)' \
+          --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
           --output go-template --template '{{"{{"}} .status.latestReadyRevisionName }}')
 
-        kn service update "${SERVICE:?}" --traffic "${REVISION:?}"=100
+        kn service update '$(params.tag)' \
+          --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
+          --traffic "${REVISION:?}"=100

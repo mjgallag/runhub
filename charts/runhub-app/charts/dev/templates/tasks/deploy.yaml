@@ -23,29 +23,28 @@ spec:
           DOMAIN='{{ $.Values.domain }}'
           SCALE_INIT=0
           SCALE_MIN=0
-          SERVICE='$(params.service)-$(params.tag)'
-          SERVICE_SUFFIX='-$(params.tag)'
+          SERVICE_PREFIX='$(params.tag).'
         elif [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG=$(workspaces.prod-kubeconfig.path)/kubeconfig
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SCALE_INIT=1
           SCALE_MIN=1
-          SERVICE='$(params.service)'
         fi
 
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
         set -- \
+          --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.global.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://{{ $service.subdomain }}'"${SERVICE_SUFFIX}"'.'"${DOMAIN:?}" \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}"'://'"${SERVICE_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
           --pull-secret container-registry-dockerconfigjson \
           --cluster-local
 
-        if ! kn service update "${SERVICE:?}" "$@"; then
-          kn service create "${SERVICE:?}" "$@"
+        if ! kn service update '$(params.tag)' "$@"; then
+          kn service create '$(params.tag)' "$@"
         fi

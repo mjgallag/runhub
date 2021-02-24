@@ -1,0 +1,7 @@
+{{- range $serviceName, $service := .Values.global.services }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $.Release.Namespace }}-{{ $serviceName }}
+---
+{{- end }}

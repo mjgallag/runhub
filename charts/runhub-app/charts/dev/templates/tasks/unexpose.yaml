@@ -12,10 +12,5 @@ spec:
     - name: unexpose
       image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
       script: |
-        if [ '$(params.tag)' ]; then
-          SERVICE='$(params.service)-$(params.tag)'
-        else
-          SERVICE='$(params.service)'
-        fi
-
-        kubectl delete virtualservice ${SERVICE:?}
+        kubectl delete virtualservice '$(params.tag)' \
+          --namespace '{{ .Release.Namespace }}-$(params.service)'
