@@ -7,8 +7,8 @@ spec:
     - name: git-revision
       value: $(body.ref)
     - name: tag
-      value: $(extensions.branch)
+      value: br-$(extensions.branch)
     - name: cache-from-tag
-      value: $(extensions.cache-from-branch)
+      value: br-$(extensions.cache-from-branch)
     - name: environment
       value: $(extensions.environment)
