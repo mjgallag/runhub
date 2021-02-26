@@ -12,8 +12,4 @@ spec:
     - name: undeploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
-
-        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
-
-        kn service delete "${TAG_DNS_LABEL:?}" --namespace '{{ .Release.Namespace }}-$(params.service)'
+        kn service delete '$(params.tag)' --namespace '{{ .Release.Namespace }}-$(params.service)'

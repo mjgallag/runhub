@@ -21,13 +21,9 @@ spec:
     - name: expose
       image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
       script: |
-        {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
-
-        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
-
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
-          SUBDOMAIN="${TAG_DNS_LABEL:?}"'.$(params.subdomain)'
+          SUBDOMAIN='$(params.tag).$(params.subdomain)'
         elif [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
@@ -38,7 +34,7 @@ spec:
         apiVersion: networking.istio.io/v1beta1
         kind: VirtualService
         metadata:
-          name: ${TAG_DNS_LABEL:?}
+          name: $(params.tag)
           namespace: $(params.environment)-{{ .Release.Name }}-$(params.service)
         spec:
           gateways:
@@ -47,26 +43,22 @@ spec:
             - ${SUBDOMAIN:?}.${DOMAIN:?}
           http:
             - rewrite:
-                authority: ${TAG_DNS_LABEL:?}.$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                authority: $(params.tag).$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
               route:
                 - destination:
-                    host: ${TAG_DNS_LABEL:?}.$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                    host: $(params.tag).$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
         EOF
     - name: migrate-traffic
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
-
-        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
-
         if [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
         fi
 
-        REVISION=$(kn service describe "${TAG_DNS_LABEL:?}" \
+        REVISION=$(kn service describe '$(params.tag)' \
           --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
           --output go-template --template '{{"{{"}} .status.latestReadyRevisionName }}')
 
-        kn service update "${TAG_DNS_LABEL:?}" \
+        kn service update '$(params.tag)' \
           --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
           --traffic "${REVISION:?}=100"

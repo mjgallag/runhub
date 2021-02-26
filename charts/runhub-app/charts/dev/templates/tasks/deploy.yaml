@@ -21,15 +21,11 @@ spec:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
-
-        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
-
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SCALE_INIT=0
           SCALE_MIN=0
-          SERVICE_PREFIX="${TAG_DNS_LABEL:?}."
+          SERVICE_PREFIX='$(params.tag).'
         elif [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
@@ -41,7 +37,7 @@ spec:
 
         set -- \
           --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
-          --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):'"${TAG_DNS_LABEL:?}"'@$(params.sha)' \
+          --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)@$(params.sha)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.global.services }}
           --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}://${SERVICE_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
@@ -51,6 +47,6 @@ spec:
           --pull-secret container-registry-dockerconfigjson \
           --cluster-local
 
-        if ! kn service update "${TAG_DNS_LABEL:?}" "$@"; then
-          kn service create "${TAG_DNS_LABEL:?}" "$@"
+        if ! kn service update '$(params.tag)' "$@"; then
+          kn service create '$(params.tag)' "$@"
         fi

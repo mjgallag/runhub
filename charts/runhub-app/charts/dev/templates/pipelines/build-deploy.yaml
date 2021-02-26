@@ -23,8 +23,23 @@ spec:
     - name: prod-kubeconfig
   {{- end }}
   tasks:
+    - name: convert-to-subdomain-tag
+      taskRef:
+        name: convert-to-subdomain
+      params:
+        - name: input
+          value: $(params.tag)
+    - name: convert-to-subdomain-cache-from-tag
+      taskRef:
+        name: convert-to-subdomain
+      params:
+        - name: input
+          value: $(params.cache-from-tag)
   {{- range $serviceName, $service := .Values.global.services }}
     - name: build-{{ $serviceName }}
+      runAfter:
+        - convert-to-subdomain-tag
+        - convert-to-subdomain-cache-from-tag
       taskRef:
         name: build
       params:
@@ -37,9 +52,9 @@ spec:
         - name: service
           value: {{ $serviceName }}
         - name: tag
-          value: $(params.tag)
+          value: $(tasks.convert-to-subdomain-tag.results.output)
         - name: cache-from-tag
-          value: $(params.cache-from-tag)
+          value: $(tasks.convert-to-subdomain-cache-from-tag.results.output)
       workspaces:
         - name: dockerfile
           workspace: dockerfile
@@ -56,7 +71,7 @@ spec:
         - name: service
           value: {{ $serviceName }}
         - name: tag
-          value: $(params.tag)
+          value: $(tasks.convert-to-subdomain-tag.results.output)
         - name: sha
           value: $(tasks.build-{{ $serviceName }}.results.sha)
         - name: environment
@@ -79,7 +94,7 @@ spec:
         - name: subdomain
           value: {{ $service.subdomain }}
         - name: tag
-          value: $(params.tag)
+          value: $(tasks.convert-to-subdomain-tag.results.output)
         - name: environment
           value: $(params.environment)
     {{- if $.Values.release }}

@@ -1,14 +1,3 @@
-{{- define "runhub-app.dev.convertToDNSLabelShellFunction" }}
-convert_to_dns_label() {
-  printf '%s' "$1" \
-    | printf '%s' "$(cut -c 1-63)" \
-    | tr '[:upper:]' '[:lower:]' \
-    | tr -c '[:alnum:]' '-' \
-    | sed 's/^-*//' \
-    | sed 's/-*$//'
-}
-{{- end }}
-
 {{ define "runhub-app.dev.imagePathWithRegistry" -}}
   {{ .Values.global.containerRegistryCredentials.server }}/{{ .Values.imagePath }}
 {{- end }}

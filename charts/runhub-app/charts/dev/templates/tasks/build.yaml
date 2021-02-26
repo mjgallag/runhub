@@ -32,10 +32,6 @@ spec:
       securityContext:
         privileged: true
       script: |
-        {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
-
-        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
-        CACHE_FROM_TAG_DNS_LABEL="$(convert_to_dns_label '$(params.cache-from-tag)')"
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.service)'
 
@@ -45,16 +41,13 @@ spec:
             --local dockerfile='$(workspaces.dockerfile.path)' \
             --local context='$(workspaces.src.path)' \
             --opt build-arg:SRC_PATH='$(params.src-path)' \
-            --output type=image,name="${IMAGE:?}:${TAG_DNS_LABEL:?}",push=true \
-            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}:${TAG_DNS_LABEL:?}" \
-            --import-cache type=registry,\"ref="${CACHE_IMAGE:?}:${TAG_DNS_LABEL:?},${CACHE_IMAGE:?}:${CACHE_FROM_TAG_DNS_LABEL:?}"\"
+            --output type=image,name="${IMAGE:?}"':$(params.tag)',push=true \
+            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}"':$(params.tag)' \
+            --import-cache type=registry,\"ref="${CACHE_IMAGE:?}"':$(params.tag),'"${CACHE_IMAGE:?}"':$(params.cache-from-tag)'\"
     - name: get-sha
       image: quay.io/skopeo/upstream:latest@sha256:90915fde2466d5163d7ca518cbd2bbcfb45b245ae18131af3f5f01fd8ad23d0e
       script: |
-        {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
-
-        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
 
-        skopeo inspect "docker://${IMAGE:?}:${TAG_DNS_LABEL:?}" --format '{{"{{"}} .Digest }}' \
+        skopeo inspect "docker://${IMAGE:?}"':$(params.tag)' --format '{{"{{"}} .Digest }}' \
           | tr -d '\n' > '$(results.sha.path)'
