@@ -57,6 +57,8 @@ spec:
           value: {{ $serviceName }}
         - name: tag
           value: $(params.tag)
+        - name: sha
+          value: $(tasks.build-{{ $serviceName }}.results.sha)
         - name: environment
           value: $(params.environment)
     {{- if $.Values.release }}

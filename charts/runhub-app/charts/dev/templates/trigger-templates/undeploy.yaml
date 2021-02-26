@@ -9,7 +9,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: undeploy-$(tt.params.tag)-
+        generateName: undeploy-
       spec:
         serviceAccountName: undeploy
         pipelineRef:

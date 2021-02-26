@@ -1,9 +1,20 @@
+{{- define "runhub-app.dev.convertToDNSLabelShellFunction" }}
+convert_to_dns_label() {
+  printf '%s' "$1" \
+    | printf '%s' "$(cut -c 1-63)" \
+    | tr '[:upper:]' '[:lower:]' \
+    | tr -c '[:alnum:]' '-' \
+    | sed 's/^-*//' \
+    | sed 's/-*$//'
+}
+{{- end }}
+
 {{ define "runhub-app.dev.imagePathWithRegistry" -}}
   {{ .Values.global.containerRegistryCredentials.server }}/{{ .Values.imagePath }}
 {{- end }}
 
 {{ define "runhub-app.dev.knImageTag" -}}
-  v0.20.0@sha256:688c8d46c77ca515fdc9f0fdf6abc28178929bd07ca98df9fea2f3f2d15150fc
+  v0.21.0@sha256:e5522ffc195f14b0618696f51ea30c26873de21f97e75da0a588dc8c093e1f67
 {{- end }}
 
 {{ define "runhub-app.dev.kubectlImageTag" -}}
