@@ -42,12 +42,12 @@ spec:
         buildctl-daemonless.sh \
           build \
             --frontend dockerfile.v0 \
-            --local 'dockerfile=$(workspaces.dockerfile.path)' \
-            --local 'context=$(workspaces.src.path)' \
-            --opt 'build-arg:SRC_PATH=$(params.src-path)' \
-            --output "type=image,name=${IMAGE:?}:${TAG_DNS_LABEL:?},push=true" \
-            --export-cache "type=registry,mode=max,ref=${CACHE_IMAGE:?}:${TAG_DNS_LABEL:?}" \
-            --import-cache "type=registry,\"ref=${CACHE_IMAGE:?}:${TAG_DNS_LABEL:?},${CACHE_IMAGE:?}:${CACHE_FROM_TAG_DNS_LABEL:?}\""
+            --local dockerfile='$(workspaces.dockerfile.path)' \
+            --local context='$(workspaces.src.path)' \
+            --opt build-arg:SRC_PATH='$(params.src-path)' \
+            --output type=image,name="${IMAGE:?}:${TAG_DNS_LABEL:?}",push=true \
+            --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}:${TAG_DNS_LABEL:?}" \
+            --import-cache type=registry,\"ref="${CACHE_IMAGE:?}:${TAG_DNS_LABEL:?},${CACHE_IMAGE:?}:${CACHE_FROM_TAG_DNS_LABEL:?}"\"
     - name: get-sha
       image: quay.io/skopeo/upstream:latest@sha256:90915fde2466d5163d7ca518cbd2bbcfb45b245ae18131af3f5f01fd8ad23d0e
       script: |
