@@ -25,7 +25,7 @@ spec:
           DOMAIN='{{ $.Values.domain }}'
           SCALE_INIT=0
           SCALE_MIN=0
-          SERVICE_PREFIX='$(params.tag).'
+          TAG_PREFIX='$(params.tag).'
         elif [ '$(params.environment)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
@@ -40,7 +40,7 @@ spec:
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)@$(params.sha)' \
           --env RUNHUB_ENVIRONMENT='$(params.environment)' \
         {{- range $serviceName, $service := .Values.global.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}://${SERVICE_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}://${TAG_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
