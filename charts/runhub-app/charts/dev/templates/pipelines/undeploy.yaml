@@ -9,7 +9,7 @@ spec:
   tasks:
     - name: convert-tag-to-subdomain
       taskRef:
-        name: convert-to-subdomain
+        name: sanitize
       params:
         - name: input
           value: $(params.tag)
