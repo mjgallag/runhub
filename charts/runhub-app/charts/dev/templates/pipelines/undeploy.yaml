@@ -7,7 +7,7 @@ spec:
     - name: tag
       type: string
   tasks:
-    - name: convert-to-subdomain-tag
+    - name: convert-tag-to-subdomain
       taskRef:
         name: convert-to-subdomain
       params:
@@ -16,22 +16,22 @@ spec:
     {{- range $serviceName, $service := .Values.global.services }}
     - name: unexpose-{{ $serviceName }}
       runAfter:
-        - convert-to-subdomain-tag
+        - convert-tag-to-subdomain
       taskRef:
         name: unexpose
       params:
         - name: service
           value: {{ $serviceName }}
         - name: tag
-          value: $(tasks.convert-to-subdomain-tag.results.output)
+          value: $(tasks.convert-tag-to-subdomain.results.output)
     - name: undeploy-{{ $serviceName }}
       runAfter:
-        - convert-to-subdomain-tag
+        - convert-tag-to-subdomain
       taskRef:
         name: undeploy
       params:
         - name: service
           value: {{ $serviceName }}
         - name: tag
-          value: $(tasks.convert-to-subdomain-tag.results.output)
+          value: $(tasks.convert-tag-to-subdomain.results.output)
     {{- end }}
