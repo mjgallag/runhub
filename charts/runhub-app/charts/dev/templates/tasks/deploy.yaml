@@ -23,7 +23,7 @@ spec:
       script: |
         {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
 
-        TAG_DNS_LABEL=$(convert_to_dns_label '$(params.tag)')
+        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
 
         if [ '$(params.environment)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'

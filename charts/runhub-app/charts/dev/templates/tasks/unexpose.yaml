@@ -14,7 +14,7 @@ spec:
       script: |
         {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
 
-        TAG_DNS_LABEL=$(convert_to_dns_label '$(params.tag)')
+        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
 
         kubectl delete virtualservice "${TAG_DNS_LABEL:?}" \
           --namespace '{{ .Release.Namespace }}-$(params.service)'

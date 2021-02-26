@@ -34,8 +34,8 @@ spec:
       script: |
         {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
 
-        TAG_DNS_LABEL=$(convert_to_dns_label '$(params.tag)')
-        CACHE_FROM_TAG_DNS_LABEL=$(convert_to_dns_label '$(params.cache-from-tag)')
+        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
+        CACHE_FROM_TAG_DNS_LABEL="$(convert_to_dns_label '$(params.cache-from-tag)')"
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.service)'
 
@@ -53,7 +53,7 @@ spec:
       script: |
         {{ include "runhub-app.dev.convertToDNSLabelShellFunction" . | nindent 8 }}
 
-        TAG_DNS_LABEL=$(convert_to_dns_label '$(params.tag)')
+        TAG_DNS_LABEL="$(convert_to_dns_label '$(params.tag)')"
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
 
         skopeo inspect "docker://${IMAGE:?}:${TAG_DNS_LABEL:?}" --format '{{"{{"}} .Digest }}' \
