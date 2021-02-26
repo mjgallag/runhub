@@ -7,7 +7,7 @@ spec:
     - name: tag
       type: string
   tasks:
-    - name: convert-tag-to-subdomain
+    - name: sanitize-tag
       taskRef:
         name: sanitize
       params:
@@ -16,22 +16,22 @@ spec:
     {{- range $serviceName, $service := .Values.global.services }}
     - name: unexpose-{{ $serviceName }}
       runAfter:
-        - convert-tag-to-subdomain
+        - sanitize-tag
       taskRef:
         name: unexpose
       params:
         - name: service
           value: {{ $serviceName }}
         - name: tag
-          value: $(tasks.convert-tag-to-subdomain.results.output)
+          value: $(tasks.sanitize-tag.results.output)
     - name: undeploy-{{ $serviceName }}
       runAfter:
-        - convert-tag-to-subdomain
+        - sanitize-tag
       taskRef:
         name: undeploy
       params:
         - name: service
           value: {{ $serviceName }}
         - name: tag
-          value: $(tasks.convert-tag-to-subdomain.results.output)
+          value: $(tasks.sanitize-tag.results.output)
     {{- end }}
