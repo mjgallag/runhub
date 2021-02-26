@@ -60,10 +60,22 @@ spec:
           workspace: dockerfile
         - name: src
           workspace: src-{{ $serviceName }}
-    - name: deploy-{{ $serviceName }}
+    - name: get-sha-{{ $serviceName }}
       runAfter:
       {{- range $serviceName, $service := $.Values.global.services }}
         - build-{{ $serviceName }}
+      {{- end }}
+      taskRef:
+        name: get-sha
+      params:
+        - name: service
+          value: {{ $serviceName }}
+        - name: tag
+          value: $(tasks.sanitize-tag.results.output)
+    - name: deploy-{{ $serviceName }}
+      runAfter:
+      {{- range $serviceName, $service := $.Values.global.services }}
+        - get-sha-{{ $serviceName }}
       {{- end }}
       taskRef:
         name: deploy
@@ -73,7 +85,7 @@ spec:
         - name: tag
           value: $(tasks.sanitize-tag.results.output)
         - name: sha
-          value: $(tasks.build-{{ $serviceName }}.results.sha)
+          value: $(tasks.get-sha-{{ $serviceName }}.results.sha)
         - name: environment
           value: $(params.environment)
     {{- if $.Values.release }}

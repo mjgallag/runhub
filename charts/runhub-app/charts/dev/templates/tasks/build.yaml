@@ -20,8 +20,6 @@ spec:
     - name: dockerfile
       readOnly: true
     - name: src
-  results:
-    - name: sha
   steps:
     - name: get-src
       image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.20.1@sha256:a0f7a0948152a401f587dde580b41b5e80b52f3432aba7902166aa79941e8835
@@ -44,10 +42,3 @@ spec:
             --output type=image,name="${IMAGE:?}"':$(params.tag)',push=true \
             --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}"':$(params.tag)' \
             --import-cache type=registry,\"ref="${CACHE_IMAGE:?}"':$(params.tag),'"${CACHE_IMAGE:?}"':$(params.cache-from-tag)'\"
-    - name: get-sha
-      image: quay.io/skopeo/upstream:latest@sha256:90915fde2466d5163d7ca518cbd2bbcfb45b245ae18131af3f5f01fd8ad23d0e
-      script: |
-        IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
-
-        skopeo inspect "docker://${IMAGE:?}"':$(params.tag)' --format '{{"{{"}} .Digest }}' \
-          | tr -d '\n' > '$(results.sha.path)'
