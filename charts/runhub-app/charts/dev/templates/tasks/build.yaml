@@ -26,7 +26,7 @@ spec:
       script: |
         /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.src.path)'
     - name: build
-      image: moby/buildkit:v0.8.1@sha256:ecd5ad4910c322cad6995f8a1a0805d9da4b09ed4aaef40627f5bcb8ebf74068
+      image: moby/buildkit:v0.8.2@sha256:4a9629b0e1c3e9e8ed1856f42bc77dfd5bb6b09be23909fe92f78baad334cda2
       securityContext:
         privileged: true
       script: |
