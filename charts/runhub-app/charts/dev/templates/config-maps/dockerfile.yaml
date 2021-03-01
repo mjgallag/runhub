@@ -4,7 +4,7 @@ metadata:
   name: dockerfile
 data:
   dockerfile: |
-    FROM node:14.15.4-alpine3.12@sha256:9ccdbf42a0a8a6fcd67458d11d3878ad6284dc9a66c842f4a7843123c7f77dec AS node
+    FROM node:14.16.0-alpine3.13@sha256:7eb57d8fd2d3ee789dbb551bdf5b0325369c3ad7a72a690e80d034041da7e42d AS node
 
     {{ range $dependencyName, $dependency := .Values.dependencies -}}
     FROM node AS {{ $dependencyName }}-base
