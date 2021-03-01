@@ -12,7 +12,7 @@ spec:
     - name: sha
   steps:
     - name: get-sha
-      image: quay.io/skopeo/upstream:latest@sha256:90915fde2466d5163d7ca518cbd2bbcfb45b245ae18131af3f5f01fd8ad23d0e
+      image: quay.io/skopeo/stable:master
       script: |
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
 
