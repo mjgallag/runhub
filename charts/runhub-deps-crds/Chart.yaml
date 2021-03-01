@@ -8,9 +8,9 @@ dependencies:
   - name: istio-operator-crds
     version: 0.0.0
     condition: istio-operator-crds.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
-  - name: knative-operator-crds
+  - name: knative-crds
     version: 0.0.0
-    condition: knative-operator-crds.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
+    condition: knative-crds.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
   - name: tekton-crds
     version: 0.0.0
     condition: tekton-crds.enabled,global.environment.dev,defaults.dependencies.enabled

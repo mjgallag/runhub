@@ -53,7 +53,7 @@ profiles:
             setValues:
               global.environment.dev: true
               cert-manager-crds.enabled: false
-              knative-operator-crds.enabled: false
+              knative-crds.enabled: false
               tekton-crds.enabled: false
             skipBuildDependencies: true
           - name: runhub-deps-operators
@@ -61,7 +61,6 @@ profiles:
             namespace: runhub-deps
             setValues:
               global.environment.dev: true
-              knative-operator.enabled: false
             skipBuildDependencies: true
           - name: runhub-deps
             chartPath: charts/runhub-deps

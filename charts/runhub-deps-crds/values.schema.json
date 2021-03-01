@@ -64,7 +64,7 @@
         }
       }
     },
-    "knative-operator-crds": {
+    "knative-crds": {
       "type": "object",
       "properties": {
         "enabled": {

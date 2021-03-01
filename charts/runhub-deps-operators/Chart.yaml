@@ -5,6 +5,3 @@ dependencies:
   - name: istio-operator
     version: 0.0.0
     condition: istio-operator.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
-  - name: knative-operator
-    version: 0.0.0
-    condition: knative-operator.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
