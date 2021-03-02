@@ -29,8 +29,7 @@ deploy:
         setValues:
           global.environment.dev: true
         valuesFiles:
-          - values-dev-and-prod.yaml
-          - values-dev.yaml
+          - values.yaml
         skipBuildDependencies: true
       - name: '{{.RUNHUB_APP}}'
         chartPath: charts/runhub-app
@@ -39,7 +38,7 @@ deploy:
         setValues:
           global.environment.prod: true
         valuesFiles:
-          - values-dev-and-prod.yaml
+          - values.yaml
         skipBuildDependencies: true
 profiles:
   - name: install-istio
