@@ -62,9 +62,7 @@ spec:
           workspace: src-{{ $serviceName }}
     - name: get-sha-{{ $serviceName }}
       runAfter:
-      {{- range $serviceName, $service := $.Values.global.services }}
         - build-{{ $serviceName }}
-      {{- end }}
       taskRef:
         name: get-sha
       params:
