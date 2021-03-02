@@ -4,32 +4,16 @@ metadata:
   name: gateway
 spec:
   servers:
-{{- with .Values.global }}
-    - hosts:
-    {{- if .environment.dev }}
-      {{- range $serviceName, $service := .services }}
-        - '*.{{ $service.subdomain }}.{{ template "runhub-app.environmentDomain" $ }}'
-      {{- end }}
-    {{- else if .environment.prod }}
-        - '*.{{ template "runhub-app.environmentDomain" $ }}'
-    {{- end }}
-        - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
+    - hosts: {{ include "runhub-app.hosts" . | nindent 8 }}
       port:
         name: http
         protocol: HTTP
         number: 80
+{{- with .Values.global }}
   {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
       tls:
         httpsRedirect: true
-    - hosts:
-    {{- if .environment.dev }}
-      {{- range $serviceName, $service := .services }}
-        - '*.{{ $service.subdomain }}.{{ template "runhub-app.environmentDomain" $ }}'
-      {{- end }}
-    {{- else if .environment.prod }}
-        - '*.{{ template "runhub-app.environmentDomain" $ }}'
-    {{- end }}
-        - '*.runhub.{{ template "runhub-app.environmentDomain" $ }}'
+    - hosts: {{ include "runhub-app.hosts" $ | nindent 8 }}
       port:
         name: https
         protocol: HTTPS
