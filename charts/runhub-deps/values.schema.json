@@ -56,14 +56,6 @@
         }
       }
     },
-    "istio": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
     "knative": {
       "type": "object",
       "properties": {

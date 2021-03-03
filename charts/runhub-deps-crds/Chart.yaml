@@ -5,9 +5,6 @@ dependencies:
   - name: cert-manager-crds
     version: 0.0.0
     condition: cert-manager-crds.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
-  - name: istio-operator-crds
-    version: 0.0.0
-    condition: istio-operator-crds.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
   - name: knative-crds
     version: 0.0.0
     condition: knative-crds.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled

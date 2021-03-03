@@ -5,9 +5,6 @@ dependencies:
   - name: cert-manager
     version: 0.0.0
     condition: cert-manager.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
-  - name: istio
-    version: 0.0.0
-    condition: istio.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
   - name: knative
     version: 0.0.0
     condition: knative.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled

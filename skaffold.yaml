@@ -10,12 +10,6 @@ deploy:
         setValues:
           global.environment.dev: true
         skipBuildDependencies: true
-      - name: runhub-deps-operators
-        chartPath: charts/runhub-deps-operators
-        namespace: runhub-deps
-        setValues:
-          global.environment.dev: true
-        skipBuildDependencies: true
       - name: runhub-deps
         chartPath: charts/runhub-deps
         namespace: runhub-deps
@@ -40,33 +34,3 @@ deploy:
         valuesFiles:
           - values.yaml
         skipBuildDependencies: true
-profiles:
-  - name: install-istio
-    deploy:
-      helm:
-        releases:
-          - name: runhub-deps-crds
-            chartPath: charts/runhub-deps-crds
-            namespace: runhub-deps
-            createNamespace: true
-            setValues:
-              global.environment.dev: true
-              cert-manager-crds.enabled: false
-              knative-crds.enabled: false
-              tekton-crds.enabled: false
-            skipBuildDependencies: true
-          - name: runhub-deps-operators
-            chartPath: charts/runhub-deps-operators
-            namespace: runhub-deps
-            setValues:
-              global.environment.dev: true
-            skipBuildDependencies: true
-          - name: runhub-deps
-            chartPath: charts/runhub-deps
-            namespace: runhub-deps
-            setValues:
-              global.environment.dev: true
-              cert-manager.enabled: false
-              knative.enabled: false
-              tekton.enabled: false
-            skipBuildDependencies: true

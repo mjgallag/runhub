@@ -1,13 +1,11 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: istio-system
----
+#!/bin/sh
+set -e
+
+ISTIOCTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/istioctl.sh")"
+
+"${ISTIOCTL:?}" install --skip-confirmation --filename - <<EOF
 apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
-metadata:
-  name: istio-operator
-  namespace: istio-system
 spec:
   values:
     global:
@@ -26,3 +24,4 @@ spec:
     ingressGateways:
       - name: istio-ingressgateway
         enabled: true
+EOF

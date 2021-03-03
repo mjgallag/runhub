@@ -1,6 +1,7 @@
 .DS_Store
 .terraform/
 .terraform.tfstate.lock.info
+/.runhub/
 /terraform/*/backend.tf
 /terraform/*/terraform.tfvars
 /terraform/shared.tfvars
