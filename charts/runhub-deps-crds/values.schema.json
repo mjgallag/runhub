@@ -48,14 +48,6 @@
       ],
       "additionalProperties": false
     },
-    "cert-manager-crds": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
     "tekton-crds": {
       "type": "object",
       "properties": {

@@ -2,9 +2,6 @@ apiVersion: v2
 name: runhub-deps
 version: 0.0.0
 dependencies:
-  - name: cert-manager
-    version: 0.0.0
-    condition: cert-manager.enabled,global.environment.dev,global.environment.prod,defaults.dependencies.enabled
   - name: tekton
     version: 0.0.0
     condition: tekton.enabled,global.environment.dev,defaults.dependencies.enabled
