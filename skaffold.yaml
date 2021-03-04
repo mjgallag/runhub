@@ -3,18 +3,18 @@ kind: Config
 deploy:
   helm:
     releases:
-      - name: '{{.RUNHUB_APP}}'
+      - name: '{{.APP}}'
         chartPath: charts/runhub-app
-        namespace: dev-{{.RUNHUB_APP}}
+        namespace: dev-{{.APP}}
         createNamespace: true
         setValues:
           global.environment.dev: true
         valuesFiles:
           - values.yaml
         skipBuildDependencies: true
-      - name: '{{.RUNHUB_APP}}'
+      - name: '{{.APP}}'
         chartPath: charts/runhub-app
-        namespace: prod-{{.RUNHUB_APP}}
+        namespace: prod-{{.APP}}
         createNamespace: true
         setValues:
           global.environment.prod: true
