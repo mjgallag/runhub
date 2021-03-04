@@ -56,14 +56,6 @@
         }
       }
     },
-    "knative": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "type": "boolean"
-        }
-      }
-    },
     "tekton": {
       "type": "object",
       "properties": {
