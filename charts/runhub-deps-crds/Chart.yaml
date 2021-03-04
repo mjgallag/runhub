@@ -1,7 +1,0 @@
-apiVersion: v2
-name: runhub-deps-crds
-version: 0.0.0
-dependencies:
-  - name: tekton-crds
-    version: 0.0.0
-    condition: tekton-crds.enabled,global.environment.dev,defaults.dependencies.enabled
