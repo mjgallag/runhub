@@ -6,6 +6,7 @@ CONFIG_DIR="${BASE_DIR:?}/.runhub"
 LOCAL_PACKAGES_DIR="${CONFIG_DIR:?}/packages"
 SCRIPTS_DIR="${BASE_DIR:?}/scripts"
 
+export BASE_DIR
 export LOCAL_PACKAGES_BIN_DIR="${LOCAL_PACKAGES_DIR:?}/bin"
 export LOCAL_PACKAGES_TMP_DIR="${LOCAL_PACKAGES_DIR:?}/tmp"
 export LOCAL_PACKAGE_INSTALLERS_DIR="${SCRIPTS_DIR:?}/local-package-installers"
