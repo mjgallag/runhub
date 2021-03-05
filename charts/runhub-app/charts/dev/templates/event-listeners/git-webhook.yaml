@@ -8,8 +8,17 @@ spec:
     - triggerRef: build-deploy-on-git-push-branch
     - triggerRef: undeploy-on-git-push-delete-branch
   resources:
-    kubernetesResource:
+    customResource:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      metadata:
+        labels:
+          networking.knative.dev/visibility: cluster-local
       spec:
         template:
+          metadata:
+            annotations:
+              autoscaling.knative.dev/initialScale: "1"
+              autoscaling.knative.dev/minScale: "1"
           spec:
             serviceAccountName: git-webhook

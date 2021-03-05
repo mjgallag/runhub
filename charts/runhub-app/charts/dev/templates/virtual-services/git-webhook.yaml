@@ -8,6 +8,8 @@ spec:
   hosts:
     - git-webhook.runhub.{{ .Values.domain }}
   http:
-    - route:
+    - rewrite:
+        authority: el-git-webhook.{{ .Release.Namespace }}.svc.cluster.local
+      route:
         - destination:
             host: el-git-webhook.{{ .Release.Namespace }}.svc.cluster.local
