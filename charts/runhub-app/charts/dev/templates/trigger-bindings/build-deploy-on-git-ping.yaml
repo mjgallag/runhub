@@ -1,0 +1,12 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: build-deploy-on-git-ping
+spec:
+  params:
+    - name: git-revision
+      value: refs/heads/$(body.repository.default_branch)
+    - name: tag
+      value: $(body.repository.default_branch)
+    - name: cache-from-tag
+      value: $(body.repository.default_branch)

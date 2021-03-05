@@ -4,6 +4,7 @@ metadata:
   name: git-webhook
 spec:
   triggers:
+    - triggerRef: build-deploy-on-git-ping
     - triggerRef: build-deploy-on-git-push-branch
     - triggerRef: undeploy-on-git-push-delete-branch
   resources:
