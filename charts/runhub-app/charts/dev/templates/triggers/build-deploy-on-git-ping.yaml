@@ -10,6 +10,15 @@ spec:
           secretKey: secret
         eventTypes:
           - ping
+    - cel:
+        overlays:
+          - key: environment
+            expression: |
+            {{- if (and .Values.release .Values.global.prodDomain) }}
+              body.repository.default_branch == '{{ .Values.release.prodBranch }}' ? 'prod' : 'dev'
+            {{- else }}
+              'dev'
+            {{- end }}
   bindings:
     - ref: build-deploy-on-git
     - ref: build-deploy-on-git-ping
