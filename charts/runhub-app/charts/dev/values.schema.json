@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "domain": {
+      "type": "string"
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "srcPath": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "srcPath"
+        ],
+        "additionalProperties": false
+      },
+      "minProperties": 1
+    },
+    "release": {
+      "type": "object",
+      "properties": {
+        "prodBranch": {
+          "type": "string"
+        },
+        "prodKubernetesCredentials": {
+          "type": "object",
+          "properties": {
+            "server": {
+              "type": "string"
+            },
+            "certificateAuthority": {
+              "type": "string"
+            },
+            "clientCertificate": {
+              "type": "string"
+            },
+            "clientKey": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "server",
+            "certificateAuthority"
+          ],
+          "oneOf": [
+            {
+              "required": [
+                "clientCertificate",
+                "clientKey"
+              ]
+            },
+            {
+              "required": [
+                "username",
+                "password"
+              ]
+            }
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "prodBranch",
+        "prodKubernetesCredentials"
+      ],
+      "additionalProperties": false
+    },
+    "imagePath": {
+      "type": "string"
+    },
+    "gitCredentials": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ],
+      "additionalProperties": false
+    },
+    "global": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "domain",
+    "imagePath",
+    "global"
+  ],
+  "additionalProperties": false
+}
