@@ -12,3 +12,5 @@ KUBECTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
   --namespace knative-serving \
   --type merge \
   --patch '{"data":{"allow-zero-initial-scale":"true"}}'
+
+"${SCRIPTS_DIR:?}/wait-for-deployments.sh" knative-serving

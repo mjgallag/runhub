@@ -9,3 +9,5 @@ curl -L \
   "https://storage.googleapis.com/tekton-releases/pipeline/previous/v${VERSION:?}/release.yaml" \
   | sed 's/disable-affinity-assistant: "false"/disable-affinity-assistant: "true"/' \
   | kubectl apply --filename -
+
+"${SCRIPTS_DIR:?}/wait-for-deployments.sh" tekton-pipelines
