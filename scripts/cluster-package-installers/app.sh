@@ -10,8 +10,3 @@ KUBECTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
   --namespace "${ENVIRONMENT:?}-${APP:?}" --create-namespace \
   --set "global.environment.${ENVIRONMENT:?}=true" \
   --values "${BASE_DIR:?}"/values.yaml
-
-if [ "${ENVIRONMENT:?}" = 'dev' ]; then
-  "${KUBECTL:?}" --namespace "${ENVIRONMENT:?}-${APP:?}" get secret git-webhook-opaque \
-    --template '{{ println (.data.secret | base64decode) }}'
-fi
