@@ -7,5 +7,5 @@
 {{- end }}
 
 {{ define "runhub-app.dev.kubectlImageTag" -}}
-  1.17.17-debian-10-r43@sha256:ae8fff3a1a9ca30dfcefdc2c31b8b8d73b19e067b4f46305bff6dd7d01d3204f
+  1.18.16-debian-10-r16@sha256:bfbbe31b7ffce4c4e7efadd88f38a816f23e5aa84f946f1d4eab26eba1713759
 {{- end }}
