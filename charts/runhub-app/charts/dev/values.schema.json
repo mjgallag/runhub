@@ -30,42 +30,20 @@
         "prodKubernetesCredentials": {
           "type": "object",
           "properties": {
-            "server": {
+            "clusterServer": {
               "type": "string"
             },
-            "certificateAuthority": {
+            "clusterCertificateAuthority": {
               "type": "string"
             },
-            "clientCertificate": {
-              "type": "string"
-            },
-            "clientKey": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            },
-            "password": {
+            "serviceAccountToken": {
               "type": "string"
             }
           },
           "required": [
-            "server",
-            "certificateAuthority"
-          ],
-          "oneOf": [
-            {
-              "required": [
-                "clientCertificate",
-                "clientKey"
-              ]
-            },
-            {
-              "required": [
-                "username",
-                "password"
-              ]
-            }
+            "clusterServer",
+            "clusterCertificateAuthority",
+            "serviceAccountToken"
           ],
           "additionalProperties": false
         }

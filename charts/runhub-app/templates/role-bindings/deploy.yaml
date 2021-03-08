@@ -10,7 +10,7 @@ roleRef:
   name: deploy
 subjects:
   - kind: ServiceAccount
-    name: build-deploy
+    name: {{ if $.Values.global.environment.dev }}build-{{ end }}deploy
     namespace: {{ $.Release.Namespace }}
 ---
 {{- end }}
