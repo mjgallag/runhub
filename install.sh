@@ -21,3 +21,7 @@ if [ "${ENVIRONMENT:?}" = 'dev' ]; then
 fi
 
 "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/app.sh" "${ENVIRONMENT:?}" "${APP:?}"
+
+if [ "${ENVIRONMENT:?}" = 'prod' ]; then
+  "${SCRIPTS_DIR:?}/generate-values-prod-k8s-creds.sh" "${APP:?}"
+fi

@@ -33,7 +33,7 @@
             "clusterServer": {
               "type": "string"
             },
-            "clusterCertificateAuthority": {
+            "clusterCertificateAuthorityData": {
               "type": "string"
             },
             "serviceAccountToken": {
@@ -42,7 +42,7 @@
           },
           "required": [
             "clusterServer",
-            "clusterCertificateAuthority",
+            "clusterCertificateAuthorityData",
             "serviceAccountToken"
           ],
           "additionalProperties": false

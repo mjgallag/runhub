@@ -6,5 +6,6 @@
 /terraform/*/terraform.tfvars
 /terraform/shared.tfvars
 /values.yaml
+values-prod-k8s-creds.yaml
 terraform.tfstate
 terraform.tfstate.backup
