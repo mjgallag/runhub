@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-ENV="${1:?}"
-APP="${2:?}"
+APP="${1:?}"
+ENV="${2:?}"
 HELM="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/helm.sh")"
 
 "${HELM:?}" upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/charts/runhub-app \
