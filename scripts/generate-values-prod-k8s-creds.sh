@@ -19,6 +19,6 @@ dev:
   release:
     prodKubernetesCredentials:
       clusterServer: ${CLUSTER_SERVER:?}
-      clusterCertificateAuthority: ${CLUSTER_CERTIFICATE_AUTHORITY:?}
+      clusterCertificateAuthorityData: ${CLUSTER_CERTIFICATE_AUTHORITY:?}
       serviceAccountToken: ${SERVICE_ACCOUNT_TOKEN:?}
 EOF

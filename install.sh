@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -e
 
 # shellcheck source=scripts/initialize.sh
 . "$(dirname "${0:?}")/scripts/initialize.sh"
