@@ -3,14 +3,14 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: deploy
-  namespace: {{ template "runhub-app.environment" $ }}-{{ $.Release.Name }}-{{ $serviceName }}
+  namespace: {{ template "runhub-app.env" $ }}-{{ $.Release.Name }}-{{ $serviceName }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: deploy
 subjects:
   - kind: ServiceAccount
-    name: {{ if $.Values.global.environment.dev }}build-{{ end }}deploy
+    name: {{ if $.Values.global.env.dev }}build-{{ end }}deploy
     namespace: {{ $.Release.Namespace }}
 ---
 {{- end }}

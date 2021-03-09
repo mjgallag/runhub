@@ -20,17 +20,17 @@ stringData:
     {{- end }}
 {{- end }}
 
-{{ define "runhub-app.environment" -}}
-  {{ range $environmentName, $val := .Values.global.environment -}}
-    {{ $environmentName }}
+{{ define "runhub-app.env" -}}
+  {{ range $envName, $val := .Values.global.env -}}
+    {{ $envName }}
   {{- end }}
 {{- end }}
 
-{{ define "runhub-app.environmentDomain" -}}
+{{ define "runhub-app.envDomain" -}}
   {{ with .Values.global -}}
-    {{ if .environment.dev -}}
+    {{ if .env.dev -}}
       {{ $.Values.dev.domain }}
-    {{- else if .environment.prod -}}
+    {{- else if .env.prod -}}
       {{ .prodDomain }}
     {{- end }}
   {{- end }}
@@ -38,13 +38,13 @@ stringData:
 
 {{- define "runhub-app.hosts" }}
   {{- range $serviceName, $service := .Values.global.services }}
-    {{- if $.Values.global.environment.dev }}
-- '*.{{ $service.subdomain }}.{{ template "runhub-app.environmentDomain" $ }}'
-    {{- else if $.Values.global.environment.prod }}
-- {{ $service.subdomain }}.{{ template "runhub-app.environmentDomain" $ }}
+    {{- if $.Values.global.env.dev }}
+- '*.{{ $service.subdomain }}.{{ template "runhub-app.envDomain" $ }}'
+    {{- else if $.Values.global.env.prod }}
+- {{ $service.subdomain }}.{{ template "runhub-app.envDomain" $ }}
     {{- end }}
   {{- end }}
-  {{- if $.Values.global.environment.dev }}
-- git-webhook.runhub.{{ template "runhub-app.environmentDomain" $ }}
+  {{- if $.Values.global.env.dev }}
+- git-webhook.runhub.{{ template "runhub-app.envDomain" $ }}
   {{- end }}
 {{- end }}

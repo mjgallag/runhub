@@ -12,7 +12,7 @@ spec:
           - ping
     - cel:
         overlays:
-          - key: environment
+          - key: env
             expression: |
             {{- if (and .Values.release .Values.global.prodDomain) }}
               body.repository.default_branch == '{{ .Values.release.prodBranch }}' ? 'prod' : 'dev'

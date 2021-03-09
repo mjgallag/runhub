@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: undeploy
-  namespace: {{ template "runhub-app.environment" $ }}-{{ $.Release.Name }}-{{ $serviceName }}
+  namespace: {{ template "runhub-app.env" $ }}-{{ $.Release.Name }}-{{ $serviceName }}
 rules:
   - apiGroups:
       - serving.knative.dev

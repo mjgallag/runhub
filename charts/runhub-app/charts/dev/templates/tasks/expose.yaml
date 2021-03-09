@@ -10,7 +10,7 @@ spec:
       type: string
     - name: tag
       type: string
-    - name: environment
+    - name: env
       type: string
 {{- if .Values.release }}
   workspaces:
@@ -21,10 +21,10 @@ spec:
     - name: expose
       image: gcr.io/bitnami-containers/kubectl:{{ template "runhub-app.dev.kubectlImageTag" . }}
       script: |
-        if [ '$(params.environment)' = 'dev' ]; then
+        if [ '$(params.env)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SUBDOMAIN='$(params.tag).$(params.subdomain)'
-        elif [ '$(params.environment)' = 'prod' ]; then
+        elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SUBDOMAIN='$(params.subdomain)'
@@ -35,30 +35,30 @@ spec:
         kind: VirtualService
         metadata:
           name: $(params.tag)
-          namespace: $(params.environment)-{{ .Release.Name }}-$(params.service)
+          namespace: $(params.env)-{{ .Release.Name }}-$(params.service)
         spec:
           gateways:
-            - $(params.environment)-{{ .Release.Name }}/gateway
+            - $(params.env)-{{ .Release.Name }}/gateway
           hosts:
             - ${SUBDOMAIN:?}.${DOMAIN:?}
           http:
             - rewrite:
-                authority: $(params.tag).$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                authority: $(params.tag).$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
               route:
                 - destination:
-                    host: $(params.tag).$(params.environment)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                    host: $(params.tag).$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
         EOF
     - name: migrate-traffic
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        if [ '$(params.environment)' = 'prod' ]; then
+        if [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
         fi
 
         REVISION=$(kn service describe '$(params.tag)' \
-          --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
+          --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
           --output go-template --template '{{"{{"}} .status.latestReadyRevisionName }}')
 
         kn service update '$(params.tag)' \
-          --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
+          --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
           --traffic "${REVISION:?}=100"

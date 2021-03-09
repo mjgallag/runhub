@@ -1,8 +1,8 @@
-variable "environment" {
+variable "env" {
   type = string
   validation {
-    condition     = var.environment == "prod" || var.environment == "dev"
-    error_message = "The environment value must be either 'prod' or 'dev'."
+    condition     = var.env == "prod" || var.env == "dev"
+    error_message = "The env value must be either 'prod' or 'dev'."
   }
 }
 

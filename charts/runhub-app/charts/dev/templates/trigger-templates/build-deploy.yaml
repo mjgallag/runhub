@@ -8,7 +8,7 @@ spec:
     - name: git-revision
     - name: tag
     - name: cache-from-tag
-    - name: environment
+    - name: env
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -27,8 +27,8 @@ spec:
             value: $(tt.params.tag)
           - name: cache-from-tag
             value: $(tt.params.cache-from-tag)
-          - name: environment
-            value: $(tt.params.environment)
+          - name: env
+            value: $(tt.params.env)
         workspaces:
         {{- range $serviceName, $service := .Values.global.services }}
           - name: src-{{ $serviceName }}

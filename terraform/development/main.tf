@@ -1,8 +1,8 @@
 locals {
-  app_env_name    = join("-", [var.environment, var.app])
+  app_env_name    = join("-", [var.env, var.app])
   project_id_name = join("-", [local.app_env_name, "rh", "v${var.project_version}"])
   region          = join("-", slice(split("-", var.zone), 0, 2))
-  is_dev          = var.environment == "dev"
+  is_dev          = var.env == "dev"
   project_services_shared = {
     container = "container.googleapis.com"
   }

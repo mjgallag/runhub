@@ -10,5 +10,5 @@ spec:
       value: br-$(body.repository.default_branch)
     - name: cache-from-tag
       value: br-$(body.repository.default_branch)
-    - name: environment
-      value: $(extensions.environment)
+    - name: env
+      value: $(extensions.env)

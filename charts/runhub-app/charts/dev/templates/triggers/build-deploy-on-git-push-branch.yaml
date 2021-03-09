@@ -30,7 +30,7 @@ spec:
               extensions.base_ref_type == 'heads'
                 ? extensions.base_branch
                 : body.repository.default_branch
-          - key: environment
+          - key: env
             expression: |
             {{- if (and .Values.release .Values.global.prodDomain) }}
               extensions.branch == '{{ .Values.release.prodBranch }}' ? 'prod' : 'dev'

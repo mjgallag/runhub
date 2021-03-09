@@ -10,7 +10,7 @@ spec:
         protocol: HTTP
         number: 80
 {{- with .Values.global }}
-  {{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+  {{- if and .tls (or .env.dev (and .env.prod .prodDomain)) }}
       tls:
         httpsRedirect: true
     - hosts: {{ include "runhub-app.hosts" $ | nindent 8 }}

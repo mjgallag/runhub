@@ -5,7 +5,7 @@
     "global": {
       "type": "object",
       "properties": {
-        "environment": {
+        "env": {
           "type": "object",
           "properties": {
             "dev": {
@@ -104,7 +104,7 @@
         }
       },
       "required": [
-        "environment",
+        "env",
         "services",
         "containerRegistryCredentials"
       ],

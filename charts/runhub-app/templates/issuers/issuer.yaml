@@ -1,5 +1,5 @@
 {{- with .Values.global }}
-{{- if and .tls (or .environment.dev (and .environment.prod .prodDomain)) }}
+{{- if and .tls (or .env.dev (and .env.prod .prodDomain)) }}
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:

@@ -12,7 +12,7 @@ spec:
       type: string
     - name: cache-from-tag
       type: string
-    - name: environment
+    - name: env
       type: string
   workspaces:
   {{- range $serviceName, $service := .Values.global.services }}
@@ -84,8 +84,8 @@ spec:
           value: $(tasks.sanitize-tag.results.output)
         - name: sha
           value: $(tasks.get-sha-{{ $serviceName }}.results.sha)
-        - name: environment
-          value: $(params.environment)
+        - name: env
+          value: $(params.env)
     {{- if $.Values.release }}
       workspaces:
         - name: prod-kubeconfig
@@ -105,8 +105,8 @@ spec:
           value: {{ $service.subdomain }}
         - name: tag
           value: $(tasks.sanitize-tag.results.output)
-        - name: environment
-          value: $(params.environment)
+        - name: env
+          value: $(params.env)
     {{- if $.Values.release }}
       workspaces:
         - name: prod-kubeconfig

@@ -1,27 +1,27 @@
 #!/bin/sh
-set -e
+set -ex
 
 # shellcheck source=scripts/initialize.sh
 . "$(dirname "${0:?}")/scripts/initialize.sh"
 
-ENVIRONMENT="${1:?}"
+ENV="${1:?}"
 APP="${2:?}"
 
-if [ "${ENVIRONMENT:?}" = 'dev' ] || [ "${ENVIRONMENT:?}" = 'prod' ]; then
+if [ "${ENV:?}" = 'dev' ] || [ "${ENV:?}" = 'prod' ]; then
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/istio.sh"
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/cert-manager.sh"
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/knative/serving.sh"
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/knative/net-istio.sh"
 fi
 
-if [ "${ENVIRONMENT:?}" = 'dev' ]; then
+if [ "${ENV:?}" = 'dev' ]; then
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/tekton/pipelines.sh"
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/tekton/triggers.sh"
   "${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/tekton/dashboard.sh"
 fi
 
-"${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/app.sh" "${ENVIRONMENT:?}" "${APP:?}"
+"${CLUSTER_PACKAGE_INSTALLERS_DIR:?}/app.sh" "${ENV:?}" "${APP:?}"
 
-if [ "${ENVIRONMENT:?}" = 'prod' ]; then
+if [ "${ENV:?}" = 'prod' ]; then
   "${SCRIPTS_DIR:?}/generate-values-prod-k8s-creds.sh" "${APP:?}"
 fi

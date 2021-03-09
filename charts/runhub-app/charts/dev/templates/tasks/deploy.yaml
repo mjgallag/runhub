@@ -10,7 +10,7 @@ spec:
       type: string
     - name: sha
       type: string
-    - name: environment
+    - name: env
       type: string
 {{- if .Values.release }}
   workspaces:
@@ -21,12 +21,12 @@ spec:
     - name: deploy
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub-app.dev.knImageTag" . }}
       script: |
-        if [ '$(params.environment)' = 'dev' ]; then
+        if [ '$(params.env)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SCALE_INIT=0
           SCALE_MIN=0
           TAG_PREFIX='$(params.tag).'
-        elif [ '$(params.environment)' = 'prod' ]; then
+        elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SCALE_INIT=1
@@ -36,9 +36,9 @@ spec:
         PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
 
         set -- \
-          --namespace '$(params.environment)-{{ .Release.Name }}-$(params.service)' \
+          --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)@$(params.sha)' \
-          --env RUNHUB_ENVIRONMENT='$(params.environment)' \
+          --env RUNHUB_ENV='$(params.env)' \
         {{- range $serviceName, $service := .Values.global.services }}
           --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}://${TAG_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
         {{- end }}

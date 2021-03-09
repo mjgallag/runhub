@@ -8,7 +8,7 @@ deploy:
         namespace: dev-{{.APP}}
         createNamespace: true
         setValues:
-          global.environment.dev: true
+          global.env.dev: true
         valuesFiles:
           - values.yaml
         skipBuildDependencies: true
@@ -17,7 +17,7 @@ deploy:
         namespace: prod-{{.APP}}
         createNamespace: true
         setValues:
-          global.environment.prod: true
+          global.env.prod: true
         valuesFiles:
           - values.yaml
         skipBuildDependencies: true

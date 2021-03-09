@@ -10,5 +10,5 @@ spec:
       value: br-$(extensions.branch)
     - name: cache-from-tag
       value: br-$(extensions.cache-from-branch)
-    - name: environment
-      value: $(extensions.environment)
+    - name: env
+      value: $(extensions.env)
