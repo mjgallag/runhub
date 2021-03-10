@@ -10,7 +10,9 @@ deploy:
         setValues:
           global.env.dev: true
         valuesFiles:
-          - values.yaml
+          - values-shared.yaml
+          - values-dev.yaml
+          - values-dev--prod-k8s-creds.yaml
         skipBuildDependencies: true
       - name: '{{.APP}}'
         chartPath: charts/runhub-app
@@ -19,5 +21,6 @@ deploy:
         setValues:
           global.env.prod: true
         valuesFiles:
-          - values.yaml
+          - values-shared.yaml
+          - values-prod.yaml
         skipBuildDependencies: true
