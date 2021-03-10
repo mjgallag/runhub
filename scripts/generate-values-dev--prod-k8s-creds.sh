@@ -14,7 +14,7 @@ SERVICE_ACCOUNT_TOKEN="$("${KUBECTL:?}" get secret \
   --namespace "prod-${APP:?}" "${SERVICE_ACCOUNT_TOKEN_SECRET:?}" \
   --template '{{ print (.data.token | base64decode) }}')"
 
-cat <<EOF > "${BASE_DIR:?}/values-prod-k8s-creds.yaml"
+cat <<EOF > "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
 dev:
   release:
     prodKubernetesCredentials:
