@@ -132,46 +132,57 @@
       "additionalProperties": false
     }
   },
-  "oneOf": [
-    {
-      "type": "object",
-      "properties": {
-        "global": {
-          "$ref": "#/definitions/global"
-        },
-        "dev": {
-          "type": "object"
-        },
-        "defaults": {
-          "$ref": "#/definitions/defaults"
+  "if": {
+    "properties": {
+      "global": {
+        "properties": {
+          "env": {
+            "required": [
+              "dev"
+            ]
+          }
         }
-      },
-      "required": [
-        "global",
-        "dev",
-        "defaults"
-      ],
-      "additionalProperties": false
-    },
-    {
-      "type": "object",
-      "properties": {
-        "global": {
-          "$ref": "#/definitions/global"
-        },
-        "prod": {
-          "type": "object"
-        },
-        "defaults": {
-          "$ref": "#/definitions/defaults"
-        }
-      },
-      "required": [
-        "global",
-        "prod",
-        "defaults"
-      ],
-      "additionalProperties": false
+      }
     }
-  ]
+  },
+  "then": {
+    "type": "object",
+    "properties": {
+      "global": {
+        "$ref": "#/definitions/global"
+      },
+      "dev": {
+        "type": "object"
+      },
+      "defaults": {
+        "$ref": "#/definitions/defaults"
+      }
+    },
+    "required": [
+      "global",
+      "dev",
+      "defaults"
+    ],
+    "additionalProperties": false
+  },
+  "else": {
+    "type": "object",
+    "properties": {
+      "global": {
+        "$ref": "#/definitions/global"
+      },
+      "prod": {
+        "type": "object"
+      },
+      "defaults": {
+        "$ref": "#/definitions/defaults"
+      }
+    },
+    "required": [
+      "global",
+      "prod",
+      "defaults"
+    ],
+    "additionalProperties": false
+  }
 }
