@@ -4,15 +4,14 @@ set -e
 APP="${1:?}"
 KUBECTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
 
-CLUSTER_SERVER="$("${KUBECTL:?}" config view \
-  --template '{{ index (index (index .clusters 0) "cluster") "server" }}')"
+CLUSTER_SERVER="$("${KUBECTL:?}" config view --output jsonpath='{ .clusters[0].cluster.server }')"
 CLUSTER_CERTIFICATE_AUTHORITY="$("${KUBECTL:?}" config view --raw \
-  --template '{{ index (index (index .clusters 0) "cluster") "certificate-authority-data" }}')"
+  --output jsonpath='{ .clusters[0].cluster.certificate-authority-data }')"
 SERVICE_ACCOUNT_TOKEN_SECRET="$("${KUBECTL:?}" get serviceaccount \
-  --namespace "prod-${APP:?}" deploy --template '{{ index (index .secrets 0) "name" }}')"
+  --namespace "prod-${APP:?}" deploy --output jsonpath='{ .secrets[0].name }')"
 SERVICE_ACCOUNT_TOKEN="$("${KUBECTL:?}" get secret \
   --namespace "prod-${APP:?}" "${SERVICE_ACCOUNT_TOKEN_SECRET:?}" \
-  --template '{{ print (.data.token | base64decode) }}')"
+  --output go-template='{{ base64decode .data.token }}')"
 
 cat <<EOF > "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
 dev:

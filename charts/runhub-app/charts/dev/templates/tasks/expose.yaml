@@ -57,7 +57,7 @@ spec:
 
         REVISION=$(kn service describe '$(params.tag)' \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
-          --output go-template --template '{{"{{"}} .status.latestReadyRevisionName }}')
+          --output jsonpath='{ .status.latestReadyRevisionName }')
 
         kn service update '$(params.tag)' \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
