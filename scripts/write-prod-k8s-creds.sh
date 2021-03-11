@@ -9,7 +9,7 @@ CLUSTER_SERVER="$("${KUBECTL:?}" config view \
 CLUSTER_CERTIFICATE_AUTHORITY="$("${KUBECTL:?}" config view --raw \
   --template '{{ index (index (index .clusters 0) "cluster") "certificate-authority-data" }}')"
 SERVICE_ACCOUNT_TOKEN_SECRET="$("${KUBECTL:?}" get serviceaccount \
-  --namespace prod-hello-world deploy --template '{{ index (index .secrets 0) "name" }}')"
+  --namespace "prod-${APP:?}" deploy --template '{{ index (index .secrets 0) "name" }}')"
 SERVICE_ACCOUNT_TOKEN="$("${KUBECTL:?}" get secret \
   --namespace "prod-${APP:?}" "${SERVICE_ACCOUNT_TOKEN_SECRET:?}" \
   --template '{{ print (.data.token | base64decode) }}')"
