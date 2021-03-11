@@ -21,25 +21,6 @@
       },
       "minProperties": 1
     },
-    "imagePath": {
-      "type": "string"
-    },
-    "gitCredentials": {
-      "type": "object",
-      "properties": {
-        "username": {
-          "type": "string"
-        },
-        "password": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "username",
-        "password"
-      ],
-      "additionalProperties": false
-    },
     "release": {
       "type": "object",
       "properties": {
@@ -70,6 +51,25 @@
       "required": [
         "prodBranch",
         "prodKubernetesCredentials"
+      ],
+      "additionalProperties": false
+    },
+    "imagePath": {
+      "type": "string"
+    },
+    "gitCredentials": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
       ],
       "additionalProperties": false
     },
