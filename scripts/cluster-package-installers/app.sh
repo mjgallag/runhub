@@ -16,11 +16,11 @@ if [ "${ENV:?}" = "${ENV_DEV:?}" ] && [ -f "${BASE_DIR:?}/values-dev--prod-k8s-c
   set -- "$@" --values "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
 
   if "${KUBECTL:?}" get namespace "prod-${APP:?}"; then
-    INTERNAL_CLUSTER_SERVER="https://$("${KUBECTL:?}" get service kubernetes \
+    CLUSTER_SERVER_INTERNAL_IP="$("${KUBECTL:?}" get service --namespace default kubernetes \
       --output jsonpath='{ .spec.clusterIP }')"
 
     set -- "$@" --set \
-      "dev.release.prodKubernetesCredentials.clusterServer=${INTERNAL_CLUSTER_SERVER:?}"
+      "dev.release.prodKubernetesCredentials.clusterServer=https://${CLUSTER_SERVER_INTERNAL_IP:?}"
   fi
 
 fi
