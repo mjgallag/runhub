@@ -55,9 +55,9 @@ spec:
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
         fi
 
-        REVISION=$(kn service describe '$(params.tag)' \
+        REVISION="$(kn service describe '$(params.tag)' \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
-          --output jsonpath='{ .status.latestReadyRevisionName }')
+          --output jsonpath='{ .status.latestReadyRevisionName }')"
 
         kn service update '$(params.tag)' \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
