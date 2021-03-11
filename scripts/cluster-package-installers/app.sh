@@ -12,7 +12,7 @@ set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/charts/runhub-app \
   --values "${BASE_DIR:?}/values-shared.yaml" \
   --values "${BASE_DIR:?}/values-${ENV:?}.yaml"
 
-if [ "${ENV:?}" = 'dev' ] && [ -f "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml" ]; then
+if [ "${ENV:?}" = "${ENV_DEV:?}" ] && [ -f "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml" ]; then
   set -- "$@" --values "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
 
   if "${KUBECTL:?}" get namespace "prod-${APP:?}"; then
