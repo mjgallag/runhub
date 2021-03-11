@@ -2,9 +2,6 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "domain": {
-      "type": "string"
-    },
     "dependencies": {
       "type": "object",
       "additionalProperties": {
@@ -55,6 +52,9 @@
       "additionalProperties": false
     },
     "imagePath": {
+      "type": "string"
+    },
+    "domain": {
       "type": "string"
     },
     "gitCredentials": {

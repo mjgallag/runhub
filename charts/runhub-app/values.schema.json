@@ -20,9 +20,6 @@
           "maxProperties": 1,
           "additionalProperties": false
         },
-        "prodDomain": {
-          "type": "string"
-        },
         "services": {
           "type": "object",
           "additionalProperties": {
@@ -42,6 +39,9 @@
             "additionalProperties": false
           },
           "minProperties": 1
+        },
+        "prodDomain": {
+          "type": "string"
         },
         "containerRegistryCredentials": {
           "type": "object",
