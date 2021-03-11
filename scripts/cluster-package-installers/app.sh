@@ -3,6 +3,7 @@ set -e
 
 APP="${1:?}"
 ENV="${2:?}"
+KUBECTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
 HELM="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/helm.sh")"
 
 set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/charts/runhub-app \
@@ -11,8 +12,17 @@ set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/charts/runhub-app \
   --values "${BASE_DIR:?}/values-shared.yaml" \
   --values "${BASE_DIR:?}/values-${ENV:?}.yaml"
 
-if [ -f "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml" ]; then
-  "${HELM:?}" "$@" --values "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
-else
-  "${HELM:?}" "$@"
+if [ "${ENV:?}" = 'dev' ] && [ -f "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml" ]; then
+  set -- "$@" --values "${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
+
+  if "${KUBECTL:?}" get namespace "prod-${APP:?}"; then
+    INTERNAL_CLUSTER_SERVER="https://$("${KUBECTL:?}" get service kubernetes \
+      --output jsonpath='{ .spec.clusterIP }')"
+
+    set -- "$@" --set \
+      "dev.release.prodKubernetesCredentials.clusterServer=${INTERNAL_CLUSTER_SERVER:?}"
+  fi
+
 fi
+
+"${HELM:?}" "$@"
