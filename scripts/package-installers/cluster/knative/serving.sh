@@ -2,7 +2,7 @@
 set -e
 
 VERSION='0.21.0'
-KUBECTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
+KUBECTL="$("${BINARY_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
 
 "${KUBECTL:?}" apply --filename \
   "https://github.com/knative/serving/releases/download/v${VERSION:?}/serving-crds.yaml"

@@ -3,8 +3,8 @@ set -e
 
 APP="${1:?}"
 ENV="${2:?}"
-KUBECTL="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
-HELM="$("${LOCAL_PACKAGE_INSTALLERS_DIR:?}/helm.sh")"
+KUBECTL="$("${BINARY_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
+HELM="$("${BINARY_PACKAGE_INSTALLERS_DIR:?}/helm.sh")"
 
 set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/charts/runhub-app \
   --namespace "${ENV:?}-${APP:?}" --create-namespace \
