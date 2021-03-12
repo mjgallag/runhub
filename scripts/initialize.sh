@@ -15,7 +15,7 @@ export LOCAL_PACKAGES_TMP_DIR="${LOCAL_PACKAGES_DIR:?}/tmp"
 export SCRIPTS_DIR="${BASE_DIR:?}/scripts"
 export INSTALLERS_DIR="${SCRIPTS_DIR:?}/package-installers"
 export LOCAL_PACKAGE_INSTALLERS_DIR="${INSTALLERS_DIR:?}/local"
-export INSTALL_LOCAL_PACKAGE="${SCRIPTS_DIR:?}/install-local-package.sh"
 export CLUSTER_PACKAGE_INSTALLERS_DIR="${INSTALLERS_DIR:?}/cluster"
+export INSTALL_LOCAL_PACKAGE="${SCRIPTS_DIR:?}/install-local-package.sh"
 
 mkdir -p "${SCRIPT_HOME_DIR:?}"
