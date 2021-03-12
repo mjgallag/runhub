@@ -2,7 +2,7 @@
 set -e
 
 VERSION='0.22.0'
-KUBECTL="$("${BINARY_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
+KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
 
 
 curl -L \

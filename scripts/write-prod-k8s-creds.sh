@@ -2,7 +2,7 @@
 set -e
 
 APP="${1:?}"
-KUBECTL="$("${BINARY_PACKAGE_INSTALLERS_DIR:?}/kubectl.sh")"
+KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
 
 CLUSTER_SERVER="$("${KUBECTL:?}" config view --output jsonpath='{ .clusters[0].cluster.server }')"
 CLUSTER_CERTIFICATE_AUTHORITY="$("${KUBECTL:?}" config view --raw \
