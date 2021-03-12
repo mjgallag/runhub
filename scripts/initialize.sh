@@ -17,5 +17,6 @@ export INSTALLERS_DIR="${SCRIPTS_DIR:?}/package-installers"
 export LOCAL_PACKAGE_INSTALLERS_DIR="${INSTALLERS_DIR:?}/local"
 export CLUSTER_PACKAGE_INSTALLERS_DIR="${INSTALLERS_DIR:?}/cluster"
 export INSTALL_LOCAL_PACKAGE="${SCRIPTS_DIR:?}/install-local-package.sh"
+export WRITE_PROD_K8S_CREDS="${SCRIPTS_DIR:?}/write-prod-k8s-creds.sh"
 
 mkdir -p "${SCRIPT_HOME_DIR:?}"
