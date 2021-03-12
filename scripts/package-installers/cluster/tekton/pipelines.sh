@@ -10,4 +10,4 @@ curl -L \
   | sed 's/disable-affinity-assistant: "false"/disable-affinity-assistant: "true"/' \
   | "${KUBECTL:?}" apply --selector knative.dev/crd-install!=true --filename -
 
-"${SCRIPTS_DIR:?}/wait-for-deployments.sh" tekton-pipelines
+"${WAIT_FOR_DEPLOYMENTS:?}" tekton-pipelines
