@@ -6,6 +6,15 @@ set -e
 
 APP="${1:?}"
 ENV="${2:?}"
+PROVIDER="${3}"
+
+if [ "${PROVIDER}" ]; then
+  if [ "${PROVIDER:?}" = 'gcp' ]; then
+    "${INFRASTRUCTURE_PACKAGE_INSTALLERS_DIR:?}/gcp.sh"
+  fi
+else
+  export KUBECONFIG="${USER_HOME_DIR:?}/.kube/config"
+fi
 
 if [ "${ENV:?}" = 'dev' ] || [ "${ENV:?}" = 'prod' ]; then
   "${KUBERNETES_PACKAGE_INSTALLERS_DIR:?}/istio.sh"
