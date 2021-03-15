@@ -3,15 +3,15 @@ set -e
 
 APP="${1:?}"
 ENV="${2:?}"
-VALUES_DEV__PROD_K8S_CREDS_YAML="${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
-KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
-HELM="$("${BINARY_INSTALLERS_DIR:?}/helm.sh")"
+VALUES_DEV__PROD_K8S_CREDS_YAML="${SCRIPT_DIR:?}/values-dev--prod-k8s-creds.yaml"
+KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
+HELM="$("${INSTALLERS_DIR:?}/bin/helm.sh")"
 
-set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/helm-charts/runhub-app \
+set -- upgrade --install --atomic "${APP:?}" "${SCRIPT_DIR:?}"/helm-charts/runhub-app \
   --namespace "${ENV:?}-${APP:?}" --create-namespace \
   --set "global.env.${ENV:?}=true" \
-  --values "${BASE_DIR:?}/values-shared.yaml" \
-  --values "${BASE_DIR:?}/values-${ENV:?}.yaml"
+  --values "${SCRIPT_DIR:?}/values-shared.yaml" \
+  --values "${SCRIPT_DIR:?}/values-${ENV:?}.yaml"
 
 if [ "${ENV:?}" = 'dev' ] && [ -f "${VALUES_DEV__PROD_K8S_CREDS_YAML:?}" ]; then
   set -- "$@" --values "${VALUES_DEV__PROD_K8S_CREDS_YAML:?}"

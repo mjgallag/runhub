@@ -7,11 +7,11 @@ URL="${3:?}"
 ARCHIVE_BIN_PATH="${4:?}"
 SHA="${5:?}"
 SHA_ALGORITHM="${6:?}"
-BIN_DIR="${CONFIG_DIR:?}/bin"
+BIN_DIR="${SCRIPT_CONFIG_DIR:?}/bin"
 NAME_DIR="${BIN_DIR:?}/${NAME:?}"
 VERSION_DIR="${NAME_DIR:?}/${VERSION:?}"
 BIN_PATH="${VERSION_DIR:?}/${ARCHIVE_BIN_PATH:?}"
-TMP_DIR="${CONFIG_DIR:?}/bin-tmp-${NAME:?}-${VERSION:?}"
+TMP_DIR="${SCRIPT_CONFIG_DIR:?}/bin-tmp-${NAME:?}-${VERSION:?}"
 ARCHIVE_PATH="${TMP_DIR:?}/${NAME:?}-${VERSION:?}"
 
 if [ ! -f "${BIN_PATH:?}" ]; then

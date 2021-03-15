@@ -2,11 +2,11 @@
 set -e
 
 VERSION='0.22.0'
-KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
+KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
 
 curl -L \
   "https://storage.googleapis.com/tekton-releases/pipeline/previous/v${VERSION:?}/release.yaml" \
   | sed 's/disable-affinity-assistant: "false"/disable-affinity-assistant: "true"/' \
   | "${KUBECTL:?}" apply --selector knative.dev/crd-install!=true --filename -
 
-"${KUBERNETES_INSTALLER_HELPERS_DIR:?}/wait-for-deployments.sh" tekton-pipelines
+"${INSTALLERS_DIR:?}/k8s/helpers/wait-for-deployments.sh" tekton-pipelines
