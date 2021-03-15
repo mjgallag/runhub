@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-VERSION='0.12.0'
+VERSION='0.12.1'
 KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
 
 "${KUBECTL:?}" apply --filename \
