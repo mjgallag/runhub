@@ -30,7 +30,3 @@ if [ "${ENV:?}" = 'dev' ]; then
 fi
 
 "${KUBERNETES_INSTALLERS_DIR:?}/app.sh" "${APP:?}" "${ENV:?}"
-
-if [ "${ENV:?}" = 'prod' ]; then
-  "${WRITE_PROD_K8S_CREDS:?}" "${APP:?}"
-fi
