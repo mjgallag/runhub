@@ -7,4 +7,4 @@ KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
 "${KUBECTL:?}" apply --filename \
   "https://github.com/knative-sandbox/net-istio/releases/download/v${VERSION:?}/net-istio.yaml"
 
-"${WAIT_FOR_DEPLOYMENTS:?}" knative-serving
+"${KUBERNETES_INSTALLER_HELPERS_DIR:?}/wait-for-deployments.sh" knative-serving

@@ -13,4 +13,4 @@ KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
   --type merge \
   --patch '{"data":{"allow-zero-initial-scale":"true"}}'
 
-"${WAIT_FOR_DEPLOYMENTS:?}" knative-serving
+"${KUBERNETES_INSTALLER_HELPERS_DIR:?}/wait-for-deployments.sh" knative-serving

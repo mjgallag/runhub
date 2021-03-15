@@ -7,4 +7,4 @@ KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
 "${KUBECTL:?}" apply --filename \
   "https://storage.googleapis.com/tekton-releases/triggers/previous/v${VERSION:?}/release.yaml"
 
-"${WAIT_FOR_DEPLOYMENTS:?}" tekton-pipelines
+"${KUBERNETES_INSTALLER_HELPERS_DIR:?}/wait-for-deployments.sh" tekton-pipelines
