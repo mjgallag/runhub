@@ -4,7 +4,7 @@ deploy:
   helm:
     releases:
       - name: '{{.APP}}'
-        chartPath: charts/runhub-app
+        chartPath: helm-charts/runhub-app
         namespace: dev-{{.APP}}
         createNamespace: true
         setValues:
@@ -16,7 +16,7 @@ deploy:
           - values-dev--prod-k8s-creds.yaml
         skipBuildDependencies: true
       - name: '{{.APP}}'
-        chartPath: charts/runhub-app
+        chartPath: helm-charts/runhub-app
         namespace: prod-{{.APP}}
         createNamespace: true
         setValues:

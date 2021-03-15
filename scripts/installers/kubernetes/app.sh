@@ -7,7 +7,7 @@ VALUES_DEV__PROD_K8S_CREDS_YAML="${BASE_DIR:?}/values-dev--prod-k8s-creds.yaml"
 KUBECTL="$("${BINARY_INSTALLERS_DIR:?}/kubectl.sh")"
 HELM="$("${BINARY_INSTALLERS_DIR:?}/helm.sh")"
 
-set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/charts/runhub-app \
+set -- upgrade --install --atomic "${APP:?}" "${BASE_DIR:?}"/helm-charts/runhub-app \
   --namespace "${ENV:?}-${APP:?}" --create-namespace \
   --set "global.env.${ENV:?}=true" \
   --values "${BASE_DIR:?}/values-shared.yaml" \
