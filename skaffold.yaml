@@ -9,6 +9,7 @@ deploy:
         createNamespace: true
         setValues:
           global.env.dev: true
+          dev.release.prodKubernetesCredentials.clusterServer: https://10.43.0.1
         valuesFiles:
           - values-shared.yaml
           - values-dev.yaml
