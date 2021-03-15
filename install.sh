@@ -3,7 +3,7 @@ set -e
 
 APP="${1:?}"
 ENV="${2:?}"
-PROVIDER="${3}"
+INFRA="${3}"
 SCRIPT_DIR="$(cd "$(dirname "${0:?}")" && pwd)"
 SCRIPT_CONFIG_DIR="${SCRIPT_DIR:?}/.runhub"
 SCRIPT_HOME_DIR="${SCRIPT_CONFIG_DIR:?}/home"
@@ -18,10 +18,8 @@ export HOME
 
 mkdir -p "${SCRIPT_HOME_DIR:?}"
 
-if [ "${PROVIDER}" ]; then
-  if [ "${PROVIDER:?}" = 'gcp' ]; then
-    "${INSTALLERS_DIR:?}/infra/gcp.sh"
-  fi
+if [ "${INFRA}" ]; then
+  "${INSTALLERS_DIR:?}/infra/${INFRA:?}.sh"
 else
   export KUBECONFIG="${USER_HOME_DIR:?}/.kube/config"
 fi
