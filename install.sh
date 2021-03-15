@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# shellcheck source=scripts/initialize.sh
-. "$(dirname "${0:?}")/scripts/initialize.sh"
+# shellcheck source=shell-scripts/initialize.sh
+. "$(dirname "${0:?}")/shell-scripts/initialize.sh"
 
 APP="${1:?}"
 ENV="${2:?}"
