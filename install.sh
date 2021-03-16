@@ -5,16 +5,12 @@ APP="${1:?}"
 ENV="${2:?}"
 INFRA="${3}"
 SCRIPT_DIR="$(cd "$(dirname "${0:?}")" && pwd)"
-SCRIPT_CONFIG_DIR="${SCRIPT_DIR:?}/.runhub"
+export SCRIPT_DIR
+export SCRIPT_CONFIG_DIR="${SCRIPT_DIR:?}/.runhub"
 SCRIPT_HOME_DIR="${SCRIPT_CONFIG_DIR:?}/home"
 USER_HOME_DIR="${HOME:?}"
-HOME="${SCRIPT_HOME_DIR:?}"
-INSTALLERS_DIR="${SCRIPT_DIR:?}/shell-scripts/installers"
-
-export SCRIPT_DIR
-export SCRIPT_CONFIG_DIR
-export INSTALLERS_DIR
-export HOME
+export HOME="${SCRIPT_HOME_DIR:?}"
+export INSTALLERS_DIR="${SCRIPT_DIR:?}/shell-scripts/installers"
 
 mkdir -p "${SCRIPT_HOME_DIR:?}"
 
