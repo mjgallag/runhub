@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-APP="${1:?}"
-ENV="${2:?}"
-INFRA="${3}"
+export APP="${1:?}"
+export ENV="${2:?}"
+export INFRA="${3}"
 SCRIPT_DIR="$(cd "$(dirname "${0:?}")" && pwd)"
 export SCRIPT_DIR
 export SCRIPT_CONFIG_DIR="${SCRIPT_DIR:?}/.runhub"
@@ -33,4 +33,4 @@ if [ "${ENV:?}" = 'dev' ]; then
   "${INSTALLERS_DIR:?}/k8s/tekton/dashboard.sh"
 fi
 
-"${INSTALLERS_DIR:?}/k8s/app.sh" "${APP:?}" "${ENV:?}"
+"${INSTALLERS_DIR:?}/k8s/app.sh"
