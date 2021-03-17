@@ -14,7 +14,7 @@ BIN_PATH="${VERSION_DIR:?}/${ARCHIVE_BIN_PATH:?}"
 TMP_DIR="${SCRIPT_CONFIG_DIR:?}/bin-tmp-${NAME:?}-${VERSION:?}"
 ARCHIVE_PATH="${TMP_DIR:?}/${NAME:?}-${VERSION:?}"
 
-if [ ! -f "${BIN_PATH:?}" ]; then
+if [ ! -f "${BIN_PATH:?}" ] && [ ! -d "${BIN_PATH:?}" ]; then
   mkdir -p "${BIN_DIR:?}" "${TMP_DIR:?}"
   rm -rf "${NAME_DIR:?}"
   mkdir -p "${VERSION_DIR:?}"
