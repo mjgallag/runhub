@@ -1,13 +1,8 @@
 .DS_Store
 .terraform/
-.terraform.tfstate.lock.info
+.terraform.lock.hcl
 /.runhub/
-/terraform/*/backend.tf
-/terraform/*/terraform.tfvars
-/terraform/shared.tfvars
 /values-dev--prod-k8s-creds.yaml
 /values-dev.yaml
 /values-prod.yaml
 /values-shared.yaml
-terraform.tfstate
-terraform.tfstate.backup

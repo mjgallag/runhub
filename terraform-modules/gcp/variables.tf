@@ -1,3 +1,7 @@
+variable "app" {
+  type = string
+}
+
 variable "env" {
   type = string
   validation {
@@ -6,21 +10,12 @@ variable "env" {
   }
 }
 
-variable "app" {
-  type = string
-}
-
-variable "zone" {
+variable "region" {
   type    = string
-  default = "us-central1-c"
+  default = "us-central1"
 }
 
 variable "billing_account" {
   type    = string
   default = "My Billing Account"
-}
-
-variable "project_version" {
-  type    = number
-  default = 1
 }
