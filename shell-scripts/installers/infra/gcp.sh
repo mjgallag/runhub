@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-GCLOUD="$("${INSTALLERS_DIR:?}/bin/google-cloud-sdk.sh")/gcloud"
+GCLOUD="$("${INSTALLERS_DIR:?}/bin/gcloud.sh")"
 
 if ! "${GCLOUD:?}" auth application-default print-access-token \
   --no-user-output-enabled --verbosity none; then
