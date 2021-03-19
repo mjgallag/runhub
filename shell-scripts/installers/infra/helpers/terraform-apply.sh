@@ -10,11 +10,11 @@ mkdir -p "${APP_ENV_TERRAFORM_DIR:?}" "${TF_PLUGIN_CACHE_DIR:?}"
 
 if "${INSTALLERS_DIR:?}/infra/helpers/has-tfstate/${BACKEND_TYPE:?}.sh"; then
   "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
-  (cd "${APP_ENV_TERRAFORM_DIR:?}" && "${TERRAFORM:?}" init -upgrade)
-  (cd "${APP_ENV_TERRAFORM_DIR:?}" && "${TERRAFORM:?}" apply -auto-approve)
+  "${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" init -upgrade
+  "${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" apply -auto-approve
 else
-  (cd "${APP_ENV_TERRAFORM_DIR:?}" && "${TERRAFORM:?}" init -upgrade)
-  (cd "${APP_ENV_TERRAFORM_DIR:?}" && "${TERRAFORM:?}" apply -auto-approve)
+  "${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" init -upgrade
+  "${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" apply -auto-approve
   "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
-  (cd "${APP_ENV_TERRAFORM_DIR:?}" && "${TERRAFORM:?}" init -upgrade -force-copy)
+  "${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" init -upgrade -force-copy
 fi
