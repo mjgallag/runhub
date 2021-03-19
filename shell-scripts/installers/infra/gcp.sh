@@ -2,6 +2,7 @@
 set -e
 
 export BACKEND_TYPE='gcs'
+export CLOUDSDK_CONTAINER_USE_APPLICATION_DEFAULT_CREDENTIALS='True'
 GCLOUD="$("${INSTALLERS_DIR:?}/bin/google-cloud-sdk.sh")/gcloud"
 
 if ! "${GCLOUD:?}" auth application-default print-access-token \
