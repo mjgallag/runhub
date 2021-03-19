@@ -10,3 +10,8 @@ if ! "${GCLOUD:?}" auth application-default print-access-token \
 fi
 
 "${INSTALLERS_DIR:?}/infra/helpers/terraform-apply.sh"
+
+REGION="$("${GCLOUD:?}" container clusters list \
+  --project "${ENV:?}-${APP:?}" --format 'value(location)')"
+"${GCLOUD:?}" container clusters get-credentials \
+  "${ENV:?}-${APP:?}" --project "${ENV:?}-${APP:?}" --region "${REGION:?}"
