@@ -1,10 +1,8 @@
 #!/bin/sh
 set -e
 
-export TF_PLUGIN_CACHE_DIR="${HOME:?}/.terraform.d/plugin-cache"
-TERRAFORM="$("${INSTALLERS_DIR:?}/bin/terraform.sh")"
+TERRAFORM="${INSTALLERS_DIR:?}/bin/terraform.sh"
 
-mkdir -p "${TF_PLUGIN_CACHE_DIR:?}"
 "${INSTALLERS_DIR:?}/infra/helpers/generate-main-tf.sh"
 
 if "${INSTALLERS_DIR:?}/infra/helpers/has-tfstate/${BACKEND_TYPE:?}.sh"; then
