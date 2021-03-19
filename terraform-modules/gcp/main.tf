@@ -14,7 +14,7 @@ resource "google_project" "app_env" {
   billing_account = data.google_billing_account.app_env.id
 }
 
-resource "google_storage_bucket" "app_env_terraform_state" {
+resource "google_storage_bucket" "terraform_state" {
   project                     = google_project.app_env.project_id
   name                        = join("-", [local.app_env_name, "terraform-state"])
   location                    = var.region
