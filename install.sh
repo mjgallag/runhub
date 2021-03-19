@@ -23,12 +23,10 @@ else
   export KUBECONFIG="${USER_HOME_DIR:?}/.kube/config"
 fi
 
-if [ "${ENV:?}" = 'dev' ] || [ "${ENV:?}" = 'prod' ]; then
-  "${INSTALLERS_DIR:?}/k8s/istio.sh"
-  "${INSTALLERS_DIR:?}/k8s/cert-manager.sh"
-  "${INSTALLERS_DIR:?}/k8s/knative/serving.sh"
-  "${INSTALLERS_DIR:?}/k8s/knative/net-istio.sh"
-fi
+"${INSTALLERS_DIR:?}/k8s/istio.sh"
+"${INSTALLERS_DIR:?}/k8s/cert-manager.sh"
+"${INSTALLERS_DIR:?}/k8s/knative/serving.sh"
+"${INSTALLERS_DIR:?}/k8s/knative/net-istio.sh"
 
 if [ "${ENV:?}" = 'dev' ]; then
   "${INSTALLERS_DIR:?}/k8s/tekton/pipelines.sh"
