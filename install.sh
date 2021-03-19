@@ -15,6 +15,9 @@ export INSTALLERS_DIR="${SCRIPT_DIR:?}/shell-scripts/installers"
 mkdir -p "${SCRIPT_HOME_DIR:?}"
 
 if [ "${INFRA}" ]; then
+  export APP_ENV_TERRAFORM_DIR="${SCRIPT_CONFIG_DIR:?}/app/${APP:?}/${ENV:?}/terraform"
+
+  mkdir -p "${APP_ENV_TERRAFORM_DIR:?}"
   "${INSTALLERS_DIR:?}/infra/${INFRA:?}.sh"
 else
   export KUBECONFIG="${USER_HOME_DIR:?}/.kube/config"
