@@ -29,7 +29,7 @@ EOF
 export OUTPUT_DEFINITIONS
 export BACKEND_TYPE='gcs'
 export CLOUDSDK_CONTAINER_USE_APPLICATION_DEFAULT_CREDENTIALS='True'
-GCLOUD="$("${INSTALLERS_DIR:?}/bin/google-cloud-sdk.sh")/gcloud"
+GCLOUD="$("${INSTALLERS_DIR:?}/bin/gcloud.sh")"
 TERRAFORM="${INSTALLERS_DIR:?}/bin/terraform.sh"
 
 if ! "${GCLOUD:?}" auth application-default print-access-token \
