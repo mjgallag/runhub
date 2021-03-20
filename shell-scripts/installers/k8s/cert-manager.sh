@@ -2,13 +2,11 @@
 set -e
 
 VERSION='1.2.0'
-KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
-HELM="${INSTALLERS_DIR:?}/bin/helm.sh"
 
-"${KUBECTL:?}" apply --filename \
+"${BIN_DIR:?}/kubectl.sh" apply --filename \
   "https://github.com/jetstack/cert-manager/releases/download/v${VERSION:?}/cert-manager.crds.yaml"
-"${HELM:?}" repo add jetstack https://charts.jetstack.io
-"${HELM:?}" repo update
-"${HELM:?}" upgrade --install --atomic cert-manager jetstack/cert-manager --version "${VERSION:?}" \
-  --namespace cert-manager --create-namespace \
+"${BIN_DIR:?}/helm.sh" repo add jetstack https://charts.jetstack.io
+"${BIN_DIR:?}/helm.sh" repo update
+"${BIN_DIR:?}/helm.sh" upgrade --install --atomic --namespace cert-manager --create-namespace \
+  cert-manager jetstack/cert-manager --version "${VERSION:?}" \
   --set extraArgs='{--enable-certificate-owner-ref=true}'

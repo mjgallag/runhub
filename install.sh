@@ -11,6 +11,7 @@ SCRIPT_HOME_DIR="${SCRIPT_CONFIG_DIR:?}/home"
 USER_HOME_DIR="${HOME:?}"
 export HOME="${SCRIPT_HOME_DIR:?}"
 export INSTALLERS_DIR="${SCRIPT_DIR:?}/shell-scripts/installers"
+export BIN_DIR="${INSTALLERS_DIR:?}/bin"
 
 mkdir -p "${SCRIPT_HOME_DIR:?}"
 

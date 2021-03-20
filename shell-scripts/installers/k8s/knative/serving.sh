@@ -2,13 +2,12 @@
 set -e
 
 VERSION='0.21.0'
-KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
 
-"${KUBECTL:?}" apply --filename \
+"${BIN_DIR:?}/kubectl.sh" apply --filename \
   "https://github.com/knative/serving/releases/download/v${VERSION:?}/serving-crds.yaml"
-"${KUBECTL:?}" apply --filename \
+"${BIN_DIR:?}/kubectl.sh" apply --filename \
   "https://github.com/knative/serving/releases/download/v${VERSION:?}/serving-core.yaml"
-"${KUBECTL:?}" patch configmap/config-autoscaler \
+"${BIN_DIR:?}/kubectl.sh" patch configmap/config-autoscaler \
   --namespace knative-serving \
   --type merge \
   --patch '{"data":{"allow-zero-initial-scale":"true"}}'

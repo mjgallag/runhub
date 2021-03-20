@@ -28,17 +28,14 @@ EOF
 )"
 export OUTPUT_DEFINITIONS
 export BACKEND_TYPE='gcs'
-export CLOUDSDK_CONTAINER_USE_APPLICATION_DEFAULT_CREDENTIALS='True'
-GCLOUD="${INSTALLERS_DIR:?}/bin/gcloud.sh"
-TERRAFORM="${INSTALLERS_DIR:?}/bin/terraform.sh"
 
-if ! "${GCLOUD:?}" auth application-default print-access-token \
+if ! "${BIN_DIR:?}/gcloud.sh" auth application-default print-access-token \
   --no-user-output-enabled --verbosity none; then
-    "${GCLOUD:?}" auth application-default login --disable-quota-project --verbosity error
+    "${BIN_DIR:?}/gcloud.sh" auth login --update-adc
 fi
 
 "${INSTALLERS_DIR:?}/infra/helpers/terraform-apply.sh"
 
-REGION="$("${TERRAFORM:?}" output -raw region)"
-"${GCLOUD:?}" container clusters get-credentials \
+REGION="$("${BIN_DIR:?}/terraform.sh" output -raw region)"
+"${BIN_DIR:?}/gcloud.sh" container clusters get-credentials \
   "${ENV:?}-${APP:?}" --project "${ENV:?}-${APP:?}" --region "${REGION:?}"
