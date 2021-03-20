@@ -2,8 +2,8 @@
 set -e
 
 VERSION='1.2.0'
-KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
-HELM="$("${INSTALLERS_DIR:?}/bin/helm.sh")"
+KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
+HELM="${INSTALLERS_DIR:?}/bin/helm.sh"
 
 "${KUBECTL:?}" apply --filename \
   "https://github.com/jetstack/cert-manager/releases/download/v${VERSION:?}/cert-manager.crds.yaml"

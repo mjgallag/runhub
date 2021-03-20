@@ -2,7 +2,7 @@
 set -e
 
 VERSION='0.15.0'
-KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
+KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
 
 "${KUBECTL:?}" apply --filename \
   "https://github.com/tektoncd/dashboard/releases/download/v${VERSION:?}/tekton-dashboard-release.yaml"

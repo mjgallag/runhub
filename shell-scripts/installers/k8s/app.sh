@@ -2,8 +2,8 @@
 set -e
 
 VALUES_DEV__PROD_K8S_CREDS_YAML="${SCRIPT_DIR:?}/values-dev--prod-k8s-creds.yaml"
-KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
-HELM="$("${INSTALLERS_DIR:?}/bin/helm.sh")"
+KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
+HELM="${INSTALLERS_DIR:?}/bin/helm.sh"
 
 set -- upgrade --install --atomic "${APP:?}" "${SCRIPT_DIR:?}"/helm-charts/runhub-app \
   --namespace "${ENV:?}-${APP:?}" --create-namespace \

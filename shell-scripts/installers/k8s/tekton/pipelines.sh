@@ -2,7 +2,7 @@
 set -e
 
 VERSION='0.22.0'
-KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
+KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
 
 curl -L \
   "https://storage.googleapis.com/tekton-releases/pipeline/previous/v${VERSION:?}/release.yaml" \

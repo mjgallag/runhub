@@ -2,7 +2,7 @@
 set -e
 
 NAMESPACE="${1:?}"
-KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
+KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
 DEPLOYMENTS="$("${KUBECTL:?}" get --namespace "${NAMESPACE:?}" deployments --output name)"
 
 for DEPLOYMENT in ${DEPLOYMENTS:?}; do

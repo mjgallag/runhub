@@ -2,7 +2,7 @@
 set -e
 
 VERSION='0.12.1'
-KUBECTL="$("${INSTALLERS_DIR:?}/bin/kubectl.sh")"
+KUBECTL="${INSTALLERS_DIR:?}/bin/kubectl.sh"
 
 "${KUBECTL:?}" apply --filename \
   "https://storage.googleapis.com/tekton-releases/triggers/previous/v${VERSION:?}/release.yaml"

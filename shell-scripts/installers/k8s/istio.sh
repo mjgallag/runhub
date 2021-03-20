@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-ISTIOCTL="$("${INSTALLERS_DIR:?}/bin/istioctl.sh")"
+ISTIOCTL="${INSTALLERS_DIR:?}/bin/istioctl.sh"
 
 "${ISTIOCTL:?}" install --skip-confirmation --filename - <<EOF
 apiVersion: install.istio.io/v1alpha1
