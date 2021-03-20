@@ -39,6 +39,6 @@ fi
 
 "${INSTALLERS_DIR:?}/infra/helpers/terraform-apply.sh"
 
-REGION="$("${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" output -raw region)"
+REGION="$("${TERRAFORM:?}" output -raw region)"
 "${GCLOUD:?}" container clusters get-credentials \
   "${ENV:?}-${APP:?}" --project "${ENV:?}-${APP:?}" --region "${REGION:?}"

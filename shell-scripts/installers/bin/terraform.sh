@@ -10,4 +10,4 @@ TERRAFORM="$("${INSTALLERS_DIR:?}/bin/helpers/install.sh" terraform \
 export TF_PLUGIN_CACHE_DIR="${HOME:?}/.terraform.d/plugin-cache"
 
 mkdir -p "${TF_PLUGIN_CACHE_DIR:?}"
-"${TERRAFORM:?}" "$@"
+"${TERRAFORM:?}" -chdir="${APP_ENV_TERRAFORM_DIR:?}" "$@"
