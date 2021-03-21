@@ -11,22 +11,20 @@ set -- upgrade --install --atomic "${APP:?}" "${SCRIPT_DIR:?}"/helm-charts/runhu
 
 if [ "${ENV:?}" = 'dev' ] && [ -f "${VALUES_DEV__PROD_K8S_CREDS_YAML:?}" ]; then
   set -- "$@" --values "${VALUES_DEV__PROD_K8S_CREDS_YAML:?}"
-
-  if "${BIN_DIR:?}/kubectl.sh" get namespace "prod-${APP:?}"; then
-    CLUSTER_SERVER_INTERNAL_IP="$("${BIN_DIR:?}/kubectl.sh" get service \
-      --namespace default kubernetes --output jsonpath='{ .spec.clusterIP }')"
-
-    set -- "$@" --set \
-      "dev.release.prodKubernetesCredentials.clusterServer=https://${CLUSTER_SERVER_INTERNAL_IP:?}"
-  fi
-
 fi
 
 "${BIN_DIR:?}/helm.sh" "$@"
 
 if [ "${ENV:?}" = 'prod' ]; then
-  CLUSTER_SERVER="$("${BIN_DIR:?}/kubectl.sh" config view \
-    --output jsonpath='{ .clusters[0].cluster.server }')"
+
+  if "${BIN_DIR:?}/kubectl.sh" get namespace "dev-${APP:?}"; then
+    CLUSTER_SERVER="https://$("${BIN_DIR:?}/kubectl.sh" get service \
+      --namespace default kubernetes --output jsonpath='{ .spec.clusterIP }')"
+  else
+    CLUSTER_SERVER="$("${BIN_DIR:?}/kubectl.sh" config view \
+      --output jsonpath='{ .clusters[0].cluster.server }')"
+  fi
+
   CLUSTER_CERTIFICATE_AUTHORITY="$("${BIN_DIR:?}/kubectl.sh" config view --raw \
     --output jsonpath='{ .clusters[0].cluster.certificate-authority-data }')"
   SERVICE_ACCOUNT_TOKEN_SECRET="$("${BIN_DIR:?}/kubectl.sh" get serviceaccount \
