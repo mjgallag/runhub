@@ -16,8 +16,10 @@ fi
 "${BIN_DIR:?}/helm.sh" "$@"
 
 if [ "${ENV:?}" = 'prod' ]; then
-  CURRENT_CONTEXT="$(kubectl config view --output jsonpath='{ .current-context }')"
-  CLUSTER="$(kubectl config view --output jsonpath='{ .contexts[?(@.name=="'"${CURRENT_CONTEXT:?}"'")].name }')"
+  CURRENT_CONTEXT="$("${BIN_DIR:?}/kubectl.sh" config view \
+    --output jsonpath='{ .current-context }')"
+  CLUSTER="$("${BIN_DIR:?}/kubectl.sh" config view \
+    --output jsonpath='{ .contexts[?(@.name=="'"${CURRENT_CONTEXT:?}"'")].name }')"
 
   if "${BIN_DIR:?}/kubectl.sh" get namespace "dev-${APP:?}"; then
     CLUSTER_SERVER="https://$("${BIN_DIR:?}/kubectl.sh" get service \
@@ -27,8 +29,8 @@ if [ "${ENV:?}" = 'prod' ]; then
       --output jsonpath='{ .clusters[?(@.name=="'"${CLUSTER:?}"'")].cluster.server }')"
   fi
 
-  CLUSTER_CERTIFICATE_AUTHORITY="$("${BIN_DIR:?}/kubectl.sh" config view --raw \
-    --output jsonpath='{ .clusters[?(@.name=="'"${CLUSTER:?}"'")].cluster.certificate-authority-data }')"
+  CLUSTER_CERTIFICATE_AUTHORITY="$("${BIN_DIR:?}/kubectl.sh" config view --raw --output \
+    jsonpath='{ .clusters[?(@.name=="'"${CLUSTER:?}"'")].cluster.certificate-authority-data }')"
   SERVICE_ACCOUNT_TOKEN_SECRET="$("${BIN_DIR:?}/kubectl.sh" get serviceaccount \
     --namespace "prod-${APP:?}" deploy --output jsonpath='{ .secrets[0].name }')"
   SERVICE_ACCOUNT_TOKEN="$("${BIN_DIR:?}/kubectl.sh" get secret \
