@@ -2,7 +2,8 @@
 .terraform/
 .terraform.lock.hcl
 /.runhub/
-/values-dev--prod-k8s-creds.yaml
+/values-dev-infra.yaml
 /values-dev.yaml
+/values-prod-infra.yaml
 /values-prod.yaml
 /values-shared.yaml

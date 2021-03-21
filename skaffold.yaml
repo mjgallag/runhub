@@ -12,7 +12,7 @@ deploy:
         valuesFiles:
           - values-shared.yaml
           - values-dev.yaml
-          - values-dev--prod-k8s-creds.yaml
+          - values-dev-infra.yaml
         skipBuildDependencies: true
       - name: '{{.APP}}'
         chartPath: helm-charts/runhub-app
@@ -23,4 +23,5 @@ deploy:
         valuesFiles:
           - values-shared.yaml
           - values-prod.yaml
+          - values-prod-infra.yaml
         skipBuildDependencies: true
