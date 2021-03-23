@@ -10,7 +10,7 @@ terraform_apply() {
       terraform_apply
     elif [ "$(< "${BIN_STDERR:?}" tr -d '\n')" = "${BACKEND_ERROR:?}" ]; then
       rm "${APP_ENV_TERRAFORM_DIR:?}/backend.tf"
-      rm -r "${APP_ENV_TERRAFORM_DIR:?}/.terraform"
+      rm "${APP_ENV_TERRAFORM_DIR:?}/.terraform/terraform.tfstate"
       "${BIN_DIR:?}/terraform.sh" init -upgrade
       "${BIN_DIR:?}/terraform.sh" apply -auto-approve
       "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
