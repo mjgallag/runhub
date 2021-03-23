@@ -18,6 +18,7 @@ module app_env {
 
   app = "${APP:?}"
   env = var.env
+  kubeconfig_path = "${HOME:?}/.kube/config"
 
 ${VARIABLE_ASSIGNMENTS:?}
 }

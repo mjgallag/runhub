@@ -6,6 +6,10 @@ variable "env" {
   type = string
 }
 
+variable "kubeconfig_path" {
+  type = string
+}
+
 variable "region" {
   type = string
 }

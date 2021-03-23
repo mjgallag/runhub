@@ -32,7 +32,3 @@ export LOGIN_ERROR='Error: storage.NewClient() failed: dialing: google: could no
 export BACKEND_ERROR="Error: Failed to get existing workspaces: querying Cloud Storage failed: storage: bucket doesn't exist"
 
 "${INSTALLERS_DIR:?}/infra/helpers/terraform-apply.sh"
-
-REGION="$("${BIN_DIR:?}/terraform.sh" output -raw region)"
-"${BIN_DIR:?}/gcloud.sh" container clusters get-credentials \
-  "${ENV:?}-${APP:?}" --project "${ENV:?}-${APP:?}" --region "${REGION:?}"

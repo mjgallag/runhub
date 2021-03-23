@@ -53,3 +53,19 @@ resource "google_container_cluster" "app_env" {
   }
   initial_node_count = 1
 }
+
+module "gke_auth" {
+  depends_on = [google_container_cluster.app_env]
+  source     = "terraform-google-modules/kubernetes-engine/google//modules/auth"
+  version    = "14.0.1"
+
+  project_id   = google_project.app_env.project_id
+  cluster_name = google_container_cluster.app_env.name
+  location     = var.region
+}
+
+resource "local_file" "kubeconfig" {
+  content         = module.gke_auth.kubeconfig_raw
+  filename        = var.kubeconfig_path
+  file_permission = "0600"
+}
