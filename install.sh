@@ -12,6 +12,7 @@ USER_HOME_DIR="${HOME:?}"
 export HOME="${SCRIPT_HOME_DIR:?}"
 export INSTALLERS_DIR="${SCRIPT_DIR:?}/shell-scripts/installers"
 export BIN_DIR="${INSTALLERS_DIR:?}/bin"
+export BIN_STDERR="${SCRIPT_CONFIG_DIR:?}/bin/tmp/stderr"
 APP_ENV_DIR="${SCRIPT_CONFIG_DIR:?}/app/${APP:?}/${ENV:?}"
 export APP_ENV_HELM_DIR="${APP_ENV_DIR:?}/helm"
 
