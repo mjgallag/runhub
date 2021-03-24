@@ -19,7 +19,7 @@ spec:
     - name: src-{{ $serviceName }}
   {{- end }}
     - name: dockerfile
-  {{- if .Values.release }}
+  {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
     - name: prod-kubeconfig
   {{- end }}
   tasks:
@@ -86,7 +86,7 @@ spec:
           value: $(tasks.get-sha-{{ $serviceName }}.results.sha)
         - name: env
           value: $(params.env)
-    {{- if $.Values.release }}
+    {{- if (and $.Values.release $.Values.release.prodKubernetesCredentials) }}
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig
@@ -107,7 +107,7 @@ spec:
           value: $(tasks.sanitize-tag.results.output)
         - name: env
           value: $(params.env)
-    {{- if $.Values.release }}
+    {{- if (and $.Values.release $.Values.release.prodKubernetesCredentials) }}
       workspaces:
         - name: prod-kubeconfig
           workspace: prod-kubeconfig

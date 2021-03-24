@@ -12,7 +12,7 @@ spec:
       type: string
     - name: env
       type: string
-{{- if .Values.release }}
+{{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
   workspaces:
     - name: prod-kubeconfig
       readOnly: true

@@ -14,10 +14,12 @@ spec:
         overlays:
           - key: env
             expression: |
-            {{- if (and .Values.release .Values.global.prodDomain) }}
-              body.repository.default_branch == '{{ .Values.release.prodBranch }}' ? 'prod' : 'dev'
+            {{- with .Values.release }}
+            {{- if (and .prodKubernetesCredentials $.Values.global.prodDomain) }}
+              body.repository.default_branch == '{{ .prodBranch }}' ? 'prod' : 'dev'
             {{- else }}
               'dev'
+            {{- end }}
             {{- end }}
   bindings:
     - ref: build-deploy-on-git

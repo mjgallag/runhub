@@ -7,6 +7,6 @@ secrets:
   - name: git-basic-auth
 {{- end }}
   - name: container-registry-dockerconfigjson
-{{- if .Values.release }}
+{{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
   - name: prod-kubeconfig-opaque
 {{- end }}

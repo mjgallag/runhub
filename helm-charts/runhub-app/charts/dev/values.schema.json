@@ -46,8 +46,7 @@
         }
       },
       "required": [
-        "prodBranch",
-        "prodKubernetesCredentials"
+        "prodBranch"
       ],
       "additionalProperties": false
     },
