@@ -3,25 +3,25 @@ locals {
 }
 
 output "container_registry_server" {
-  value = "${google_artifact_registry_repository.container_registry[0].location}-docker.pkg.dev"
+  value = local.is_dev ? "${google_artifact_registry_repository.container_registry[0].location}-docker.pkg.dev" : ""
 }
 
 output "container_registry_path" {
-  value = "${google_project.app_env.project_id}/${google_artifact_registry_repository.container_registry[0].repository_id}"
+  value = local.is_dev ? "${google_project.app_env.project_id}/${google_artifact_registry_repository.container_registry[0].repository_id}" : ""
 }
 
 output "dev_container_registry_username" {
-  value = local.container_registry_username
+  value = local.is_dev ? local.container_registry_username : ""
 }
 
 output "dev_container_registry_password" {
-  value = google_service_account_key.dev_container_registry[0].private_key
+  value = local.is_dev ? google_service_account_key.dev_container_registry[0].private_key : ""
 }
 
 output "prod_container_registry_username" {
-  value = local.container_registry_username
+  value = local.is_dev ? local.container_registry_username : ""
 }
 
 output "prod_container_registry_password" {
-  value = google_service_account_key.prod_container_registry[0].private_key
+  value = local.is_dev ? google_service_account_key.prod_container_registry[0].private_key : ""
 }
