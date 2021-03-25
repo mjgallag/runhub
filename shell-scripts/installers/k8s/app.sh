@@ -14,7 +14,7 @@ if [ "${ENV:?}" = 'prod' ]; then
   CLUSTER="$("${BIN_DIR:?}/kubectl.sh" config view \
     --output jsonpath='{ .contexts[?(@.name=="'"${CURRENT_CONTEXT:?}"'")].name }')"
 
-  if "${BIN_DIR:?}/kubectl.sh" get namespace "dev-${APP:?}"; then
+  if "${BIN_DIR:?}/kubectl.sh" get namespace "dev-${APP:?}" 2> /dev/null; then
     CLUSTER_SERVER="https://$("${BIN_DIR:?}/kubectl.sh" get service \
       --namespace default kubernetes --output jsonpath='{ .spec.clusterIP }')"
   else
