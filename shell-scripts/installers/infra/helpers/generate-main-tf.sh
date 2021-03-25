@@ -23,5 +23,29 @@ module app_env {
 ${VARIABLE_ASSIGNMENTS:?}
 }
 
-${OUTPUT_DEFINITIONS:?}
+output "container_registry_server" {
+  value = module.app_env.container_registry_server
+}
+
+output "container_registry_path" {
+  value = module.app_env.container_registry_path
+}
+
+output "dev_container_registry_username" {
+  value = module.app_env.dev_container_registry_username
+}
+
+output "dev_container_registry_password" {
+  value     = module.app_env.dev_container_registry_password
+  sensitive = true
+}
+
+output "prod_container_registry_username" {
+  value = module.app_env.prod_container_registry_username
+}
+
+output "prod_container_registry_password" {
+  value     = module.app_env.prod_container_registry_password
+  sensitive = true
+}
 EOF
