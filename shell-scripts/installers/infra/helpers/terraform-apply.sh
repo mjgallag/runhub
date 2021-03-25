@@ -29,3 +29,16 @@ terraform_apply() {
 "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
 "${BIN_DIR:?}/terraform.sh" version > /dev/null
 terraform_apply
+
+if [ "${ENV:?}" = 'dev' ]; then
+  for VALUES_ENV in 'dev' 'prod'; do
+    cat <<EOF >> "${APP_ENV_HELM_DIR:?}/values-${VALUES_ENV:?}-infra.yaml"
+global:
+  containerRegistryCredentials:
+    server: $("${BIN_DIR:?}/terraform.sh" output -raw container_registry_server)
+    path: $("${BIN_DIR:?}/terraform.sh" output -raw container_registry_path)
+    username: $("${BIN_DIR:?}/terraform.sh" output -raw ${VALUES_ENV:?}_container_registry_username)
+    password: $("${BIN_DIR:?}/terraform.sh" output -raw ${VALUES_ENV:?}_container_registry_password)
+EOF
+  done
+fi
