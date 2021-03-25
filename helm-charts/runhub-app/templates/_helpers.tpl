@@ -1,4 +1,4 @@
-{{- define "runhub-app.container-registry-dockerconfigjson" }}
+{{- define "runhub-app.containerRegistryDockerconfigjson" }}
 apiVersion: v1
 kind: Secret
 metadata:
