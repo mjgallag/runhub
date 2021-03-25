@@ -2,7 +2,7 @@
 set -e
 
 printf '' > "${SCRIPT_DIR:?}/values-dev-infra.yaml"
-printf '' > "${SCRIPT_DIR:?}/values-dev-infra.yaml"
+printf '' > "${SCRIPT_DIR:?}/values-prod-infra.yaml"
 
 for APP_ENV in 'dev' 'prod'; do
   for VALUES_ENV in 'dev' 'prod'; do
