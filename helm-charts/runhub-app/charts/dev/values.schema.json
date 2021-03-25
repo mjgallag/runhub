@@ -50,9 +50,6 @@
       ],
       "additionalProperties": false
     },
-    "imagePath": {
-      "type": "string"
-    },
     "domain": {
       "type": "string"
     },
@@ -78,7 +75,6 @@
   },
   "required": [
     "domain",
-    "imagePath",
     "global"
   ],
   "additionalProperties": false

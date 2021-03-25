@@ -49,6 +49,9 @@
             "server": {
               "type": "string"
             },
+            "path": {
+              "type": "string"
+            },
             "username": {
               "type": "string"
             },
@@ -58,6 +61,7 @@
           },
           "required": [
             "server",
+            "path",
             "username",
             "password"
           ],

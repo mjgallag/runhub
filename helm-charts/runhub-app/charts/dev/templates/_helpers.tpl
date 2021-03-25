@@ -1,5 +1,7 @@
 {{ define "runhub-app.dev.imagePathWithRegistry" -}}
-  {{ .Values.global.containerRegistryCredentials.server }}/{{ .Values.imagePath }}
+  {{ with .Values.global.containerRegistryCredentials -}}
+    {{ .server }}/{{ .path }}
+  {{- end }}
 {{- end }}
 
 {{ define "runhub-app.dev.knImageTag" -}}
