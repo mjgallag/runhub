@@ -26,24 +26,24 @@ resource "google_service_account" "prod_container_registry" {
   account_id = "prod-container-registry"
 }
 
-resource "google_artifact_registry_repository_iam_member" "dev_container_registry_reader" {
+resource "google_artifact_registry_repository_iam_member" "dev_container_registry_writer" {
   count      = local.is_dev ? 1 : 0
   provider   = google-beta
   project    = google_project.app_env.project_id
   repository = google_artifact_registry_repository.container_registry[0].name
   location   = var.region
   member     = "serviceAccount:${google_service_account.dev_container_registry[0].email}"
-  role       = "roles/artifactregistry.reader"
+  role       = "roles/artifactregistry.writer"
 }
 
-resource "google_artifact_registry_repository_iam_member" "prod_container_registry_writer" {
+resource "google_artifact_registry_repository_iam_member" "prod_container_registry_reader" {
   count      = local.is_dev ? 1 : 0
   provider   = google-beta
   project    = google_project.app_env.project_id
   repository = google_artifact_registry_repository.container_registry[0].name
   location   = var.region
   member     = "serviceAccount:${google_service_account.prod_container_registry[0].email}"
-  role       = "roles/artifactregistry.writer"
+  role       = "roles/artifactregistry.reader"
 }
 
 resource "google_service_account_key" "dev_container_registry" {
