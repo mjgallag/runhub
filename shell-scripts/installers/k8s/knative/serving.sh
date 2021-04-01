@@ -11,5 +11,4 @@ VERSION='0.21.0'
   --namespace knative-serving \
   --type merge \
   --patch '{"data":{"allow-zero-initial-scale":"true"}}'
-
 "${INSTALLERS_DIR:?}/k8s/helpers/wait-for-deployments.sh" knative-serving
