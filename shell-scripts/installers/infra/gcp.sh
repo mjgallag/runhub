@@ -25,3 +25,7 @@ export LOGIN_ERROR='Error: storage.NewClient() failed: dialing: google: could no
 export BACKEND_ERROR="Error: Failed to get existing workspaces: querying Cloud Storage failed: storage: bucket doesn't exist"
 
 "${INSTALLERS_DIR:?}/infra/helpers/terraform-apply.sh"
+"${BIN_DIR:?}/kubectl.sh" patch StorageClass standard --type merge \
+  --patch '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+"${BIN_DIR:?}/kubectl.sh" patch StorageClass standard-rwo --type merge \
+  --patch '{"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
