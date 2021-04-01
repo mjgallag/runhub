@@ -12,20 +12,50 @@ resource "google_container_cluster" "app_env" {
   release_channel {
     channel = "REGULAR"
   }
-  networking_mode = "VPC_NATIVE"
-  ip_allocation_policy {}
+  vertical_pod_autoscaling {
+    enabled = true
+  }
   cluster_autoscaling {
     enabled = true
     resource_limits {
       resource_type = "cpu"
-      maximum       = 32 * 400
+      maximum       = 64 * 400
     }
     resource_limits {
       resource_type = "memory"
-      maximum       = 128 * 400
+      maximum       = 240 * 400
+    }
+    autoscaling_profile = "OPTIMIZE_UTILIZATION"
+  }
+  networking_mode = "VPC_NATIVE"
+  ip_allocation_policy {
+    cluster_ipv4_cidr_block  = "/17"
+    services_ipv4_cidr_block = "/22"
+  }
+  default_max_pods_per_node   = 32
+  enable_intranode_visibility = true
+  addons_config {
+    dns_cache_config {
+      enabled = true
     }
   }
-  initial_node_count = 1
+  enable_shielded_nodes = true
+  workload_identity_config {
+    identity_namespace = "${google_project.app_env.project_id}.svc.id.goog"
+  }
+  remove_default_node_pool = true
+  initial_node_count       = 1
+}
+
+resource "google_container_node_pool" "main" {
+  project    = google_project.app_env.project_id
+  name       = "main"
+  location   = var.region
+  cluster    = google_container_cluster.app_env.name
+  node_count = 1
+  node_config {
+    machine_type = "n1-standard-1"
+  }
 }
 
 module "google_container_cluster_auth" {
