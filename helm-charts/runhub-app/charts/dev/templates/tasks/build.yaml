@@ -29,6 +29,13 @@ spec:
       image: moby/buildkit:v0.8.2@sha256:4a9629b0e1c3e9e8ed1856f42bc77dfd5bb6b09be23909fe92f78baad334cda2
       securityContext:
         privileged: true
+      resources:
+        requests:
+          cpu: 4
+          memory: 16Gi
+        limits:
+          cpu: 4
+          memory: 16Gi
       script: |
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.service)'

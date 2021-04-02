@@ -44,6 +44,8 @@ spec:
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
+          --request cpu=1,memory=4Gi \
+          --limit cpu=1,memory=4Gi \
           --pull-secret container-registry-dockerconfigjson \
           --cluster-local
 
