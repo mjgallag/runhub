@@ -25,7 +25,6 @@ resource "google_container_cluster" "app_env" {
       resource_type = "memory"
       maximum       = 240 * 400
     }
-    autoscaling_profile = "OPTIMIZE_UTILIZATION"
   }
   networking_mode = "VPC_NATIVE"
   ip_allocation_policy {
