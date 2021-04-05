@@ -2,6 +2,16 @@
 set -e
 
 terraform_apply() {
+  set -- apply -auto-approve
+
+  for VARS_ENV in 'shared' "${ENV:?}"; do
+    ENV_VARS="${CONFIG_DIR:?}/${VARS_ENV:?}.tfvars"
+
+    if [ -f "${ENV_VARS:?}" ]; then
+      set -- "$@" "-var-file=${ENV_VARS:?}"
+    fi
+  done
+
   if ! "${INSTALLERS_DIR:?}/bin/helpers/get-stderr.sh" \
     "${BIN_DIR:?}/terraform.sh" init -upgrade -no-color; then
 
@@ -12,7 +22,7 @@ terraform_apply() {
       rm "${APP_ENV_TERRAFORM_DIR:?}/backend.tf"
       rm "${APP_ENV_TERRAFORM_DIR:?}/.terraform/terraform.tfstate"
       "${BIN_DIR:?}/terraform.sh" init -upgrade
-      "${BIN_DIR:?}/terraform.sh" apply -auto-approve
+      "${BIN_DIR:?}/terraform.sh" "$@"
       "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
       "${BIN_DIR:?}/terraform.sh" init -upgrade -force-copy
     else
@@ -21,7 +31,7 @@ terraform_apply() {
     fi
 
   else
-    "${BIN_DIR:?}/terraform.sh" apply -auto-approve
+    "${BIN_DIR:?}/terraform.sh" "$@"
   fi
 }
 
