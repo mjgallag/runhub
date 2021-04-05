@@ -2,8 +2,4 @@
 .terraform/
 .terraform.lock.hcl
 /.runhub/
-/values-dev-infra.yaml
-/values-dev.yaml
-/values-prod-infra.yaml
-/values-prod.yaml
-/values-shared.yaml
+/config/

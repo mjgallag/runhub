@@ -10,9 +10,10 @@ deploy:
         setValues:
           global.env.dev: true
         valuesFiles:
-          - values-shared.yaml
-          - values-dev.yaml
-          - values-dev-infra.yaml
+          - config/values-shared.yaml
+          - config/values-dev.yaml
+          - config/generated/values-dev-from-dev.yaml
+          - config/generated/values-dev-from-prod.yaml
         skipBuildDependencies: true
       - name: '{{.APP}}'
         chartPath: helm-charts/runhub-app
@@ -21,7 +22,8 @@ deploy:
         setValues:
           global.env.prod: true
         valuesFiles:
-          - values-shared.yaml
-          - values-prod.yaml
-          - values-prod-infra.yaml
+          - config/values-shared.yaml
+          - config/values-prod.yaml
+          - config/generated/values-prod-from-prod.yaml
+          - config/generated/values-prod-from-dev.yaml
         skipBuildDependencies: true

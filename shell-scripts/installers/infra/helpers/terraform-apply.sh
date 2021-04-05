@@ -32,7 +32,7 @@ terraform_apply
 
 if [ "${ENV:?}" = 'dev' ]; then
   for VALUES_ENV in 'dev' 'prod'; do
-    cat <<EOF >> "${APP_ENV_HELM_DIR:?}/values-${VALUES_ENV:?}-infra.yaml"
+    cat <<EOF >> "${GENERATED_CONFIG_DIR:?}/values-${VALUES_ENV:?}-from-${ENV:?}.yaml"
 global:
   containerRegistryCredentials:
     server: $("${BIN_DIR:?}/terraform.sh" output -raw container_registry_server)

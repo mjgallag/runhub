@@ -1,12 +1,21 @@
 #!/bin/sh
 set -e
 
-"${BIN_DIR:?}/helm.sh" upgrade --install --atomic \
+set -- upgrade --install --atomic \
   --namespace "${ENV:?}-${APP:?}" --create-namespace \
   "${APP:?}" "${SCRIPT_DIR:?}"/helm-charts/runhub-app --set "global.env.${ENV:?}=true" \
-  --values "${SCRIPT_DIR:?}/values-shared.yaml" \
-  --values "${SCRIPT_DIR:?}/values-${ENV:?}.yaml" \
-  --values "${SCRIPT_DIR:?}/values-${ENV:?}-infra.yaml"
+  --values "${CONFIG_DIR:?}/values-shared.yaml" \
+  --values "${CONFIG_DIR:?}/values-${ENV:?}.yaml"
+
+for FROM_ENV in 'dev' 'prod'; do
+  VALUES_ENV_FROM_ENV="${GENERATED_CONFIG_DIR:?}/values-${ENV:?}-from-${FROM_ENV:?}.yaml"
+
+  if [ -f "${VALUES_ENV_FROM_ENV:?}" ]; then
+    set -- "$@" --values "${VALUES_ENV_FROM_ENV:?}"
+  fi
+done
+
+"${BIN_DIR:?}/helm.sh" "$@"
 
 if [ "${ENV:?}" = 'prod' ]; then
   CURRENT_CONTEXT="$("${BIN_DIR:?}/kubectl.sh" config view \
@@ -30,7 +39,7 @@ if [ "${ENV:?}" = 'prod' ]; then
     --namespace "prod-${APP:?}" "${SERVICE_ACCOUNT_TOKEN_SECRET:?}" \
     --output go-template='{{ base64decode .data.token }}')"
 
-  cat <<EOF >> "${APP_ENV_HELM_DIR:?}/values-dev-infra.yaml"
+  cat <<EOF >> "${GENERATED_CONFIG_DIR:?}/values-dev-from-${ENV:?}.yaml"
 dev:
   release:
     prodKubernetesCredentials:

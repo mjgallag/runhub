@@ -14,11 +14,14 @@ export INSTALLERS_DIR="${SCRIPT_DIR:?}/shell-scripts/installers"
 export BIN_DIR="${INSTALLERS_DIR:?}/bin"
 export BIN_STDERR="${SCRIPT_CONFIG_DIR:?}/bin/tmp/stderr"
 APP_ENV_DIR="${SCRIPT_CONFIG_DIR:?}/app/${APP:?}/${ENV:?}"
-export APP_ENV_HELM_DIR="${APP_ENV_DIR:?}/helm"
+export CONFIG_DIR="${SCRIPT_DIR:?}/config"
+export GENERATED_CONFIG_DIR="${CONFIG_DIR:?}/generated"
 
-mkdir -p "${SCRIPT_HOME_DIR:?}" "${APP_ENV_HELM_DIR:?}"
-printf '' > "${APP_ENV_HELM_DIR:?}/values-dev-infra.yaml"
-printf '' > "${APP_ENV_HELM_DIR:?}/values-prod-infra.yaml"
+mkdir -p "${SCRIPT_HOME_DIR:?}" "${GENERATED_CONFIG_DIR:?}"
+
+for VALUES_ENV in 'dev' 'prod'; do
+  printf '' > "${GENERATED_CONFIG_DIR:?}/values-${VALUES_ENV:?}-from-${ENV:?}.yaml"
+done
 
 if [ "${INFRA}" ]; then
   export APP_ENV_TERRAFORM_DIR="${APP_ENV_DIR:?}/terraform"
@@ -40,6 +43,4 @@ if [ "${ENV:?}" = 'dev' ]; then
   "${INSTALLERS_DIR:?}/k8s/tekton/dashboard.sh"
 fi
 
-"${INSTALLERS_DIR:?}/k8s/helpers/generate-helm-values-infra.sh"
 "${INSTALLERS_DIR:?}/k8s/app.sh"
-"${INSTALLERS_DIR:?}/k8s/helpers/generate-helm-values-infra.sh"
