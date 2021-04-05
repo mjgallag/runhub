@@ -3,15 +3,21 @@ set -e
 
 set -- upgrade --install --atomic \
   --namespace "${ENV:?}-${APP:?}" --create-namespace \
-  "${APP:?}" "${SCRIPT_DIR:?}"/helm-charts/runhub-app --set "global.env.${ENV:?}=true" \
-  --values "${CONFIG_DIR:?}/values-shared.yaml" \
-  --values "${CONFIG_DIR:?}/values-${ENV:?}.yaml"
+  "${APP:?}" "${SCRIPT_DIR:?}"/helm-charts/runhub-app --set "global.env.${ENV:?}=true"
 
 for FROM_ENV in 'dev' 'prod'; do
   VALUES_ENV_FROM_ENV="${GENERATED_CONFIG_DIR:?}/values-${ENV:?}-from-${FROM_ENV:?}.yaml"
 
   if [ -f "${VALUES_ENV_FROM_ENV:?}" ]; then
     set -- "$@" --values "${VALUES_ENV_FROM_ENV:?}"
+  fi
+done
+
+for VALUES_ENV in 'shared' "${ENV:?}"; do
+  ENV_VALUES="${CONFIG_DIR:?}/values-${VALUES_ENV:?}.yaml"
+
+  if [ -f "${ENV_VALUES:?}" ]; then
+    set -- "$@" --values "${ENV_VALUES:?}"
   fi
 done
 
