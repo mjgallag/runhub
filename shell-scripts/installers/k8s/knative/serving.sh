@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-VERSION='0.21.0'
+VERSION='0.22.0'
 
 "${BIN_DIR:?}/kubectl.sh" apply --filename \
   "https://github.com/knative/serving/releases/download/v${VERSION:?}/serving-crds.yaml"
