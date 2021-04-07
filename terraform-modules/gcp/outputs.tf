@@ -3,11 +3,11 @@ locals {
 }
 
 output "container_registry_server" {
-  value = local.is_dev ? "${google_artifact_registry_repository.container_registry[0].location}-docker.pkg.dev" : ""
+  value = local.is_dev ? "${google_artifact_registry_repository.app[0].location}-docker.pkg.dev" : ""
 }
 
 output "container_registry_path" {
-  value = local.is_dev ? "${google_project.app_env.project_id}/${google_artifact_registry_repository.container_registry[0].repository_id}" : ""
+  value = local.is_dev ? "${google_project.app_env.project_id}/${google_artifact_registry_repository.app[0].repository_id}" : ""
 }
 
 output "dev_container_registry_username" {

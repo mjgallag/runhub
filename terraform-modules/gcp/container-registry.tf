@@ -4,7 +4,7 @@ resource "google_project_service" "artifact_registry" {
   service = "artifactregistry.googleapis.com"
 }
 
-resource "google_artifact_registry_repository" "container_registry" {
+resource "google_artifact_registry_repository" "app" {
   count         = local.is_dev ? 1 : 0
   depends_on    = [google_project_service.artifact_registry]
   provider      = google-beta
@@ -30,7 +30,7 @@ resource "google_artifact_registry_repository_iam_member" "dev_container_registr
   count      = local.is_dev ? 1 : 0
   provider   = google-beta
   project    = google_project.app_env.project_id
-  repository = google_artifact_registry_repository.container_registry[0].name
+  repository = google_artifact_registry_repository.app[0].name
   location   = var.region
   member     = "serviceAccount:${google_service_account.dev_container_registry[0].email}"
   role       = "roles/artifactregistry.writer"
@@ -40,7 +40,7 @@ resource "google_artifact_registry_repository_iam_member" "prod_container_regist
   count      = local.is_dev ? 1 : 0
   provider   = google-beta
   project    = google_project.app_env.project_id
-  repository = google_artifact_registry_repository.container_registry[0].name
+  repository = google_artifact_registry_repository.app[0].name
   location   = var.region
   member     = "serviceAccount:${google_service_account.prod_container_registry[0].email}"
   role       = "roles/artifactregistry.reader"
