@@ -60,7 +60,7 @@ resource "google_container_node_pool" "main" {
 module "google_container_cluster_auth" {
   depends_on = [google_container_cluster.app_env]
   source     = "terraform-google-modules/kubernetes-engine/google//modules/auth"
-  version    = "14.0.1"
+  version    = "14.1.0"
 
   project_id   = google_project.app_env.project_id
   cluster_name = google_container_cluster.app_env.name
