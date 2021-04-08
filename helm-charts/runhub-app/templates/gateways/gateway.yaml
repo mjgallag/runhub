@@ -2,7 +2,11 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: gateway
+  annotations:
+    external-dns-namespace: {{ .Release.Namespace }}
 spec:
+  selector:
+    istio: ingressgateway
   servers:
     - hosts: {{ include "runhub-app.hosts" . | nindent 8 }}
       port:

@@ -109,7 +109,8 @@
       "required": [
         "env",
         "services",
-        "containerRegistryCredentials"
+        "containerRegistryCredentials",
+        "tls"
       ],
       "additionalProperties": false
     },

@@ -1,0 +1,21 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Namespace }}--external-dns
+rules:
+  - apiGroups:
+      - networking.istio.io
+    resources:
+      - gateways
+    verbs:
+      - list
+      - get
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - services
+    verbs:
+      - list
+      - get
+      - watch
