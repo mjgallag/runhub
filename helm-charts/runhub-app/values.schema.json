@@ -64,21 +64,9 @@
       ],
       "additionalProperties": false
     },
-    "tls": {
+    "dns": {
       "type": "object",
       "properties": {
-        "letsEncrypt": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "email"
-          ],
-          "additionalProperties": false
-        },
         "cloudflareCredentials": {
           "type": "object",
           "properties": {
@@ -97,8 +85,28 @@
         }
       },
       "required": [
-        "letsEncrypt",
         "cloudflareCredentials"
+      ],
+      "additionalProperties": false
+    },
+    "tls": {
+      "type": "object",
+      "properties": {
+        "letsEncrypt": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "email"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "letsEncrypt"
       ],
       "additionalProperties": false
     },
@@ -117,6 +125,9 @@
         "containerRegistryCredentials": {
           "$ref": "#/definitions/containerRegistryCredentials"
         },
+        "dns": {
+          "$ref": "#/definitions/dns"
+        },
         "tls": {
           "$ref": "#/definitions/tls"
         }
@@ -125,6 +136,7 @@
         "env",
         "services",
         "containerRegistryCredentials",
+        "dns",
         "tls"
       ],
       "additionalProperties": false
@@ -144,6 +156,9 @@
         "containerRegistryCredentials": {
           "$ref": "#/definitions/containerRegistryCredentials"
         },
+        "dns": {
+          "$ref": "#/definitions/dns"
+        },
         "tls": {
           "$ref": "#/definitions/tls"
         }
@@ -153,6 +168,7 @@
         "services",
         "prodDomain",
         "containerRegistryCredentials",
+        "dns",
         "tls"
       ],
       "additionalProperties": false

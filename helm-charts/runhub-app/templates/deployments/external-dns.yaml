@@ -25,6 +25,6 @@ spec:
             - --txt-owner-id={{ .Release.Namespace }}
           env:
             - name: CF_API_EMAIL
-              value: {{ .Values.global.tls.cloudflareCredentials.email }}
+              value: {{ .Values.global.dns.cloudflareCredentials.email }}
             - name: CF_API_TOKEN
-              value: {{ .Values.global.tls.cloudflareCredentials.apiToken }}
+              value: {{ .Values.global.dns.cloudflareCredentials.apiToken }}
