@@ -24,9 +24,7 @@ spec:
             - --domain-filter={{ template "runhub-app.envDomain" . }}
             - --txt-owner-id={{ .Release.Namespace }}
           env:
-          {{- with .Values.global.tls.cloudflareCredentials }}
             - name: CF_API_EMAIL
-              value: {{ .email }}
+              value: {{ .Values.global.tls.cloudflareCredentials.email }}
             - name: CF_API_TOKEN
-              value: {{ .apiToken }}
-          {{- end }}
+              value: {{ .Values.global.tls.cloudflareCredentials.apiToken }}

@@ -13,17 +13,13 @@ spec:
         name: http
         protocol: HTTP
         number: 80
-{{- with .Values.global }}
-  {{- if and .tls (or .env.dev (and .env.prod .prodDomain)) }}
       tls:
         httpsRedirect: true
-    - hosts: {{ include "runhub-app.hosts" $ | nindent 8 }}
+    - hosts: {{ include "runhub-app.hosts" . | nindent 8 }}
       port:
         name: https
         protocol: HTTPS
         number: 443
       tls:
         mode: SIMPLE
-        credentialName: {{ $.Release.Namespace }}--certificate-tls
-  {{- end }}
-{{- end }}
+        credentialName: {{ .Release.Namespace }}--certificate-tls

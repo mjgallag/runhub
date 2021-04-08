@@ -1,14 +1,10 @@
-{{- with .Values.global }}
-{{- if and .tls (or .env.dev (and .env.prod .prodDomain)) }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: {{ $.Release.Namespace }}
+  name: {{ .Release.Namespace }}
   namespace: istio-system
 spec:
-  dnsNames: {{ include "runhub-app.hosts" $ | nindent 4 }}
-  secretName: {{ $.Release.Namespace }}--certificate-tls
+  dnsNames: {{ include "runhub-app.hosts" . | nindent 4 }}
+  secretName: {{ .Release.Namespace }}--certificate-tls
   issuerRef:
-    name: {{ $.Release.Namespace }}
-{{- end }}
-{{- end }}
+    name: {{ .Release.Namespace }}

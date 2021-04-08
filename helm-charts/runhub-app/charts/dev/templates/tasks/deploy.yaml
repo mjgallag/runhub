@@ -33,14 +33,12 @@ spec:
           SCALE_MIN=1
         fi
 
-        PROTOCOL='http{{ if .Values.global.tls }}s{{ end }}'
-
         set -- \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
           --image '{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)@$(params.sha)' \
           --env RUNHUB_ENV='$(params.env)' \
         {{- range $serviceName, $service := .Values.global.services }}
-          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL='"${PROTOCOL:?}://${TAG_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
+          --env 'RUNHUB_SERVICE_{{ upper $serviceName }}_URL=https://'"${TAG_PREFIX}"'{{ $service.subdomain }}.'"${DOMAIN:?}" \
         {{- end }}
           --scale-init "${SCALE_INIT:?}" \
           --scale-min "${SCALE_MIN:?}" \
