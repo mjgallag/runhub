@@ -1,114 +1,157 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema#",
   "definitions": {
-    "global": {
+    "env": {
       "type": "object",
       "properties": {
-        "env": {
-          "type": "object",
-          "properties": {
-            "dev": {
-              "type": "boolean",
-              "const": true
-            },
-            "prod": {
-              "type": "boolean",
-              "const": true
-            }
-          },
-          "minProperties": 1,
-          "maxProperties": 1,
-          "additionalProperties": false
+        "dev": {
+          "type": "boolean",
+          "const": true
         },
-        "services": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "subdomain": {
-                "type": "string"
-              },
-              "srcPath": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "subdomain",
-              "srcPath"
-            ],
-            "additionalProperties": false
+        "prod": {
+          "type": "boolean",
+          "const": true
+        }
+      },
+      "minProperties": 1,
+      "maxProperties": 1,
+      "additionalProperties": false
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "subdomain": {
+            "type": "string"
           },
-          "minProperties": 1
+          "srcPath": {
+            "type": "string"
+          }
         },
-        "prodDomain": {
+        "required": [
+          "subdomain",
+          "srcPath"
+        ],
+        "additionalProperties": false
+      },
+      "minProperties": 1
+    },
+    "prodDomain": {
+      "type": "string"
+    },
+    "containerRegistryCredentials": {
+      "type": "object",
+      "properties": {
+        "server": {
           "type": "string"
         },
-        "containerRegistryCredentials": {
+        "path": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "server",
+        "path",
+        "username",
+        "password"
+      ],
+      "additionalProperties": false
+    },
+    "tls": {
+      "type": "object",
+      "properties": {
+        "letsEncrypt": {
           "type": "object",
           "properties": {
-            "server": {
-              "type": "string"
-            },
-            "path": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string"
-            },
-            "password": {
+            "email": {
               "type": "string"
             }
           },
           "required": [
-            "server",
-            "path",
-            "username",
-            "password"
+            "email"
           ],
           "additionalProperties": false
         },
-        "tls": {
+        "cloudflareCredentials": {
           "type": "object",
           "properties": {
-            "letsEncrypt": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "email"
-              ],
-              "additionalProperties": false
+            "email": {
+              "type": "string"
             },
-            "cloudflareCredentials": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "apiToken": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "email",
-                "apiToken"
-              ],
-              "additionalProperties": false
+            "apiToken": {
+              "type": "string"
             }
           },
           "required": [
-            "letsEncrypt",
-            "cloudflareCredentials"
+            "email",
+            "apiToken"
           ],
           "additionalProperties": false
         }
       },
       "required": [
+        "letsEncrypt",
+        "cloudflareCredentials"
+      ],
+      "additionalProperties": false
+    },
+    "devGlobal": {
+      "type": "object",
+      "properties": {
+        "env": {
+          "$ref": "#/definitions/env"
+        },
+        "services": {
+          "$ref": "#/definitions/services"
+        },
+        "prodDomain": {
+          "$ref": "#/definitions/prodDomain"
+        },
+        "containerRegistryCredentials": {
+          "$ref": "#/definitions/containerRegistryCredentials"
+        },
+        "tls": {
+          "$ref": "#/definitions/tls"
+        }
+      },
+      "required": [
         "env",
         "services",
+        "containerRegistryCredentials",
+        "tls"
+      ],
+      "additionalProperties": false
+    },
+    "prodGlobal": {
+      "type": "object",
+      "properties": {
+        "env": {
+          "$ref": "#/definitions/env"
+        },
+        "services": {
+          "$ref": "#/definitions/services"
+        },
+        "prodDomain": {
+          "$ref": "#/definitions/prodDomain"
+        },
+        "containerRegistryCredentials": {
+          "$ref": "#/definitions/containerRegistryCredentials"
+        },
+        "tls": {
+          "$ref": "#/definitions/tls"
+        }
+      },
+      "required": [
+        "env",
+        "services",
+        "prodDomain",
         "containerRegistryCredentials",
         "tls"
       ],
@@ -154,7 +197,7 @@
     "type": "object",
     "properties": {
       "global": {
-        "$ref": "#/definitions/global"
+        "$ref": "#/definitions/devGlobal"
       },
       "dev": {
         "type": "object"
@@ -174,7 +217,7 @@
     "type": "object",
     "properties": {
       "global": {
-        "$ref": "#/definitions/global"
+        "$ref": "#/definitions/prodGlobal"
       },
       "prod": {
         "type": "object"
