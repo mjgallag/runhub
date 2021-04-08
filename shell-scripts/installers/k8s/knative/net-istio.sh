@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-VERSION='0.22.0'
+VERSION='0.22.1'
 
 "${BIN_DIR:?}/kubectl.sh" apply --filename \
   "https://github.com/knative-sandbox/net-istio/releases/download/v${VERSION:?}/net-istio.yaml"
