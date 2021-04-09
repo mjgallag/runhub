@@ -21,7 +21,6 @@ spec:
             - --source=istio-gateway
             - --annotation-filter=external-dns-namespace={{ .Release.Namespace }}
             - --provider=cloudflare
-            - --domain-filter={{ template "runhub-app.envDomain" . }}
             - --txt-owner-id={{ .Release.Namespace }}
           env:
             - name: CF_API_EMAIL
