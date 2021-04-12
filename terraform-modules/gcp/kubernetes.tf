@@ -53,9 +53,6 @@ resource "google_container_node_pool" "main" {
   location   = var.region
   cluster    = google_container_cluster.app_env.name
   node_count = 1
-  node_config {
-    machine_type = "n1-standard-1"
-  }
 }
 
 module "google_container_cluster_auth" {
