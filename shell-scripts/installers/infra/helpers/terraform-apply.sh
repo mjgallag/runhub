@@ -23,7 +23,7 @@ terraform_apply() {
       rm "${APP_ENV_TERRAFORM_DIR:?}/.terraform/terraform.tfstate"
       "${BIN_DIR:?}/terraform.sh" init -upgrade
       "${BIN_DIR:?}/terraform.sh" "$@"
-      "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
+      "${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf/${INFRA:?}.sh"
       "${BIN_DIR:?}/terraform.sh" init -upgrade -force-copy
     else
       cat "${BIN_STDERR:?}" >&2
@@ -36,7 +36,7 @@ terraform_apply() {
 }
 
 "${INSTALLERS_DIR:?}/infra/helpers/generate-main-tf.sh"
-"${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf.sh"
+"${INSTALLERS_DIR:?}/infra/helpers/generate-backend-tf/${INFRA:?}.sh"
 "${BIN_DIR:?}/terraform.sh" version > /dev/null
 terraform_apply
 

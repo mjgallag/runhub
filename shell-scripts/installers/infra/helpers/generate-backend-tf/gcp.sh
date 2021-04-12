@@ -3,7 +3,7 @@ set -e
 
 cat <<EOF > "${APP_ENV_TERRAFORM_DIR:?}/backend.tf"
 terraform {
-  backend "${BACKEND_TYPE:?}" {
+  backend "gcs" {
     bucket  = "${ENV:?}-${APP:?}-terraform-state"
   }
 }
