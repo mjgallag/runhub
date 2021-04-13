@@ -31,11 +31,8 @@ spec:
         privileged: true
       resources:
         requests:
-          cpu: 4
-          memory: 16Gi
-        limits:
-          cpu: 4
-          memory: 16Gi
+          cpu: 3.5
+          memory: 11Gi
       script: |
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.service)'
