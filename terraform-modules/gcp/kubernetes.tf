@@ -47,12 +47,16 @@ resource "google_container_cluster" "app_env" {
   initial_node_count       = 1
 }
 
-resource "google_container_node_pool" "main" {
-  project    = google_project.app_env.project_id
-  name       = "main"
-  location   = var.region
-  cluster    = google_container_cluster.app_env.name
-  node_count = 1
+resource "google_container_node_pool" "default_pool" {
+  project            = google_project.app_env.project_id
+  name               = "default-pool"
+  location           = var.region
+  cluster            = google_container_cluster.app_env.name
+  initial_node_count = 1
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 1000
+  }
 }
 
 module "google_container_cluster_auth" {
