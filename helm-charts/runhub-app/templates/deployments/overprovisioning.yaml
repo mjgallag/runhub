@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: overprovisioning
+spec:
+  replicas: {{ len .Values.global.services }}
+  selector:
+    matchLabels:
+      app: overprovisioning
+  template:
+    metadata:
+      labels:
+        app: overprovisioning
+    spec:
+      priorityClassName: {{ .Release.Namespace }}--overprovisioning
+      containers:
+        - name: overprovisioning
+          image: k8s.gcr.io/pause
+          resources:
+            requests:
+              cpu: {{ template "runhub-app.service-requests-cpu" . }}
+              memory: {{ template "runhub-app.service-requests-memory" . }}

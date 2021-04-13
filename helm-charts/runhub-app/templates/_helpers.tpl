@@ -48,3 +48,11 @@ stringData:
 - git-webhook.runhub.{{ template "runhub-app.envDomain" $ }}
   {{- end }}
 {{- end }}
+
+{{ define "runhub-app.service-requests-cpu" -}}
+  .5
+{{- end }}
+
+{{ define "runhub-app.service-requests-memory" -}}
+  2Gi
+{{- end }}
