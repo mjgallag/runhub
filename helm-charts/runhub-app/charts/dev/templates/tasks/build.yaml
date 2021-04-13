@@ -32,7 +32,7 @@ spec:
       resources:
         requests:
           cpu: 3.5
-          memory: 11Gi
+          memory: 12Gi
       script: |
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.service)'

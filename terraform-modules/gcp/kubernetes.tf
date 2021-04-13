@@ -16,15 +16,7 @@ resource "google_container_cluster" "app_env" {
     enabled = true
   }
   cluster_autoscaling {
-    enabled = true
-    resource_limits {
-      resource_type = "cpu"
-      maximum       = 64 * 400
-    }
-    resource_limits {
-      resource_type = "memory"
-      maximum       = 240 * 400
-    }
+    enabled             = false
     autoscaling_profile = "OPTIMIZE_UTILIZATION"
   }
   networking_mode = "VPC_NATIVE"
@@ -53,8 +45,29 @@ resource "google_container_node_pool" "default_pool" {
   location           = var.region
   cluster            = google_container_cluster.app_env.name
   initial_node_count = 1
+}
+
+resource "google_container_node_pool" "e2_medium_pool" {
+  project  = google_project.app_env.project_id
+  name     = "e2-medium-pool"
+  location = var.region
+  cluster  = google_container_cluster.app_env.name
   autoscaling {
-    min_node_count = 1
+    min_node_count = 0
+    max_node_count = 1000
+  }
+}
+
+resource "google_container_node_pool" "e2_standard_4_pool" {
+  project  = google_project.app_env.project_id
+  name     = "e2-standard-4-pool"
+  location = var.region
+  cluster  = google_container_cluster.app_env.name
+  node_config {
+    machine_type = "e2-standard-4"
+  }
+  autoscaling {
+    min_node_count = 0
     max_node_count = 1000
   }
 }
