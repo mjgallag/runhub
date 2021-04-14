@@ -15,7 +15,8 @@ output "dev_container_registry_username" {
 }
 
 output "dev_container_registry_password" {
-  value = local.is_dev ? google_service_account_key.dev_container_registry[0].private_key : ""
+  value     = local.is_dev ? google_service_account_key.dev_container_registry[0].private_key : ""
+  sensitive = true
 }
 
 output "prod_container_registry_username" {
@@ -23,5 +24,6 @@ output "prod_container_registry_username" {
 }
 
 output "prod_container_registry_password" {
-  value = local.is_dev ? google_service_account_key.prod_container_registry[0].private_key : ""
+  value     = local.is_dev ? google_service_account_key.prod_container_registry[0].private_key : ""
+  sensitive = true
 }

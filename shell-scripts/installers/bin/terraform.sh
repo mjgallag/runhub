@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-VERSION='0.14.10'
+VERSION='0.15.0'
 URL="https://releases.hashicorp.com/terraform/${VERSION:?}/terraform_${VERSION:?}_darwin_amd64.zip"
-SHA='4b2acb55c6350cba92769c852d4502dff3e185726fc5293e3ab0bb64393846c4'
+SHA='96537262e38008a421d329ce51c1bc2a1926f0b4e68270c92a81a8a42fa2c513'
 SHA_ALGORITHM=256
 TERRAFORM="$("${INSTALLERS_DIR:?}/bin/helpers/install.sh" terraform \
   "${VERSION:?}" "${URL:?}" terraform "${SHA:?}" "${SHA_ALGORITHM:?}")"
