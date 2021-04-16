@@ -1,9 +1,9 @@
 #!/bin/sh
 set -e
 
-VERSION='1.18.17'
+VERSION='1.18.18'
 URL="https://dl.k8s.io/v${VERSION:?}/kubernetes-client-darwin-amd64.tar.gz"
-SHA='cff748a737c04b75d112386acb67a47d4589785f0b95643b8e77771a163bb52f5d6c5a979ca78adbc533255a923d919fdd5e83f12705a517769c2aed677ffae7'
+SHA='18ad76c92e7d9b8180622615965bbafe84ef04d56eef1d5e41a5e00ef92bdc309486ea954e9a38bc0c91c4e0449c46c6c95a79f0a9b8c96d665ea355e1e2e747'
 SHA_ALGORITHM=512
 KUBECTL="$("${INSTALLERS_DIR:?}/bin/helpers/install.sh" kubectl \
   "${VERSION:?}" "${URL:?}" kubernetes/client/bin/kubectl "${SHA:?}" "${SHA_ALGORITHM:?}")"
