@@ -35,7 +35,7 @@ spec:
           memory: 12Gi
       script: |
         IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)'
-        CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/cache/$(params.service)'
+        CACHE_IMAGE='{{ template "runhub-app.dev.imagePathWithRegistry" . }}/$(params.service)/cache'
 
         buildctl-daemonless.sh \
           build \
