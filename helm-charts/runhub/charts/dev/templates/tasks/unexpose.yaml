@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: unexpose
+spec:
+  params:
+    - name: service
+      type: string
+    - name: tag
+      type: string
+  steps:
+    - name: unexpose
+      image: gcr.io/bitnami-containers/kubectl:{{ template "runhub.dev.kubectlImageTag" . }}
+      script: |
+        kubectl delete virtualservice '$(params.tag)' \
+          --namespace '{{ .Release.Namespace }}-$(params.service)'

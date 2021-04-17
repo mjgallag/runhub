@@ -1,0 +1,10 @@
+apiVersion: v2
+name: runhub
+version: 0.0.0
+dependencies:
+  - name: dev
+    version: 0.0.0
+    condition: global.env.dev,defaults.dependencies.enabled
+  - name: prod
+    version: 0.0.0
+    condition: global.env.prod,defaults.dependencies.enabled
