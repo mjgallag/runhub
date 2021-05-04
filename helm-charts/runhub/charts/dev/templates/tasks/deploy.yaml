@@ -48,5 +48,5 @@ spec:
           --cluster-local
 
         if ! kn service update '$(params.tag)' "$@"; then
-          kn service create '$(params.tag)' "$@"
+          kn service create '$(params.tag)' "$@" || exit 0
         fi
