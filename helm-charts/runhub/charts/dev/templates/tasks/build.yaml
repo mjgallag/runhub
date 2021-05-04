@@ -8,9 +8,9 @@ spec:
       type: string
     - name: git-revision
       type: string
-    - name: src-path
-      type: string
     - name: service
+      type: string
+    - name: service-src-path
       type: string
     - name: tag
       type: string
@@ -25,6 +25,7 @@ spec:
       image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.23.0@sha256:2ea2ea78928b365d6d13c5308f9fff63f685063684c843611be74abc43ea4f1c
       script: |
         /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.src.path)'
+        rm -rf '$(workspaces.src.path)/.git'
     - name: build
       image: moby/buildkit:v0.8.3@sha256:171689e43026533b48701ab6566b72659dd1839488d715c73ef3fe387fab9a80
       securityContext:
@@ -42,7 +43,8 @@ spec:
             --frontend dockerfile.v0 \
             --local dockerfile='$(workspaces.dockerfile.path)' \
             --local context='$(workspaces.src.path)' \
-            --opt build-arg:SRC_PATH='$(params.src-path)' \
+            --opt build-arg:APP='{{ .Release.Name }}' \
+            --opt build-arg:SERVICE_SRC_PATH='$(params.service-src-path)' \
             --output type=image,name="${IMAGE:?}"':$(params.tag)',push=true \
             --export-cache type=registry,mode=max,ref="${CACHE_IMAGE:?}"':$(params.tag)' \
             --import-cache type=registry,\"ref="${CACHE_IMAGE:?}"':$(params.tag),'"${CACHE_IMAGE:?}"':$(params.cache-from-tag)'\"

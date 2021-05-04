@@ -2,22 +2,6 @@
   "$schema": "https://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-    "dependencies": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "srcPath": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "srcPath"
-        ],
-        "additionalProperties": false
-      },
-      "minProperties": 1
-    },
     "release": {
       "type": "object",
       "properties": {

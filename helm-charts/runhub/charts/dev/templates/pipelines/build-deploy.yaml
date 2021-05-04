@@ -47,10 +47,10 @@ spec:
           value: $(params.git-url)
         - name: git-revision
           value: $(params.git-revision)
-        - name: src-path
-          value: {{ $service.srcPath }}
         - name: service
           value: {{ $serviceName }}
+        - name: service-src-path
+          value: {{ $service.srcPath }}
         - name: tag
           value: $(tasks.sanitize-tag.results.output)
         - name: cache-from-tag

@@ -4,50 +4,31 @@ metadata:
   name: dockerfile
 data:
   dockerfile: |
-    FROM node:14.16.1-alpine3.13@sha256:4ffbef007b0214706fb8ec92353ccd5b0a12d9d1522e0f2c5e0a8bde3f9d8985 AS node
+    FROM alpine:3.13.5@sha256:69e70a79f2d41ab5d637de98c1e0b055206ba40a8145e7bddb55ccc04e13cf8f AS alpine
 
-    {{ range $dependencyName, $dependency := .Values.dependencies -}}
-    FROM node AS {{ $dependencyName }}-base
-    WORKDIR /{{ $dependency.srcPath }}
-    COPY {{ $dependency.srcPath }}/package.json {{ $dependency.srcPath }}/package-lock.json .
+    FROM node:14.16.1-alpine3.13@sha256:7021600941a9caa072c592b6a89cec80e46cb341d934f1868220f5786f236f60 AS node
+    RUN npm install --global npm@7.11.2  && npm cache clean --force
 
-    FROM {{ $dependencyName }}-base AS {{ $dependencyName }}-build
+    FROM alpine AS src
+    ARG APP
+    WORKDIR "/${APP}-src"
+    COPY . .
+
+    FROM src AS src-dependencies
+    ARG APP
+    RUN find . \( -name package.json -o -name package-lock.json \) -exec sh -c \
+      'mkdir -p "$(dirname "${2:?}/${1:?}")" && cp "${1:?}" "${2:?}/${1:?}"' \
+      _ {} "../${APP}-src-dependencies" \;
+
+    FROM node
+    ARG APP
+    WORKDIR "/${APP}"
+    COPY --from=src-dependencies "/${APP}-src-dependencies" .
     RUN npm ci && npm cache clean --force
-    COPY {{ $dependency.srcPath }} .
+    COPY --from=src "/${APP}-src" .
+    ARG SERVICE_SRC_PATH
+    WORKDIR "/${APP}/${SERVICE_SRC_PATH}"
     RUN npm run --if-present build
-    RUN rm -R node_modules
-
-    FROM {{ $dependencyName }}-base AS {{ $dependencyName }}-production
     ENV NODE_ENV=production
-    RUN npm ci && npm cache clean --force
-    COPY --from={{ $dependencyName }}-build /{{ $dependency.srcPath }} .
-    {{- end }}
-
-    FROM node AS base
-    {{- range $dependencyName, $dependency := .Values.dependencies }}
-    WORKDIR /{{ $dependency.srcPath }}
-    COPY {{ $dependency.srcPath }}/package.json .
-    {{- end }}
-    ARG SRC_PATH
-    WORKDIR /$SRC_PATH
-    COPY $SRC_PATH/package.json $SRC_PATH/package-lock.json .
-
-    FROM base AS build
-    RUN npm ci && npm cache clean --force
-    {{- range $dependencyName, $dependency := .Values.dependencies }}
-    COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
-    {{- end }}
-    COPY $SRC_PATH .
-    RUN npm run --if-present build
-    RUN rm -R node_modules
-
-    FROM base AS production
-    ENV NODE_ENV=production
-    RUN npm ci && npm cache clean --force
-    {{- range $dependencyName, $dependency := .Values.dependencies }}
-    COPY --from={{ $dependencyName }}-production /{{ $dependency.srcPath }} /{{ $dependency.srcPath }}
-    {{- end }}
-    ARG SRC_PATH
-    COPY --from=build /$SRC_PATH .
     ENTRYPOINT ["npm", "run", "serve"]
     EXPOSE 8080
