@@ -27,7 +27,7 @@ data:
     RUN npm ci && npm cache clean --force
     COPY --from=src "/${APP}-src" .
     ARG SERVICE_SRC_PATH
-    WORKDIR "/${APP}/${SERVICE_SRC_PATH}"
+    WORKDIR "${SERVICE_SRC_PATH}"
     RUN npm run --if-present build
     ENV NODE_ENV=production
     ENTRYPOINT ["npm", "run", "serve"]
