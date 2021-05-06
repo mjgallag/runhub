@@ -20,15 +20,26 @@ data:
       'mkdir -p "$(dirname "${2:?}/${1:?}")" && cp "${1:?}" "${2:?}/${1:?}"' \
       _ {} "../${APP}-src-dependencies" \;
 
-    FROM node
+    FROM node AS build
     ARG APP
-    WORKDIR "/${APP}"
+    WORKDIR "/${APP}-build"
     COPY --from=src-dependencies "/${APP}-src-dependencies" .
     RUN npm ci && npm cache clean --force
     COPY --from=src "/${APP}-src" .
     ARG SERVICE_SRC_PATH
     WORKDIR "${SERVICE_SRC_PATH}"
     RUN npm run --if-present build
+    WORKDIR "/${APP}-build"
+    RUN rm -R node_modules
+
+    FROM node AS serve
     ENV NODE_ENV=production
+    ARG APP
+    WORKDIR "/${APP}"
+    COPY --from=src-dependencies "/${APP}-src-dependencies" .
+    RUN npm ci && npm cache clean --force
+    COPY --from=build "/${APP}-build" .
+    ARG SERVICE_SRC_PATH
+    WORKDIR "${SERVICE_SRC_PATH}"
     ENTRYPOINT ["npm", "run", "serve"]
     EXPOSE 8080
