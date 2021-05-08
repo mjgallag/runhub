@@ -16,7 +16,7 @@ spec:
       type: string
   workspaces:
   {{- range $serviceName, $service := .Values.global.services }}
-    - name: src-{{ $serviceName }}
+    - name: build-context-{{ $serviceName }}
   {{- end }}
     - name: dockerfile
   {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
@@ -58,8 +58,8 @@ spec:
       workspaces:
         - name: dockerfile
           workspace: dockerfile
-        - name: src
-          workspace: src-{{ $serviceName }}
+        - name: context
+          workspace: build-context-{{ $serviceName }}
     - name: get-sha-{{ $serviceName }}
       runAfter:
         - build-{{ $serviceName }}

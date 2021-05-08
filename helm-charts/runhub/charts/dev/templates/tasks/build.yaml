@@ -19,13 +19,13 @@ spec:
   workspaces:
     - name: dockerfile
       readOnly: true
-    - name: src
+    - name: context
   steps:
     - name: get-src
       image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.23.0@sha256:2ea2ea78928b365d6d13c5308f9fff63f685063684c843611be74abc43ea4f1c
       script: |
-        /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.src.path)'
-        rm -rf '$(workspaces.src.path)/.git'
+        /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.context.path)'
+        rm -rf '$(workspaces.context.path)/.git'
     - name: build
       image: moby/buildkit:v0.8.3@sha256:171689e43026533b48701ab6566b72659dd1839488d715c73ef3fe387fab9a80
       securityContext:
@@ -42,7 +42,7 @@ spec:
           build \
             --frontend dockerfile.v0 \
             --local dockerfile='$(workspaces.dockerfile.path)' \
-            --local context='$(workspaces.src.path)' \
+            --local context='$(workspaces.context.path)' \
             --opt build-arg:APP='{{ .Release.Name }}' \
             --opt build-arg:SERVICE_SRC_PATH='$(params.service-src-path)' \
             --output type=image,name="${IMAGE:?}"':$(params.tag)',push=true \
