@@ -5,6 +5,9 @@ metadata:
 data:
   Dockerfile: |
     FROM alpine:3.13.5@sha256:69e70a79f2d41ab5d637de98c1e0b055206ba40a8145e7bddb55ccc04e13cf8f AS alpine
+    WORKDIR /tools
+    COPY /tools/*.sh .
+    RUN find . -name '*.sh' -exec chmod +x {} \;
 
     FROM node:14.16.1-alpine3.13@sha256:7021600941a9caa072c592b6a89cec80e46cb341d934f1868220f5786f236f60 AS node
     RUN npm install --global npm@7.12.0  && npm cache clean --force
@@ -16,9 +19,7 @@ data:
 
     FROM src AS src-dependencies
     ARG APP
-    RUN find . \( -name package.json -o -name package-lock.json \) -exec sh -c \
-      'mkdir -p "$(dirname "${2:?}/${1:?}")" && cp "${1:?}" "${2:?}/${1:?}"' \
-      _ {} "../${APP}-src-dependencies" \;
+    RUN ../tools/cp-package-jsons.sh . "../${APP}-src-dependencies"
 
     FROM node AS build
     ARG APP
@@ -45,3 +46,10 @@ data:
     EXPOSE 8080
   Dockerfile.dockerignore: |
     **/.git/
+  cp-package-jsons.sh: |
+    #!/bin/sh
+    set -e
+
+    find "${1:?}" \( -name package.json -o -name package-lock.json \) -exec sh -c \
+      'mkdir -p "$(dirname "${2:?}/${1:?}")" && cp "${1:?}" "${2:?}/${1:?}"' \
+      _ {} "${2:?}" \;
