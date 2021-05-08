@@ -37,12 +37,12 @@ spec:
         IMAGE='{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service)/cache'
 
-        cp -RL '$(workspaces.tools.path)' '$(workspaces.context.path)/.runhub-build-tools'
+        cp -RL '$(workspaces.tools.path)' '$(workspaces.context.path)/tools'
 
         buildctl-daemonless.sh \
           build \
             --frontend dockerfile.v0 \
-            --local dockerfile='$(workspaces.context.path)/.runhub-build-tools' \
+            --local dockerfile='$(workspaces.context.path)/tools' \
             --local context='$(workspaces.context.path)' \
             --opt build-arg:APP='{{ .Release.Name }}' \
             --opt build-arg:SERVICE_SRC_PATH='$(params.service-src-path)' \
