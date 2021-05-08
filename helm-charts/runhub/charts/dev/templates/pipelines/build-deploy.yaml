@@ -18,7 +18,7 @@ spec:
   {{- range $serviceName, $service := .Values.global.services }}
     - name: build-context-{{ $serviceName }}
   {{- end }}
-    - name: dockerfile
+    - name: build-tools
   {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
     - name: prod-kubeconfig
   {{- end }}
@@ -56,8 +56,8 @@ spec:
         - name: cache-from-tag
           value: $(tasks.sanitize-cache-from-tag.results.output)
       workspaces:
-        - name: dockerfile
-          workspace: dockerfile
+        - name: tools
+          workspace: build-tools
         - name: context
           workspace: build-context-{{ $serviceName }}
     - name: get-sha-{{ $serviceName }}

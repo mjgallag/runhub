@@ -17,7 +17,7 @@ spec:
     - name: cache-from-tag
       type: string
   workspaces:
-    - name: dockerfile
+    - name: tools
       readOnly: true
     - name: context
   steps:
@@ -41,7 +41,7 @@ spec:
         buildctl-daemonless.sh \
           build \
             --frontend dockerfile.v0 \
-            --local dockerfile='$(workspaces.dockerfile.path)' \
+            --local dockerfile='$(workspaces.tools.path)' \
             --local context='$(workspaces.context.path)' \
             --opt build-arg:APP='{{ .Release.Name }}' \
             --opt build-arg:SERVICE_SRC_PATH='$(params.service-src-path)' \

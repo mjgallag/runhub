@@ -34,9 +34,9 @@ spec:
           - name: build-context-{{ $serviceName }}
             emptyDir: {}
         {{- end }}
-          - name: dockerfile
+          - name: build-tools
             configMap:
-              name: dockerfile
+              name: build-tools
         {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
           - name: prod-kubeconfig
             secret:
