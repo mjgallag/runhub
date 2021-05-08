@@ -5,6 +5,7 @@ metadata:
 data:
   Dockerfile: |
     FROM alpine:3.13.5@sha256:69e70a79f2d41ab5d637de98c1e0b055206ba40a8145e7bddb55ccc04e13cf8f AS alpine
+    RUN apk add --no-cache jq
     WORKDIR /tools
     COPY /tools/*.sh .
     RUN find . -name '*.sh' -exec chmod +x {} \;
@@ -21,6 +22,13 @@ data:
     ARG APP
     RUN ../tools/cp-package-jsons.sh . "../${APP}-src-dependencies"
 
+    FROM src-dependencies AS src-dependencies-production
+    ARG APP
+    WORKDIR "/${APP}-src-dependencies"
+    RUN cp -R . "../${APP}-src-dependencies-production" && rm -R "../${APP}-src-dependencies-production/packages"
+    ARG SERVICE_SRC_PATH
+    RUN ../tools/cp-production-packages.sh "${SERVICE_SRC_PATH}/package.json" "../${APP}-src-dependencies-production"
+
     FROM node AS build
     ARG APP
     WORKDIR "/${APP}-build"
@@ -33,13 +41,21 @@ data:
     WORKDIR "/${APP}-build"
     RUN rm -R node_modules
 
+    FROM alpine AS build-production
+    ARG APP
+    WORKDIR "/${APP}-build"
+    COPY --from=build "/${APP}-build" .
+    RUN cp -R . "../${APP}-build-production" && rm -R "../${APP}-build-production/packages"
+    ARG SERVICE_SRC_PATH
+    RUN ../tools/cp-production-packages.sh "${SERVICE_SRC_PATH}/package.json" "../${APP}-build-production"
+
     FROM node AS serve
     ENV NODE_ENV=production
     ARG APP
     WORKDIR "/${APP}"
-    COPY --from=src-dependencies "/${APP}-src-dependencies" .
+    COPY --from=src-dependencies-production "/${APP}-src-dependencies-production" .
     RUN npm ci && npm cache clean --force
-    COPY --from=build "/${APP}-build" .
+    COPY --from=build-production "/${APP}-build-production" .
     ARG SERVICE_SRC_PATH
     WORKDIR "${SERVICE_SRC_PATH}"
     ENTRYPOINT ["npm", "run", "serve"]
@@ -53,3 +69,33 @@ data:
     find "${1:?}" \( -name package.json -o -name package-lock.json \) -exec sh -c \
       'mkdir -p "$(dirname "${2:?}/${1:?}")" && cp "${1:?}" "${2:?}/${1:?}"' \
       _ {} "${2:?}" \;
+  cp-production-packages.sh: |
+    #!/bin/sh
+    set -e
+
+    find_packages() {
+      PACKAGE_DIR="$(cd "$(dirname "${1:?}")" && pwd)"
+      echo "${PACKAGE_DIR:?}"
+
+      PACKAGES=$(jq '
+        .
+          | select(has("dependencies"))
+          | .dependencies
+          | to_entries
+          | .[]
+          | .value
+          | select(startswith("file:"))
+          | sub("^file:"; "")
+        ' "${1:?}" --raw-output)
+
+      for PACKAGE in ${PACKAGES}; do
+        PACKAGE_JSON="$(cd "${PACKAGE_DIR:?}/${PACKAGE:?}" && pwd)/package.json"
+        find_packages "${PACKAGE_JSON:?}"
+      done
+    }
+
+    for PACKAGE in $(find_packages "${1:?}" | sort | uniq); do
+      PACKAGE_DIR=$(printf '%s' "${PACKAGE:?}" | cut -c "$(pwd | wc -m | tr -d ' ')-" | cut -c 2-)
+      mkdir -p "$(dirname "${2:?}/${PACKAGE_DIR:?}")"
+      cp -R "${PACKAGE_DIR:?}" "${2:?}/${PACKAGE_DIR:?}"
+    done
