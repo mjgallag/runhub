@@ -39,7 +39,7 @@ data:
     WORKDIR "${SERVICE_SRC_PATH}"
     RUN npm run --if-present build
     WORKDIR "/${APP}-build"
-    RUN find . -type d -name node_modules -exec rm -Rf {} +
+    RUN find . -name node_modules -prune -exec rm -Rf {} +
 
     FROM alpine AS build-production
     ARG APP
