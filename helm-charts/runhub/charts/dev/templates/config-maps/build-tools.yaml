@@ -27,7 +27,7 @@ data:
     WORKDIR "/${APP}-src-dependencies"
     RUN cp -R . "../${APP}-src-dependencies-production" && rm -R "../${APP}-src-dependencies-production/packages"
     ARG SERVICE_SRC_PATH
-    RUN ../tools/cp-production-packages.sh "${SERVICE_SRC_PATH}/package.json" "../${APP}-src-dependencies-production"
+    RUN ../tools/cp-shared-dependencies-production.sh "${SERVICE_SRC_PATH}" "../${APP}-src-dependencies-production"
 
     FROM node AS build
     ARG APP
@@ -47,7 +47,7 @@ data:
     COPY --from=build "/${APP}-build" .
     RUN cp -R . "../${APP}-build-production" && rm -R "../${APP}-build-production/packages"
     ARG SERVICE_SRC_PATH
-    RUN ../tools/cp-production-packages.sh "${SERVICE_SRC_PATH}/package.json" "../${APP}-build-production"
+    RUN ../tools/cp-shared-dependencies-production.sh "${SERVICE_SRC_PATH}" "../${APP}-build-production"
 
     FROM node AS serve
     ENV NODE_ENV=production
@@ -69,33 +69,31 @@ data:
     find "${1:?}" \( -name package.json -o -name package-lock.json \) -exec sh -c \
       'mkdir -p "$(dirname "${2:?}/${1:?}")" && cp "${1:?}" "${2:?}/${1:?}"' \
       _ {} "${2:?}" \;
-  cp-production-packages.sh: |
+  cp-shared-dependencies-production.sh: |
     #!/bin/sh
     set -e
 
-    find_packages() {
-      PACKAGE_DIR="$(cd "$(dirname "${1:?}")" && pwd)"
-      echo "${PACKAGE_DIR:?}"
+    get_dependency_dirs() {
+      echo "${1:?}"
 
-      PACKAGES=$(jq '
-        .
-          | select(has("dependencies"))
+      RELATIVE_DEPENDENCY_DIRS=$(jq '
+        select(has("dependencies"))
           | .dependencies
           | to_entries
           | .[]
           | .value
           | select(startswith("file:"))
           | sub("^file:"; "")
-        ' "${1:?}" --raw-output)
+        ' "${1:?}/package.json" --raw-output)
 
-      for PACKAGE in ${PACKAGES}; do
-        PACKAGE_JSON="$(cd "${PACKAGE_DIR:?}/${PACKAGE:?}" && pwd)/package.json"
-        find_packages "${PACKAGE_JSON:?}"
+      for RELATIVE_DEPENDENCY_DIR in ${RELATIVE_DEPENDENCY_DIRS}; do
+        NORMALIZED_RELATIVE_DEPENDENCY_DIR=$( (cd "${1:?}/${RELATIVE_DEPENDENCY_DIR:?}" && pwd) \
+          | cut -c "$(pwd | wc -m | tr -d ' ')-" | cut -c 2-)
+        get_dependency_dirs "${NORMALIZED_RELATIVE_DEPENDENCY_DIR:?}"
       done
     }
 
-    for PACKAGE in $(find_packages "${1:?}" | sort | uniq); do
-      PACKAGE_DIR=$(printf '%s' "${PACKAGE:?}" | cut -c "$(pwd | wc -m | tr -d ' ')-" | cut -c 2-)
-      mkdir -p "$(dirname "${2:?}/${PACKAGE_DIR:?}")"
-      cp -R "${PACKAGE_DIR:?}" "${2:?}/${PACKAGE_DIR:?}"
+    for DEPENDENCY_DIR in $(get_dependency_dirs "${1:?}" | sort | uniq); do
+      mkdir -p "${2:?}/${DEPENDENCY_DIR:?}"
+      cp -R "${DEPENDENCY_DIR:?}/." "${2:?}/${DEPENDENCY_DIR:?}"
     done
