@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-VERSION='0.23.0'
+VERSION='0.24.1'
 
 curl -L \
   "https://storage.googleapis.com/tekton-releases/pipeline/previous/v${VERSION:?}/release.yaml" \
