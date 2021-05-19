@@ -54,8 +54,11 @@ resource "google_container_node_pool" "primary" {
   cluster            = google_container_cluster.app_env.name
   initial_node_count = 1
   node_config {
-    image_type   = "cos"
-    oauth_scopes = []
+    image_type = "cos"
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring"
+    ]
   }
 }
 
