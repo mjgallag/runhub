@@ -22,7 +22,7 @@ spec:
     - name: context
   steps:
     - name: get-src
-      image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.23.0@sha256:2ea2ea78928b365d6d13c5308f9fff63f685063684c843611be74abc43ea4f1c
+      image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.24.1@sha256:52358dec303aa1349c2b4f23e6e483b479ba71214ef8e94c369cfe8e25af31fb
       script: |
         /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.context.path)/src'
     - name: build
