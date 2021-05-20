@@ -5,7 +5,7 @@
 {{- end }}
 
 {{ define "runhub.dev.knImageTag" -}}
-  v0.22.0@sha256:49d88fab4deb755fa6fa8269746a81f0b2efc2dc7b65712d7e38e035dc675afb
+  v0.23.0@sha256:1828037a709e77659fa774197056f7acbde85b348282b6cdb1e622e050bcc4e5
 {{- end }}
 
 {{ define "runhub.dev.kubectlImageTag" -}}
