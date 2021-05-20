@@ -11,7 +11,7 @@ data:
     RUN find . ! -name . -prune -name '*.sh' -exec chmod +x {} +
 
     FROM node:14.17.0-alpine3.13@sha256:954f97825c2b535defef235dd8b92a7936b59b12aa6685bc1b5c17864b2812c3 AS node
-    RUN npm install --global npm@7.13.0  && npm cache clean --force
+    RUN npm install --global npm@7.14.0  && npm cache clean --force
 
     FROM alpine AS src
     ARG APP
