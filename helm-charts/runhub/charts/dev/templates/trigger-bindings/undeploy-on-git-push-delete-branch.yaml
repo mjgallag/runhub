@@ -5,4 +5,4 @@ metadata:
 spec:
   params:
     - name: tag
-      value: br-$(extensions.branch)
+      value: $(extensions.branch)
