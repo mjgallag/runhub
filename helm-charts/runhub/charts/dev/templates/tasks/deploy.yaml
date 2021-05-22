@@ -26,11 +26,13 @@ spec:
           SCALE_INIT=0
           SCALE_MIN=0
           TAG_PREFIX='$(params.tag).'
+          SERVICE_NAME='$(params.tag)'
         elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SCALE_INIT=1
           SCALE_MIN=1
+          SERVICE_NAME='$(params.env)'
         fi
 
         set -- \
@@ -47,6 +49,6 @@ spec:
           --pull-secret container-registry-dockerconfigjson \
           --cluster-local
 
-        if ! kn service update '$(params.tag)' "$@"; then
-          kn service create '$(params.tag)' "$@" || exit 0
+        if ! kn service update "${SERVICE_NAME:?}" "$@"; then
+          kn service create "${SERVICE_NAME:?}" "$@" || exit 0
         fi

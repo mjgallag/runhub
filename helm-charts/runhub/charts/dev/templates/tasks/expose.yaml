@@ -24,17 +24,19 @@ spec:
         if [ '$(params.env)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SUBDOMAIN='$(params.tag).$(params.subdomain)'
+          SERVICE_NAME='$(params.tag)'
         elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SUBDOMAIN='$(params.subdomain)'
+          SERVICE_NAME='$(params.env)'
         fi
 
         kubectl apply --filename - <<EOF
         apiVersion: networking.istio.io/v1beta1
         kind: VirtualService
         metadata:
-          name: $(params.tag)
+          name: ${SERVICE_NAME:?}
           namespace: $(params.env)-{{ .Release.Name }}-$(params.service)
         spec:
           gateways:
@@ -43,22 +45,25 @@ spec:
             - ${SUBDOMAIN:?}.${DOMAIN:?}
           http:
             - rewrite:
-                authority: $(params.tag).$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                authority: ${SERVICE_NAME:?}.$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
               route:
                 - destination:
-                    host: $(params.tag).$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                    host: ${SERVICE_NAME:?}.$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
         EOF
     - name: migrate-traffic
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub.dev.knImageTag" . }}
       script: |
-        if [ '$(params.env)' = 'prod' ]; then
+        if [ '$(params.env)' = 'dev' ]; then
+          SERVICE_NAME='$(params.tag)'
+        elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
+          SERVICE_NAME='$(params.env)'
         fi
 
-        REVISION="$(kn service describe '$(params.tag)' \
+        REVISION="$(kn service describe "${SERVICE_NAME:?}" \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
           --output jsonpath='{ .status.latestReadyRevisionName }')"
 
-        kn service update '$(params.tag)' \
+        kn service update "${SERVICE_NAME:?}" \
           --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
           --traffic "${REVISION:?}=100"
