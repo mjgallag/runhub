@@ -13,10 +13,20 @@ spec:
       params:
         - name: input
           value: $(params.tag)
+    - name: validate
+      runAfter:
+        - sanitize-tag
+      taskRef:
+        name: validate
+      params:
+        - name: tag
+          value: $(tasks.sanitize-tag.results.output)
+        - name: env
+          value: dev
     {{- range $serviceName, $service := .Values.global.services }}
     - name: unexpose-{{ $serviceName }}
       runAfter:
-        - sanitize-tag
+        - validate
       taskRef:
         name: unexpose
       params:
@@ -26,7 +36,7 @@ spec:
           value: $(tasks.sanitize-tag.results.output)
     - name: undeploy-{{ $serviceName }}
       runAfter:
-        - sanitize-tag
+        - validate
       taskRef:
         name: undeploy
       params:

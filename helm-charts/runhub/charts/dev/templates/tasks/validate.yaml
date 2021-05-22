@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: validate
+spec:
+  params:
+    - name: tag
+      type: string
+    - name: env
+      type: string
+  steps:
+    - name: validate
+      image: alpine:{{ template "runhub.dev.alpineImageTag" . }}
+      script: |
+        if [ '$(params.tag)' = 'prod' ] && [ '$(params.env)' = 'dev' ]; then
+          exit 1
+        fi

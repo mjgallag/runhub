@@ -35,11 +35,21 @@ spec:
       params:
         - name: input
           value: $(params.cache-from-tag)
-  {{- range $serviceName, $service := .Values.global.services }}
-    - name: build-{{ $serviceName }}
+    - name: validate
       runAfter:
         - sanitize-tag
         - sanitize-cache-from-tag
+      taskRef:
+        name: validate
+      params:
+        - name: tag
+          value: $(tasks.sanitize-tag.results.output)
+        - name: env
+          value: $(params.env)
+  {{- range $serviceName, $service := .Values.global.services }}
+    - name: build-{{ $serviceName }}
+      runAfter:
+        - validate
       taskRef:
         name: build
       params:

@@ -4,7 +4,7 @@ metadata:
   name: build-tools
 data:
   Dockerfile: |
-    FROM alpine:3.13.5@sha256:69e70a79f2d41ab5d637de98c1e0b055206ba40a8145e7bddb55ccc04e13cf8f AS alpine
+    FROM alpine:{{ template "runhub.dev.alpineImageTag" . }} AS alpine
     RUN apk add --no-cache jq
     WORKDIR /tools
     COPY /tools/*.sh .
