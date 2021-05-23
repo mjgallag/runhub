@@ -23,7 +23,7 @@ spec:
       script: |
         if [ '$(params.env)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
-          SUBDOMAIN='$(params.tag).$(params.subdomain)'
+          SUBDOMAIN='$(params.tag)-$(params.subdomain)'
           SERVICE_NAME='$(params.tag)-$(params.service)'
         elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'

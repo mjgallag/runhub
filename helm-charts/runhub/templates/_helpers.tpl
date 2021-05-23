@@ -37,13 +37,7 @@ stringData:
 {{- end }}
 
 {{- define "runhub.hosts" }}
-  {{- range $serviceName, $service := .Values.global.services }}
-    {{- if $.Values.global.env.dev }}
-- '*.{{ $service.subdomain }}.{{ template "runhub.envDomain" $ }}'
-    {{- else if $.Values.global.env.prod }}
-- {{ $service.subdomain }}.{{ template "runhub.envDomain" $ }}
-    {{- end }}
-  {{- end }}
+- '*.{{ template "runhub.envDomain" $ }}'
   {{- if $.Values.global.env.dev }}
 - git-webhook.runhub.{{ template "runhub.envDomain" $ }}
   {{- end }}
