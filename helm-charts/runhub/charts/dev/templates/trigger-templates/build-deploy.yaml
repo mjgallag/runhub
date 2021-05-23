@@ -9,6 +9,7 @@ spec:
     - name: tag
     - name: cache-from-tag
     - name: env
+    - name: git-default-branch
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -29,6 +30,8 @@ spec:
             value: $(tt.params.cache-from-tag)
           - name: env
             value: $(tt.params.env)
+          - name: git-default-branch
+            value: $(tt.params.git-default-branch)
         workspaces:
         {{- range $serviceName, $service := .Values.global.services }}
           - name: build-context-{{ $serviceName }}

@@ -14,6 +14,8 @@ spec:
       type: string
     - name: env
       type: string
+    - name: git-default-branch
+      type: string
   workspaces:
   {{- range $serviceName, $service := .Values.global.services }}
     - name: build-context-{{ $serviceName }}
@@ -85,6 +87,7 @@ spec:
       {{- range $serviceName, $service := $.Values.global.services }}
         - get-sha-{{ $serviceName }}
       {{- end }}
+        - provision
       taskRef:
         name: deploy
       params:
@@ -123,3 +126,20 @@ spec:
           workspace: prod-kubeconfig
     {{- end }}
   {{- end }}
+    - name: provision
+      taskRef:
+        name: provision
+      params:
+        - name: services-count
+          value: '{{ len .Values.global.services }}'
+        - name: env
+          value: $(params.env)
+        - name: tag
+          value: $(params.tag)
+        - name: git-default-branch
+          value: $(params.git-default-branch)
+    {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
+      workspaces:
+        - name: prod-kubeconfig
+          workspace: prod-kubeconfig
+    {{- end }}

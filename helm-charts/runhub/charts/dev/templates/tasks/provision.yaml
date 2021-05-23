@@ -1,0 +1,59 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: provision
+spec:
+  params:
+    - name: services-count
+      type: string
+    - name: env
+      type: string
+    - name: tag
+      type: string
+    - name: git-default-branch
+      type: string
+{{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
+  workspaces:
+    - name: prod-kubeconfig
+      readOnly: true
+{{- end }}
+  steps:
+    - name: provision
+      image: gcr.io/bitnami-containers/kubectl:{{ template "runhub.dev.kubectlImageTag" . }}
+      script: |
+        kubectl_apply_overprovisioning_deployment() {
+          kubectl apply --filename - <<EOF
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: overprovisioning
+          namespace: ${1:?}-{{ .Release.Name }}-app
+        spec:
+          replicas: $(params.services-count)
+          selector:
+            matchLabels:
+              app: overprovisioning
+          template:
+            metadata:
+              labels:
+                app: overprovisioning
+            spec:
+              priorityClassName: ${1:?}-{{ .Release.Name }}--overprovisioning
+              containers:
+                - name: overprovisioning
+                  image: k8s.gcr.io/pause
+                  resources:
+                    requests:
+                      cpu: {{ template "runhub.service-requests-cpu" . }}
+                      memory: {{ template "runhub.service-requests-memory" . }}
+        EOF
+        }
+
+        if [ '$(params.tag)' = '$(params.git-default-branch)' ]; then
+          kubectl_apply_overprovisioning_deployment 'dev'
+        fi
+
+        if [ '$(params.env)' = 'prod' ]; then
+          export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
+          kubectl_apply_overprovisioning_deployment '$(params.env)'
+        fi

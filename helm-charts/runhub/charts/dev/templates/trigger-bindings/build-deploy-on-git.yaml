@@ -6,3 +6,5 @@ spec:
   params:
     - name: git-url
       value: $(body.repository.clone_url)
+    - name: git-default-branch
+      value: $(body.repository.default_branch)
