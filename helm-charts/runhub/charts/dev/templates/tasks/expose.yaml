@@ -24,12 +24,12 @@ spec:
         if [ '$(params.env)' = 'dev' ]; then
           DOMAIN='{{ $.Values.domain }}'
           SUBDOMAIN='$(params.tag).$(params.subdomain)'
-          SERVICE_NAME='$(params.tag)'
+          SERVICE_NAME='$(params.tag)-$(params.service)'
         elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
           DOMAIN='{{ $.Values.global.prodDomain }}'
           SUBDOMAIN='$(params.subdomain)'
-          SERVICE_NAME='$(params.env)'
+          SERVICE_NAME='$(params.env)-$(params.service)'
         fi
 
         kubectl apply --filename - <<EOF
@@ -37,7 +37,7 @@ spec:
         kind: VirtualService
         metadata:
           name: ${SERVICE_NAME:?}
-          namespace: $(params.env)-{{ .Release.Name }}-$(params.service)
+          namespace: $(params.env)-{{ .Release.Name }}-app
         spec:
           gateways:
             - $(params.env)-{{ .Release.Name }}/gateway
@@ -45,25 +45,25 @@ spec:
             - ${SUBDOMAIN:?}.${DOMAIN:?}
           http:
             - rewrite:
-                authority: ${SERVICE_NAME:?}.$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                authority: ${SERVICE_NAME:?}.$(params.env)-{{ .Release.Name }}-app.svc.cluster.local
               route:
                 - destination:
-                    host: ${SERVICE_NAME:?}.$(params.env)-{{ .Release.Name }}-$(params.service).svc.cluster.local
+                    host: ${SERVICE_NAME:?}.$(params.env)-{{ .Release.Name }}-app.svc.cluster.local
         EOF
     - name: migrate-traffic
       image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub.dev.knImageTag" . }}
       script: |
         if [ '$(params.env)' = 'dev' ]; then
-          SERVICE_NAME='$(params.tag)'
+          SERVICE_NAME='$(params.tag)-$(params.service)'
         elif [ '$(params.env)' = 'prod' ]; then
           export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
-          SERVICE_NAME='$(params.env)'
+          SERVICE_NAME='$(params.env)-$(params.service)'
         fi
 
         REVISION="$(kn service describe "${SERVICE_NAME:?}" \
-          --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
+          --namespace '$(params.env)-{{ .Release.Name }}-app' \
           --output jsonpath='{ .status.latestReadyRevisionName }')"
 
         kn service update "${SERVICE_NAME:?}" \
-          --namespace '$(params.env)-{{ .Release.Name }}-$(params.service)' \
+          --namespace '$(params.env)-{{ .Release.Name }}-app' \
           --traffic "${REVISION:?}=100"

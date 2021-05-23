@@ -1,9 +1,8 @@
-{{- range $serviceName, $service := .Values.global.services }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: deploy
-  namespace: {{ template "runhub.env" $ }}-{{ $.Release.Name }}-{{ $serviceName }}
+  namespace: {{ template "runhub.env" $ }}-{{ $.Release.Name }}-app
 rules:
   - apiGroups:
       - serving.knative.dev
@@ -22,5 +21,3 @@ rules:
       - get
       - create
       - patch
----
-{{- end }}
