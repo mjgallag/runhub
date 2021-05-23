@@ -39,7 +39,7 @@ stringData:
 {{- define "runhub.hosts" }}
 - '*.{{ template "runhub.envDomain" $ }}'
   {{- if $.Values.global.env.dev }}
-- git-webhook.runhub.{{ template "runhub.envDomain" $ }}
+- '*.runhub.{{ template "runhub.envDomain" $ }}'
   {{- end }}
 {{- end }}
 
