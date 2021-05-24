@@ -68,10 +68,10 @@ spec:
         - name: cache-from-tag
           value: $(tasks.sanitize-cache-from-tag.results.output)
       workspaces:
-        - name: build-tools
-          workspace: build-tools
         - name: context
           workspace: build-context-{{ $serviceName }}
+        - name: build-tools
+          workspace: build-tools
     - name: get-sha-{{ $serviceName }}
       runAfter:
         - build-{{ $serviceName }}
