@@ -6,8 +6,8 @@ data:
   Dockerfile: |
     FROM alpine:{{ template "runhub.dev.alpineImageTag" . }} AS alpine
     RUN apk add --no-cache jq
-    WORKDIR /tools
-    COPY /tools/*.sh .
+    WORKDIR /build-tools
+    COPY /build-tools/*.sh .
     RUN find . ! -name . -prune -name '*.sh' -exec chmod +x {} +
 
     FROM node:14.17.0-alpine3.13@sha256:954f97825c2b535defef235dd8b92a7936b59b12aa6685bc1b5c17864b2812c3 AS node
@@ -20,14 +20,14 @@ data:
 
     FROM src AS src-dependencies
     ARG APP
-    RUN ../tools/cp-package-jsons.sh . "../${APP}-src-dependencies"
+    RUN ../build-tools/cp-package-jsons.sh . "../${APP}-src-dependencies"
 
     FROM src-dependencies AS src-dependencies-production
     ARG APP
     WORKDIR "/${APP}-src-dependencies"
     RUN cp -R . "../${APP}-src-dependencies-production" && rm -R "../${APP}-src-dependencies-production/packages"
     ARG SERVICE_SRC_PATH
-    RUN ../tools/cp-shared-dependencies-production.sh "packages/${SERVICE_SRC_PATH}" "../${APP}-src-dependencies-production"
+    RUN ../build-tools/cp-shared-dependencies-production.sh "packages/${SERVICE_SRC_PATH}" "../${APP}-src-dependencies-production"
 
     FROM node AS build
     ARG APP
@@ -47,7 +47,7 @@ data:
     COPY --from=build "/${APP}-build" .
     RUN cp -R . "../${APP}-build-production" && rm -R "../${APP}-build-production/packages"
     ARG SERVICE_SRC_PATH
-    RUN ../tools/cp-shared-dependencies-production.sh "packages/${SERVICE_SRC_PATH}" "../${APP}-build-production"
+    RUN ../build-tools/cp-shared-dependencies-production.sh "packages/${SERVICE_SRC_PATH}" "../${APP}-build-production"
 
     FROM node AS serve
     ENV NODE_ENV=production

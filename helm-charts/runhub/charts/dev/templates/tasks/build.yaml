@@ -17,7 +17,7 @@ spec:
     - name: cache-from-tag
       type: string
   workspaces:
-    - name: tools
+    - name: build-tools
       readOnly: true
     - name: context
   steps:
@@ -37,12 +37,12 @@ spec:
         IMAGE='{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service)/cache'
 
-        cp -RL '$(workspaces.tools.path)' '$(workspaces.context.path)/tools'
+        cp -RL '$(workspaces.build-tools.path)' '$(workspaces.context.path)/build-tools'
 
         buildctl-daemonless.sh \
           build \
             --frontend dockerfile.v0 \
-            --local dockerfile='$(workspaces.context.path)/tools' \
+            --local dockerfile='$(workspaces.context.path)/build-tools' \
             --local context='$(workspaces.context.path)' \
             --opt build-arg:APP='{{ .Release.Name }}' \
             --opt build-arg:SERVICE_SRC_PATH='$(params.service-src-path)' \
