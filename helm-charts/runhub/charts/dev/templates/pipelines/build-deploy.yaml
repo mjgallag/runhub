@@ -18,7 +18,7 @@ spec:
       type: string
   workspaces:
   {{- range $serviceName, $service := .Values.global.services }}
-    - name: build-context-{{ $serviceName }}
+    - name: build-temp-{{ $serviceName }}
   {{- end }}
     - name: build-tools
   {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
@@ -68,8 +68,8 @@ spec:
         - name: cache-from-tag
           value: $(tasks.sanitize-cache-from-tag.results.output)
       workspaces:
-        - name: context
-          workspace: build-context-{{ $serviceName }}
+        - name: temp
+          workspace: build-temp-{{ $serviceName }}
         - name: build-tools
           workspace: build-tools
     - name: get-sha-{{ $serviceName }}

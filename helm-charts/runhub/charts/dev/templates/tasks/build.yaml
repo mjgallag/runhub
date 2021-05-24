@@ -17,14 +17,14 @@ spec:
     - name: cache-from-tag
       type: string
   workspaces:
-    - name: context
+    - name: temp
     - name: build-tools
       readOnly: true
   steps:
     - name: get-src
       image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.24.1@sha256:52358dec303aa1349c2b4f23e6e483b479ba71214ef8e94c369cfe8e25af31fb
       script: |
-        /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.context.path)/src'
+        /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.temp.path)/src'
     - name: build
       image: moby/buildkit:v0.8.3@sha256:171689e43026533b48701ab6566b72659dd1839488d715c73ef3fe387fab9a80
       securityContext:
@@ -37,13 +37,13 @@ spec:
         IMAGE='{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service)'
         CACHE_IMAGE='{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service)/cache'
 
-        cp -RL '$(workspaces.build-tools.path)' '$(workspaces.context.path)/build-tools'
+        cp -RL '$(workspaces.build-tools.path)' '$(workspaces.temp.path)/build-tools'
 
         buildctl-daemonless.sh \
           build \
             --frontend dockerfile.v0 \
-            --local dockerfile='$(workspaces.context.path)/build-tools' \
-            --local context='$(workspaces.context.path)' \
+            --local dockerfile='$(workspaces.temp.path)/build-tools' \
+            --local context='$(workspaces.temp.path)' \
             --opt build-arg:APP='{{ .Release.Name }}' \
             --opt build-arg:SERVICE_SRC_PATH='$(params.service-src-path)' \
             --output type=image,name="${IMAGE:?}"':$(params.tag)',push=true \

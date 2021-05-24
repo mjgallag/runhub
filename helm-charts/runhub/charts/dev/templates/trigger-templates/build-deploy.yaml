@@ -34,7 +34,7 @@ spec:
             value: $(tt.params.git-default-branch)
         workspaces:
         {{- range $serviceName, $service := .Values.global.services }}
-          - name: build-context-{{ $serviceName }}
+          - name: build-temp-{{ $serviceName }}
             emptyDir: {}
         {{- end }}
           - name: build-tools
