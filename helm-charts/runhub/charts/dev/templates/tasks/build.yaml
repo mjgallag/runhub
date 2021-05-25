@@ -21,10 +21,7 @@ spec:
     - name: build-tools
       readOnly: true
   steps:
-    - name: get-src
-      image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.24.1@sha256:52358dec303aa1349c2b4f23e6e483b479ba71214ef8e94c369cfe8e25af31fb
-      script: |
-        /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.temp.path)/src'
+    {{ include "runhub.dev.getSrcTaskStep" . | indent 4 }}
     - name: build
       image: moby/buildkit:v0.8.3@sha256:171689e43026533b48701ab6566b72659dd1839488d715c73ef3fe387fab9a80
       securityContext:

@@ -23,25 +23,11 @@ spec:
           value: $(tasks.sanitize-tag.results.output)
         - name: env
           value: dev
-    {{- range $serviceName, $service := .Values.global.services }}
-    - name: unexpose-{{ $serviceName }}
+    - name: uninstall
       runAfter:
         - validate
       taskRef:
-        name: unexpose
+        name: uninstall
       params:
-        - name: service
-          value: {{ $serviceName }}
         - name: tag
           value: $(tasks.sanitize-tag.results.output)
-    - name: undeploy-{{ $serviceName }}
-      runAfter:
-        - validate
-      taskRef:
-        name: undeploy
-      params:
-        - name: service
-          value: {{ $serviceName }}
-        - name: tag
-          value: $(tasks.sanitize-tag.results.output)
-    {{- end }}

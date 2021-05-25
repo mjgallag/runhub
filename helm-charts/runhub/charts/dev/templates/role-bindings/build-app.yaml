@@ -1,13 +1,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: deploy
+  name: build-app
   namespace: {{ $.Release.Namespace }}-app
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: deploy
+  name: build-app
 subjects:
   - kind: ServiceAccount
-    name: {{ if $.Values.global.env.dev }}build-{{ end }}deploy
+    name: build-deploy
     namespace: {{ $.Release.Namespace }}

@@ -17,26 +17,6 @@
       "maxProperties": 1,
       "additionalProperties": false
     },
-    "services": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "subdomain": {
-            "type": "string"
-          },
-          "srcPath": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "subdomain",
-          "srcPath"
-        ],
-        "additionalProperties": false
-      },
-      "minProperties": 1
-    },
     "prodDomain": {
       "type": "string"
     },
@@ -116,9 +96,6 @@
         "env": {
           "$ref": "#/definitions/env"
         },
-        "services": {
-          "$ref": "#/definitions/services"
-        },
         "prodDomain": {
           "$ref": "#/definitions/prodDomain"
         },
@@ -134,7 +111,6 @@
       },
       "required": [
         "env",
-        "services",
         "containerRegistryCredentials",
         "dns",
         "tls"
@@ -147,9 +123,6 @@
         "env": {
           "$ref": "#/definitions/env"
         },
-        "services": {
-          "$ref": "#/definitions/services"
-        },
         "prodDomain": {
           "$ref": "#/definitions/prodDomain"
         },
@@ -165,7 +138,6 @@
       },
       "required": [
         "env",
-        "services",
         "prodDomain",
         "containerRegistryCredentials",
         "dns",

@@ -17,13 +17,8 @@ spec:
     - name: git-default-branch
       type: string
   workspaces:
-  {{- range $serviceName, $service := .Values.global.services }}
-    - name: build-temp-{{ $serviceName }}
-  {{- end }}
-    - name: build-tools
-  {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
-    - name: prod-kubeconfig
-  {{- end }}
+    - name: app-chart
+    - name: app-chart-templates
   tasks:
     - name: sanitize-tag
       taskRef:
@@ -48,98 +43,26 @@ spec:
           value: $(tasks.sanitize-tag.results.output)
         - name: env
           value: $(params.env)
-  {{- range $serviceName, $service := .Values.global.services }}
-    - name: build-{{ $serviceName }}
+    - name: install
       runAfter:
         - validate
       taskRef:
-        name: build
+        name: install
       params:
         - name: git-url
           value: $(params.git-url)
         - name: git-revision
           value: $(params.git-revision)
-        - name: service
-          value: {{ $serviceName }}
-        - name: service-src-path
-          value: {{ $service.srcPath }}
         - name: tag
           value: $(tasks.sanitize-tag.results.output)
         - name: cache-from-tag
           value: $(tasks.sanitize-cache-from-tag.results.output)
-      workspaces:
-        - name: temp
-          workspace: build-temp-{{ $serviceName }}
-        - name: build-tools
-          workspace: build-tools
-    - name: get-sha-{{ $serviceName }}
-      runAfter:
-        - build-{{ $serviceName }}
-      taskRef:
-        name: get-sha
-      params:
-        - name: service
-          value: {{ $serviceName }}
-        - name: tag
-          value: $(tasks.sanitize-tag.results.output)
-    - name: deploy-{{ $serviceName }}
-      runAfter:
-      {{- range $serviceName, $service := $.Values.global.services }}
-        - get-sha-{{ $serviceName }}
-      {{- end }}
-        - provision
-      taskRef:
-        name: deploy
-      params:
-        - name: service
-          value: {{ $serviceName }}
-        - name: tag
-          value: $(tasks.sanitize-tag.results.output)
-        - name: sha
-          value: $(tasks.get-sha-{{ $serviceName }}.results.sha)
         - name: env
           value: $(params.env)
-    {{- if (and $.Values.release $.Values.release.prodKubernetesCredentials) }}
-      workspaces:
-        - name: prod-kubeconfig
-          workspace: prod-kubeconfig
-    {{- end }}
-    - name: expose-{{ $serviceName }}
-      runAfter:
-      {{- range $serviceName, $service := $.Values.global.services }}
-        - deploy-{{ $serviceName }}
-      {{- end }}
-      taskRef:
-        name: expose
-      params:
-        - name: service
-          value: {{ $serviceName }}
-        - name: subdomain
-          value: {{ $service.subdomain }}
-        - name: tag
-          value: $(tasks.sanitize-tag.results.output)
-        - name: env
-          value: $(params.env)
-    {{- if (and $.Values.release $.Values.release.prodKubernetesCredentials) }}
-      workspaces:
-        - name: prod-kubeconfig
-          workspace: prod-kubeconfig
-    {{- end }}
-  {{- end }}
-    - name: provision
-      taskRef:
-        name: provision
-      params:
-        - name: services-count
-          value: '{{ len .Values.global.services }}'
-        - name: env
-          value: $(params.env)
-        - name: tag
-          value: $(params.tag)
         - name: git-default-branch
           value: $(params.git-default-branch)
-    {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
       workspaces:
-        - name: prod-kubeconfig
-          workspace: prod-kubeconfig
-    {{- end }}
+        - name: app-chart
+          workspace: app-chart
+        - name: app-chart-templates
+          workspace: app-chart-templates

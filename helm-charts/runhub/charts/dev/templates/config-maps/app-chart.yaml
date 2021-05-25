@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-chart
+data:
+  Chart.yaml: |
+    apiVersion: v2
+    name: runhub-app
+    version: 0.0.0
+  values.schema.json: |
+    {
+      "$schema": "https://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+        "services": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "subdomain": {
+                "type": "string"
+              },
+              "srcPath": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "subdomain",
+              "srcPath"
+            ],
+            "additionalProperties": false
+          },
+          "minProperties": 1
+        }
+      },
+      "required": [
+        "services"
+      ],
+      "additionalProperties": false
+    }

@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-chart-templates
+data:
+  build-deploy.yaml: |
+    apiVersion: tekton.dev/v1beta1
+    kind: Pipeline
+    metadata:
+      name: build-deploy.{{"{{"}} .Release.Name }}
+      namespace: {{ $.Release.Namespace }}
+    spec:
+      params:
+        - name: git-url
+          type: string
+        - name: git-revision
+          type: string
+        - name: tag
+          type: string
+        - name: cache-from-tag
+          type: string
+        - name: env
+          type: string
+        - name: git-default-branch
+          type: string
+      workspaces:
+        - name: build-tools
+      {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
+        - name: prod-kubeconfig
+      {{- end }}
+      tasks:
+      {{"{{"}}- range $serviceName, $service := .Values.services }}
+        - name: build-{{"{{"}} $serviceName }}
+          taskRef:
+            name: build
+          params:
+            - name: git-url
+              value: $(params.git-url)
+            - name: git-revision
+              value: $(params.git-revision)
+            - name: service
+              value: {{"{{"}} $serviceName }}
+            - name: service-src-path
+              value: {{"{{"}} $service.srcPath }}
+            - name: tag
+              value: $(params.tag)
+            - name: cache-from-tag
+              value: $(params.cache-from-tag)
+          workspaces:
+            - name: build-tools
+              workspace: build-tools
+        - name: get-sha-{{"{{"}} $serviceName }}
+          runAfter:
+            - build-{{"{{"}} $serviceName }}
+          taskRef:
+            name: get-sha
+          params:
+            - name: service
+              value: {{"{{"}} $serviceName }}
+            - name: tag
+              value: $(params.tag)
+        - name: deploy-{{"{{"}} $serviceName }}
+          runAfter:
+          {{"{{"}}- range $serviceName, $service := $.Values.services }}
+            - get-sha-{{"{{"}} $serviceName }}
+          {{"{{"}}- end }}
+            - provision
+          taskRef:
+            name: deploy.{{"{{"}} $.Release.Name }}
+          params:
+            - name: service
+              value: {{"{{"}} $serviceName }}
+            - name: tag
+              value: $(params.tag)
+            - name: sha
+              value: $(tasks.get-sha-{{"{{"}} $serviceName }}.results.sha)
+            - name: env
+              value: $(params.env)
+        {{- if (and $.Values.release $.Values.release.prodKubernetesCredentials) }}
+          workspaces:
+            - name: prod-kubeconfig
+              workspace: prod-kubeconfig
+        {{- end }}
+        - name: expose-{{"{{"}} $serviceName }}
+          runAfter:
+          {{"{{"}}- range $serviceName, $service := $.Values.services }}
+            - deploy-{{"{{"}} $serviceName }}
+          {{"{{"}}- end }}
+          taskRef:
+            name: expose
+          params:
+            - name: service
+              value: {{"{{"}} $serviceName }}
+            - name: subdomain
+              value: {{"{{"}} $service.subdomain }}
+            - name: tag
+              value: $(params.tag)
+            - name: env
+              value: $(params.env)
+        {{- if (and $.Values.release $.Values.release.prodKubernetesCredentials) }}
+          workspaces:
+            - name: prod-kubeconfig
+              workspace: prod-kubeconfig
+        {{- end }}
+      {{"{{"}}- end }}
+        - name: provision
+          taskRef:
+            name: provision
+          params:
+            - name: services-count
+              value: '{{"{{"}} len .Values.services }}'
+            - name: env
+              value: $(params.env)
+            - name: tag
+              value: $(params.tag)
+            - name: git-default-branch
+              value: $(params.git-default-branch)
+        {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
+          workspaces:
+            - name: prod-kubeconfig
+              workspace: prod-kubeconfig
+        {{- end }}
+  undeploy.yaml: |
+    apiVersion: tekton.dev/v1beta1
+    kind: Pipeline
+    metadata:
+      name: undeploy.{{"{{"}} .Release.Name }}
+      namespace: {{ $.Release.Namespace }}
+    spec:
+      params:
+        - name: tag
+          type: string
+      tasks:
+      {{"{{"}}- range $serviceName, $service := .Values.services }}
+        - name: unexpose-{{"{{"}} $serviceName }}
+          taskRef:
+            name: unexpose
+          params:
+            - name: service
+              value: {{"{{"}} $serviceName }}
+            - name: tag
+              value: $(params.tag)
+        - name: undeploy-{{"{{"}} $serviceName }}
+          taskRef:
+            name: undeploy
+          params:
+            - name: service
+              value: {{"{{"}} $serviceName }}
+            - name: tag
+              value: $(params.tag)
+      {{"{{"}}- end }}
+  deploy.yaml: |
+    apiVersion: tekton.dev/v1beta1
+    kind: Task
+    metadata:
+      name: deploy.{{"{{"}} .Release.Name }}
+      namespace: {{ $.Release.Namespace }}
+    spec:
+      params:
+        - name: service
+          type: string
+        - name: tag
+          type: string
+        - name: sha
+          type: string
+        - name: env
+          type: string
+    {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
+      workspaces:
+        - name: prod-kubeconfig
+          readOnly: true
+    {{- end }}
+      steps:
+        - name: deploy
+          image: gcr.io/knative-releases/knative.dev/client/cmd/kn:{{ template "runhub.dev.knImageTag" . }}
+          script: |
+            if [ '$(params.env)' = 'dev' ]; then
+              DOMAIN='{{ $.Values.domain }}'
+              SCALE_INIT=0
+              SCALE_MIN=0
+              TAG_PREFIX='$(params.tag)-'
+              SERVICE_NAME='$(params.tag)-$(params.service)'
+            elif [ '$(params.env)' = 'prod' ]; then
+              export KUBECONFIG='$(workspaces.prod-kubeconfig.path)/kubeconfig'
+              DOMAIN='{{ $.Values.global.prodDomain }}'
+              SCALE_INIT=1
+              SCALE_MIN=1
+              SERVICE_NAME='$(params.env)-$(params.service)'
+            fi
+
+            set -- \
+              --namespace '$(params.env)-{{ .Release.Name }}-app' \
+              --image '{{ template "runhub.dev.imagePathWithRegistry" . }}/$(params.service):$(params.tag)@$(params.sha)' \
+              --env RUNHUB_ENV='$(params.env)' \
+            {{"{{"}}- range $serviceName, $service := .Values.services }}
+              --env 'RUNHUB_SERVICE_{{"{{"}} upper $serviceName }}_URL=https://'"${TAG_PREFIX}"'{{"{{"}} $service.subdomain }}.'"${DOMAIN:?}" \
+            {{"{{"}}- end }}
+              --scale-init "${SCALE_INIT:?}" \
+              --scale-min "${SCALE_MIN:?}" \
+              --request cpu={{ template "runhub.service-requests-cpu" . }} \
+              --request memory={{ template "runhub.service-requests-memory" . }} \
+              --pull-secret container-registry-dockerconfigjson \
+              --cluster-local
+
+            if ! kn service update "${SERVICE_NAME:?}" "$@"; then
+              kn service create "${SERVICE_NAME:?}" "$@" || exit 0
+            fi

@@ -1,31 +1,27 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: deploy
+  name: undeploy-app
   namespace: {{ $.Release.Namespace }}-app
 rules:
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - list
+      - get
+      - update
+      - delete
   - apiGroups:
       - serving.knative.dev
     resources:
       - services
     verbs:
-      - get
-      - create
-      - update
-      - watch
+      - delete
   - apiGroups:
       - networking.istio.io
     resources:
       - virtualservices
     verbs:
-      - get
-      - create
-      - patch
-  - apiGroups:
-      - apps
-    resources:
-      - deployments
-    verbs:
-      - get
-      - create
-      - patch
+      - delete

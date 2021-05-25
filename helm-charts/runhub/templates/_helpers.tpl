@@ -20,12 +20,6 @@ stringData:
     {{- end }}
 {{- end }}
 
-{{ define "runhub.env" -}}
-  {{ range $envName, $val := .Values.global.env -}}
-    {{ $envName }}
-  {{- end }}
-{{- end }}
-
 {{ define "runhub.envDomain" -}}
   {{ with .Values.global -}}
     {{ if .env.dev -}}

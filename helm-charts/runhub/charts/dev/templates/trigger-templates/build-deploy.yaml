@@ -33,15 +33,9 @@ spec:
           - name: git-default-branch
             value: $(tt.params.git-default-branch)
         workspaces:
-        {{- range $serviceName, $service := .Values.global.services }}
-          - name: build-temp-{{ $serviceName }}
-            emptyDir: {}
-        {{- end }}
-          - name: build-tools
+          - name: app-chart
             configMap:
-              name: build-tools
-        {{- if (and .Values.release .Values.release.prodKubernetesCredentials) }}
-          - name: prod-kubeconfig
-            secret:
-              secretName: prod-kubeconfig-opaque
-        {{- end }}
+              name: app-chart
+          - name: app-chart-templates
+            configMap:
+              name: app-chart-templates

@@ -1,0 +1,61 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: install
+spec:
+  params:
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
+    - name: tag
+      type: string
+    - name: cache-from-tag
+      type: string
+    - name: env
+      type: string
+    - name: git-default-branch
+      type: string
+  workspaces:
+    - name: temp
+    - name: app-chart
+      readOnly: true
+    - name: app-chart-templates
+      readOnly: true
+  steps:
+    {{ include "runhub.dev.getSrcTaskStep" . | indent 4 }}
+    - name: install
+      image: alpine/helm:{{ template "runhub.dev.helmImageTag" . }}
+      script: |
+        if [ '$(params.env)' = 'dev' ]; then
+          RELEASE_NAME='$(params.tag)'
+        elif [ '$(params.env)' = 'prod' ]; then
+          RELEASE_NAME='$(params.env)'
+        fi
+
+        mkdir '$(workspaces.temp.path)/charts'
+        cp -R '$(workspaces.app-chart.path)' '$(workspaces.temp.path)/charts/runhub-app'
+        cp -R '$(workspaces.app-chart-templates.path)' '$(workspaces.temp.path)/charts/runhub-app/templates'
+
+        helm upgrade --install --atomic --namespace '{{ .Release.Namespace }}-app' \
+          "${RELEASE_NAME:?}" '$(workspaces.temp.path)/charts/runhub-app' \
+          --values '$(workspaces.temp.path)/src/runhub.yaml'
+    - name: run-build-deploy-pipeline
+      image: gcr.io/tekton-releases/dogfooding/tkn@{{ template "runhub.dev.tknImageTag" . }}
+      script: |
+        if [ '$(params.env)' = 'dev' ]; then
+          PIPELINE_SUFFIX='$(params.tag)'
+        elif [ '$(params.env)' = 'prod' ]; then
+          PIPELINE_SUFFIX='$(params.env)'
+        fi
+
+        tkn pipeline start build-deploy."${PIPELINE_SUFFIX:?}" --serviceaccount build-deploy \
+          --param git-url='$(params.git-url)' \
+          --param git-revision='$(params.git-revision)' \
+          --param tag='$(params.tag)' \
+          --param cache-from-tag='$(params.cache-from-tag)' \
+          --param env='$(params.env)' \
+          --param git-default-branch='$(params.git-default-branch)' \
+          --workspace name=build-tools,config=build-tools \
+          --workspace name=prod-kubeconfig,secret=prod-kubeconfig-opaque \
+          --showlog

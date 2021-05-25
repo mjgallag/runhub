@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: uninstall
+spec:
+  params:
+    - name: tag
+      type: string
+  steps:
+    - name: run-undeploy-pipeline
+      image: gcr.io/tekton-releases/dogfooding/tkn@{{ template "runhub.dev.tknImageTag" . }}
+      script: |
+        tkn pipeline start undeploy.'$(params.tag)' --serviceaccount undeploy \
+          --param tag='$(params.tag)' \
+          --showlog
+    - name: uninstall
+      image: alpine/helm:{{ template "runhub.dev.helmImageTag" . }}
+      script: |
+        helm uninstall --namespace '{{ .Release.Namespace }}-app' '$(params.tag)'
