@@ -10,7 +10,7 @@ data:
     COPY /build-tools/*.sh .
     RUN find . ! -name . -prune -name '*.sh' -exec chmod +x {} +
 
-    FROM node:14.17.0-alpine3.13@sha256:954f97825c2b535defef235dd8b92a7936b59b12aa6685bc1b5c17864b2812c3 AS node
+    FROM node:14.17.1-alpine3.13@sha256:dfac7a6ff51008deee7520e33a7f22dfd48ee6f2c7b7889c91e2ce2095cb1e69 AS node
     RUN npm install --global npm@7.14.0  && npm cache clean --force
 
     FROM alpine AS src
