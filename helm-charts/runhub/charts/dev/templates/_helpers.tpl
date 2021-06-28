@@ -24,7 +24,7 @@
 {{- end }}
 
 {{ define "runhub.dev.kubectlImageTag" -}}
-  1.19.11-debian-10-r0@sha256:a58c5bc8981f97f0a2dc235d31d04978d196aa9e6115df1fd06fefba078b0c7c
+  1.19.12-debian-10-r0@sha256:e132fce600e903e135136ed686a0cd8ae63350390c2ce926279ca54b61df9620
 {{- end }}
 
 {{ define "runhub.dev.tknImageTag" -}}
