@@ -1,6 +1,6 @@
 {{- define "runhub.dev.getSrcTaskStep" }}
 - name: get-src
-  image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.24.1@sha256:52358dec303aa1349c2b4f23e6e483b479ba71214ef8e94c369cfe8e25af31fb
+  image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.25.0@sha256:b963f6e7a69617db57b685893256f978436277094c21d43b153994acd8a01247
   script: |
     /ko-app/git-init -url '$(params.git-url)' -revision '$(params.git-revision)' -path '$(workspaces.temp.path)/src'
 {{- end }}
